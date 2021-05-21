@@ -6,10 +6,32 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Inna-KLB/recipes.git"
+  },
   "author": "Inna-KLB",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Inna-KLB/recipes/issues"
+  },
+  "homepage": "https://github.com/Inna-KLB/recipes#readme",
   "devDependencies": {
+    "@babel/core": "^7.13.13",
+    "@babel/preset-env": "^7.13.12",
+    "babel-loader": "^8.2.2",
+    "browser-sync": "^2.26.14",
+    "core-js": "^3.10.1",
     "gulp": "^4.0.2",
-    "webpack": "^5.37.1"
-  }
+    "gulp-autoprefixer": "^7.0.1",
+    "gulp-clean": "^0.4.0",
+    "gulp-clean-css": "^4.3.0",
+    "gulp-file-include": "^2.3.0",
+    "gulp-rename": "^2.0.0",
+    "gulp-sass": "^4.1.0",
+    "gulp-sourcemaps": "^3.0.0",
+    "webpack": "^5.37.1",
+    "webpack-stream": "^6.1.2"
+  },
+  "dependencies": {}
 }
