@@ -16,9 +16,18 @@
     border-color: $red
     &:hover, &:focus
       filter: saturate(80%)
+  &_blue
+    background-color: $blue
+    border-color: $blue
+    &:hover, &:focus
+      filter: saturate(180%)
 
 .add-fav
   border: none
   outline: none
+  color: $red
+  & ion-icon
+    font-size: 1.5rem
+    --ionicon-stroke-width: 2.2rem  
   &:focus
     outline: none

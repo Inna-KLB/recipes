@@ -90,10 +90,31 @@
 /*!*******************************!*\
   !*** ./src/assets/js/main.js ***!
   \*******************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-console.log('Yappi!');
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _modules_addToFavorites__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/addToFavorites */ "./src/assets/js/modules/addToFavorites.js");
+
+Object(_modules_addToFavorites__WEBPACK_IMPORTED_MODULE_0__["default"])('.main-page', '.add-fav');
+
+/***/ }),
+
+/***/ "./src/assets/js/modules/addToFavorites.js":
+/*!*************************************************!*\
+  !*** ./src/assets/js/modules/addToFavorites.js ***!
+  \*************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var addToFavorites = function addToFavorites(pageSelector, buttonSelector) {
+  var pageName = document.querySelector(pageSelector);
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (addToFavorites);
 
 /***/ })
 

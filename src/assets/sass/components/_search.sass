@@ -1,0 +1,21 @@
+.search
+  text-align: center
+  height: clamp(55px, 10vh, 100px)
+  width: 100%
+  &__label
+    width: 60%
+  &__input
+    color: $grey
+    width: 100%
+    font-size: 1rem
+    height: 50%
+    padding: 1% 2%
+    border-radius: 10px 0 0 10px
+    border: 1px solid $grey
+    border-right-width: 0
+    &:active, &:focus
+      border-color: $blue
+      outline: none
+  & .btn
+    margin: -1%
+    padding: 0.3% 1.5%
