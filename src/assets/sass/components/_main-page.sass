@@ -3,7 +3,6 @@
   .cards
     flex-wrap: wrap
     .card
-      z-index: 100
       position: relative
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.3)
       flex-basis: 23%
@@ -24,15 +23,21 @@
         margin-top: 40%
         margin-bottom: 10%
         font-weight: 500
-  .btn 
+  a.btn 
+    display: inline-block
     margin: 15% auto
     padding: 3% 4.5%
     font-size: 1rem
+    &:hover
+      color: $white
 
   .add-fav
     position: absolute
     top: 0
     right: 0
+
+  .btn_blue
+    font-size: 1rem
   
 
 
