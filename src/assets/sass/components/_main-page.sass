@@ -1,12 +1,11 @@
 .main-page
   color: $white
   .cards
-    flex-wrap: wrap
     .card
       position: relative
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.3)
       flex-basis: 23%
-      height: clamp(100px, 55vh, 1000px)
+      height: clamp(300px, 45vh, 450px)
       margin-bottom: 1%
       text-align: center
       background-image: url('../img/borsh.jpg')
@@ -18,14 +17,16 @@
         position: absolute
         top: 0
         left: 0
-        padding: 1% 3%
+        padding: 2% 3%
+        display: flex
+        flex-direction: column
+        justify-content: center
+        align-items: center
       &__header
-        margin-top: 40%
         margin-bottom: 10%
         font-weight: 500
   a.btn 
-    display: inline-block
-    margin: 15% auto
+    margin-top: 20%
     padding: 3% 4.5%
     font-size: 1rem
     &:hover

@@ -1,5 +1,5 @@
 .footer
-  height: clamp(50px, 30vh, 100px)
+  height: clamp(80px, 30vh, 120px)
   background-color: $white
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.3)
   padding: 1% 9% 
@@ -8,6 +8,10 @@
   margin-top: 2%
   &__navbar 
     flex-basis: 30%
+    .navbar-menu__item:not(:last-of-type):after
+      content: "|"
+      padding-left: 3%
+
   &__text
     text-align: center
     color: $grey
@@ -16,7 +20,7 @@
       margin-bottom: 1.5%
       font-weight: 500     
   &__btns
-    flex-basis: 28%
+    flex-basis: 30%
     & .btn
       font-size: 0.9rem
       padding: 2%

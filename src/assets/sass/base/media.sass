@@ -1,0 +1,117 @@
+@media screen and (max-width: 455px)
+  html
+    font-size: 13px
+  main, .footer
+    padding: 0 6%
+  .arrow-up
+    padding: 0.2% 0.8% 
+  .header, .footer
+    .btn 
+      font-size: 1.2rem
+      padding: 0.7% 2.1%
+      & span 
+        display: none
+    .navbar-menu
+      display: none
+  .header
+    padding: 2% 6%
+    .btn 
+      &_brown
+        padding: 0.7% 2.4%
+        margin-right: 2% 
+      &_mobile
+        display: block            
+  .footer
+    height: clamp(50px, 13vh, 80px)
+    &__text
+      flex-basis: 50%
+    &__btns
+      flex-basis: 50%
+      justify-content: flex-end
+    .btn
+      padding: 2% 4%
+      width: 25%
+  .search
+    height: clamp(50px, 8vh, 80px)
+    & .btn
+      padding: 0.6% 1.5%
+  
+  .main-page
+    & .cards .card 
+      flex-basis: 48%
+      height: clamp(220px, 35vh, 250px)
+  .pagination
+    &__item
+      padding: 0.6% 1.6%
+      &:first-of-type, &:last-of-type
+        padding: 0.3% 0.5%   
+
+@media screen and (min-width: 456px) and (max-width: 767px)
+  html 
+    font-size: 14px
+  main, .header, .footer
+    padding: 1% 4%
+  .header
+    padding-bottom: 2%
+    margin-bottom: 2%
+  .footer
+    &__text
+      flex-basis: 35%
+    &__btns
+      justify-content: center
+      flex-basis: 35%
+      & .btn
+        width: 85%
+        padding: 2.5% 0.5%
+        margin-bottom: 3%
+  .search
+    height: clamp(60px, 9vh, 70px)
+    & .btn
+      padding: 0.55% 1.5%
+  .main-page
+    & .cards .card 
+      flex-basis: 30%
+      height: clamp(250px, 35vh, 280px)
+  .pagination
+    &__item
+      padding: 0.4% 1%
+      &:first-of-type, &:last-of-type
+        padding: 0.4% 0.5%   
+@media screen and (min-width: 768px) and (max-width: 1024px)
+  html 
+    font-size: 15px
+  main, .header, .footer
+    padding: 1% 4%
+
+  .footer
+      & .btn
+        width: 85%
+        margin-bottom: 2%
+
+  .search
+    height: clamp(50px, 8vh, 60px)
+    & .btn
+      padding: 0.4% 1.5%
+  .main-page
+    & .cards .card 
+      flex-basis: 30%
+      height: clamp(280px, 35vh, 300px)
+  .pagination
+    &__item
+      padding: 0.4% 1%
+      &:first-of-type, &:last-of-type
+        padding: 0.4% 0.5%     
+@media screen and (min-width: 1025px) and (max-width: 1240px)
+  .search
+    height: clamp(55px, 9vh, 70px)
+    & .btn
+      padding: 0.4% 1.5%
+  .main-page
+    & .cards .card 
+      flex-basis: 24%
+      height: clamp(280px, 35vh, 300px)
+  .footer
+    &__text
+      flex-basis: 32%
+    &__btns
+      flex-basis: 37%
