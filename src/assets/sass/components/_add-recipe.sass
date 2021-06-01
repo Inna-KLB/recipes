@@ -1,0 +1,25 @@
+.add-recipe
+  & input, & textarea, & select
+    border: none
+    border-bottom: 0.5px solid $blue
+    &:focus
+      outline: none
+    &::placeholder
+      opacity: 0.5
+
+  .recipe
+    &-info
+      &__text
+        & ion-icon
+          font-size: 1.5rem
+          color: $grey
+        & .header__input
+          border: none
+          border-bottom: 0.5px solid $blue
+          font-size: 2rem
+          font-weight: 500
+          margin-bottom: 10%
+          
+    &-description
+      & input
+        width: 100%

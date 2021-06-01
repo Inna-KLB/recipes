@@ -33,8 +33,12 @@
       width: 25%
   .search
     height: clamp(50px, 8vh, 80px)
+    &__input, & .btn
+      height: clamp(30px, 53%, 40px)
+    &__input
+      flex-basis: 70%
     & .btn
-      padding: 0.6% 1.5%
+      flex-basis: 20%
   
   .main-page
     & .cards .card 
@@ -42,9 +46,30 @@
       height: clamp(220px, 35vh, 250px)
   .pagination
     &__item
-      padding: 0.6% 1.6%
+      padding: 0.6% 1.8%
       &:first-of-type, &:last-of-type
-        padding: 0.3% 0.5%   
+        padding: 0.8% 1%
+      & ion-icon
+        font-size: 0.9rem 
+
+  .recipe
+    &-info
+      &__img, &__text
+        flex-basis: 100%
+      & .btn
+        padding: 1.3% 1.5% 
+      & .btn_brown
+        margin-bottom: 3%  
+    &-instruction
+      &__step
+        width: 100%
+        &:not(:last-of-type)
+          border-bottom: 1px dotted $blue
+        & img
+          display: none
+        & p 
+          flex-basis: 100%
+          padding: 2% 0            
 
 @media screen and (min-width: 456px) and (max-width: 767px)
   html 
@@ -53,7 +78,7 @@
     padding: 1% 4%
   .header
     padding-bottom: 2%
-    margin-bottom: 2%
+    margin-bottom: 0
   .footer
     &__text
       flex-basis: 35%
@@ -74,9 +99,34 @@
       height: clamp(250px, 35vh, 280px)
   .pagination
     &__item
-      padding: 0.4% 1%
+      padding: 0.4% 1.1%
       &:first-of-type, &:last-of-type
-        padding: 0.4% 0.5%   
+        padding: 0.5% 0.5%   
+
+  .recipe
+    &-info
+      &__img
+        width: 60%
+      &__text
+        flex-basis: 35%
+        & div p
+          flex-basis: 100%
+        & .btn
+          flex-basis: 100%
+          padding: 1.5% 1.2%
+          width: 90%
+        & .btn_brown
+          margin-bottom: 5%
+    &-instruction
+      &__step
+        width: 100%
+        margin-bottom: 3%
+        & img
+          width: 28vw
+          height: auto
+        & p 
+          flex-basis: 67%
+
 @media screen and (min-width: 768px) and (max-width: 1024px)
   html 
     font-size: 15px
@@ -90,8 +140,10 @@
 
   .search
     height: clamp(50px, 8vh, 60px)
+    &__input
+      flex-basis: 70%
     & .btn
-      padding: 0.4% 1.5%
+      flex-basis: 20%
   .main-page
     & .cards .card 
       flex-basis: 30%
@@ -101,7 +153,29 @@
       padding: 0.4% 1%
       &:first-of-type, &:last-of-type
         padding: 0.4% 0.5%     
-@media screen and (min-width: 1025px) and (max-width: 1240px)
+  .recipe
+    &-info
+      &__img
+        flex-basis: 60%
+      &__text
+        flex-basis: 37%
+        & div p
+          flex-basis: 100%
+        & .btn
+          flex-basis: 100%
+          padding: 1.5% 1.2%
+          width: 90%
+        & .btn_brown
+          margin-bottom: 5%
+    &-instruction
+      &__step
+        width: 100%
+        & img
+          width: 28vw
+          height: auto
+        & p 
+          flex-basis: 67%
+@media screen and (min-width: 1025px) and (max-width: 1290px)
   .search
     height: clamp(55px, 9vh, 70px)
     & .btn
@@ -114,4 +188,12 @@
     &__text
       flex-basis: 32%
     &__btns
-      flex-basis: 37%
+      flex-basis: 38%
+      & .btn
+      width: 49%
+  .recipe
+    &-info
+      &__img
+        width: 60%
+      &__text
+        flex-basis: 50%

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script type="module" src="https://unpkg.com/ionicons@5.4.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule="" src="https://unpkg.com/ionicons@5.4.0/dist/ionicons/ionicons.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/krishdevdb/reseter.css/css/reseter.min.css"/>
+  <link rel="stylesheet" href="css/main.min.css">
+  <title>Home recipes</title>
+</head>
+<body>
+  <header class="header"> 
+    <div class="header-top flex">
+      <p class="logo">Home Recipes</p>
+      <button class="btn btn_red"><ion-icon name="heart-outline"></ion-icon><span> Перейти в избранное</span></button>
+      <button class="btn btn_brown">&plus;  <span> Добавить рецепт</span></button>
+      <button class="btn btn_mobile btn_blue"><ion-icon name="menu"></ion-icon></button>
+    </div>
+    <nav class="navbar-menu flex">
+      <a href="#" class="navbar-menu__item">Первые блюда</a>
+      <a href="#" class="navbar-menu__item">Вторые блюда</a>
+      <a href="#" class="navbar-menu__item">Завтрак</a>
+      <a href="#" class="navbar-menu__item">Салаты</a>
+      <a href="#" class="navbar-menu__item">Мясо</a>
+      <a href="#" class="navbar-menu__item">Рыба</a>
+      <a href="#" class="navbar-menu__item">ПП-блюда</a>
+      <a href="#" class="navbar-menu__item">Выпечка</a>
+    </nav>
+  </header>
+
+<main class="add-recipe">
+  <section class="recipe-info flex">
+    <img class="recipe-info__img" src="img/borsh.jpg" alt="Картинка рецепта">
+    <div class="recipe-info__text">
+      <ion-icon name="pencil-outline"></ion-icon><input class="header__input" type="text" placeholder="Название блюда">    
+      <div class="flex"> 
+        <select name="" id="" multiple>
+          <option value="firstCourse">Первое блюдо</option>
+          <option value="secondCourse">Второе блюдо</option>
+          <option value="breakfast">Завтрак</option>
+          <option value="salads">Салаты</option>
+          <option value="meat">Мясо</option>
+          <option value="fish">Рыба</option>
+          <option value="healthlyFood">ПП-блюда</option>
+          <option value="bakeryProd">Выпечка</option>
+        </select>
+        <label>Выберите категорию<input type="checkbox"></label>
+      </div>
+    </div>
+  </section>
+  <section class="recipe-description">
+    <h3 class="recipe-description__header">Описание блюда</h3>
+    <div class="recipe-description__text">
+      <input type="text" placeholder="Небольшое описание блюда(1-2 небольших предложения)">
+    </div>
+  </section>
+  <section class="recipe-ingredients">
+    <h3>Ингредиенты</h3>
+    <ul class="recipe-ingredients__list">
+      <li class="flex">
+        <input type="text" placeholder="Название ингредиента">
+        <input type="number" placeholder="Количество">
+        <select>
+          <option value="gr">гр</option>
+          <option value="kg">кг</option>
+          <option value="litr">л</option>
+          <option value="mililitr">мл</option>
+        </select>
+      </li>
+      <button class="btn_blue">Добавить ингредиент</button>
+    </ul>
+  </section>
+  <section class="recipe-instruction">
+    <h3>Пошаговый рецепт</h3>
+    <div class="recipe-instruction__step flex">
+      <img src="img/borsh.jpg" alt="Пошаговый рецепт">
+      <p>Глубокую, небольшую кастрюлю поместите на плиту, бросьте в нее сливочное масло (можно растопить масло заранее и залить уже растаявшим) и на среднем огне растопите.</p>
+    </div>
+  </section>
+</main>
+
+<a href="#" class="arrow-up"><ion-icon name="arrow-up-sharp"></ion-icon></a>
+    <footer class="footer flex">
+      <nav class="navbar-menu footer__navbar">
+        <a href="#" class="navbar-menu__item">Первые блюда</a>
+        <a href="#" class="navbar-menu__item">Вторые блюда</a>
+        <a href="#" class="navbar-menu__item">Завтрак</a>
+        <a href="#" class="navbar-menu__item">Салаты</a>
+        <a href="#" class="navbar-menu__item">Мясо</a>
+        <a href="#" class="navbar-menu__item">Рыба</a>
+        <a href="#" class="navbar-menu__item">ПП-блюда</a>
+        <a href="#" class="navbar-menu__item">Выпечка</a>
+      </nav>
+      <div class="footer__text">
+        <p> &#169;Home Recipes by Inna-KLB</p>
+        <p>2021</p>
+      </div>
+      <div class="footer__btns flex">
+        <button class="btn btn_red"><ion-icon name="heart-outline"></ion-icon><span> Перейти в избранное</span></button>
+        <button class="btn btn_brown">&plus;<span> Добавить рецепт</span></button>
+      </div>
+
+    </footer>
+    <script src="js/script.js"></script>
+  </body>
+</html>

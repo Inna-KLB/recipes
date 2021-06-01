@@ -1,16 +1,17 @@
 .search
   text-align: center
-  height: clamp(55px, 10vh, 100px)
+  height: clamp(55px, 10vh, 80px)
   width: 100%
-  &__label
-    width: 60%
-    height: 49%
+  margin-bottom: 2%
+  display: flex
+  justify-content: center
+  align-items: center
   &__input
-    color: $grey
-    width: 100%
+    color: $grey 
     font-size: 1rem
-    height: 100%
-    padding: 1% 2%
+    height: clamp(35px, 53%, 45px)
+    flex-basis: 50%
+    padding: 1%
     border-radius: 10px 0 0 10px
     border: 1px solid $grey
     border-right-width: 0
@@ -18,7 +19,9 @@
       border-color: $blue
       outline: none
   & .btn
+    flex-basis: 10%
     margin: -1%
-    padding: 0.3% 1.5%
+    height: clamp(35px, 53%, 45px)
+    padding: 0.4% 1.5%
     border-top-left-radius: 0
     border-bottom-left-radius: 0

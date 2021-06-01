@@ -5,7 +5,7 @@
       position: relative
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.3)
       flex-basis: 23%
-      height: clamp(300px, 45vh, 450px)
+      height: clamp(330px, 45vh, 450px)
       margin-bottom: 1%
       text-align: center
       background-image: url('../img/borsh.jpg')
@@ -25,8 +25,11 @@
       &__header
         margin-bottom: 10%
         font-weight: 500
+      &__description
+        flex-basis: 45%
+        overflow: hidden
+        text-overflow: ellipsis
   a.btn 
-    margin-top: 20%
     padding: 3% 4.5%
     font-size: 1rem
     &:hover

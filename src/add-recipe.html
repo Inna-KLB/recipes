@@ -1,0 +1,55 @@
+@@include('parts/header.html')
+
+<main class="add-recipe">
+  <section class="recipe-info flex">
+    <img class="recipe-info__img" src="img/borsh.jpg" alt="Картинка рецепта">
+    <div class="recipe-info__text">
+      <ion-icon name="pencil-outline"></ion-icon><input class="header__input" type="text" placeholder="Название блюда">    
+      <div class="flex"> 
+        <select name="" id="" multiple>
+          <option value="firstCourse">Первое блюдо</option>
+          <option value="secondCourse">Второе блюдо</option>
+          <option value="breakfast">Завтрак</option>
+          <option value="salads">Салаты</option>
+          <option value="meat">Мясо</option>
+          <option value="fish">Рыба</option>
+          <option value="healthlyFood">ПП-блюда</option>
+          <option value="bakeryProd">Выпечка</option>
+        </select>
+        <label>Выберите категорию<input type="checkbox"></label>
+      </div>
+    </div>
+  </section>
+  <section class="recipe-description">
+    <h3 class="recipe-description__header">Описание блюда</h3>
+    <div class="recipe-description__text">
+      <input type="text" placeholder="Небольшое описание блюда(1-2 небольших предложения)">
+    </div>
+  </section>
+  <section class="recipe-ingredients">
+    <h3>Ингредиенты</h3>
+    <ul class="recipe-ingredients__list">
+      <li class="flex">
+        <input type="text" placeholder="Название ингредиента">
+        <input type="number" placeholder="Количество">
+        <select>
+          <option value="gr">гр</option>
+          <option value="kg">кг</option>
+          <option value="litr">л</option>
+          <option value="mililitr">мл</option>
+        </select>
+      </li>
+      <button class="btn_blue">Добавить ингредиент</button>
+    </ul>
+  </section>
+  <section class="recipe-instruction">
+    <h3>Пошаговый рецепт</h3>
+    <div class="recipe-instruction__step flex">
+      <img src="img/borsh.jpg" alt="Пошаговый рецепт">
+      <p>Глубокую, небольшую кастрюлю поместите на плиту, бросьте в нее сливочное масло (можно растопить масло заранее и залить уже растаявшим) и на среднем огне растопите.</p>
+    </div>
+  </section>
+</main>
+
+@@include('parts/arrow.html')
+@@include('parts/footer.html')
