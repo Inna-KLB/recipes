@@ -1,25 +1,115 @@
 .add-recipe
   & input, & textarea, & select
     border: none
-    border-bottom: 0.5px solid $blue
+    &:not(input[type="file"]):not(select)     
+      border-bottom: 1px solid $blue
     &:focus
       outline: none
     &::placeholder
       opacity: 0.5
-
-  .recipe
+  & .input-group__header
+    font-weight: 500
+    color: $grey
+    text-align: center
+  
+  & .recipe
     &-info
-      &__text
+      justify-content: center
+      &__img, &__category, &__time, &__portions
+        padding: 1.5% 1.5%
+        border: 1px dashed $blue
+        border-radius: 10px
+      &__header
+        flex-basis: 100%
+        & .header__input
+          font-size: 1.7rem
+          font-weight: 500
+          margin-bottom: 3%
+          width: 95%
         & ion-icon
           font-size: 1.5rem
-          color: $grey
-        & .header__input
-          border: none
-          border-bottom: 0.5px solid $blue
-          font-size: 2rem
-          font-weight: 500
-          margin-bottom: 10%
-          
+          color: $grey        
+      & .flex-wrapper
+        flex-basis: 60%
+        display: flex
+        justify-content: center
+        flex-wrap: wrap
+        align-items: center
+      &__category
+        flex-basis: 25%
+        margin-right: -5%
+        & label
+          display: block
+          margin-bottom: 2%
+          cursor: pointer
+          &:hover 
+            color: $blue
+        & input
+          height: 0.9rem
+          width: 0.9rem
+          &:checked + span
+            color: $blue
+      &__img
+        flex-basis: 75%
+        text-align: center
+        & .img
+          &-load
+            &__label
+              margin-bottom: 2%
+            &__input
+              cursor: pointer
+              font-size: 0.9rem
+              color: $blue
+          &-checkbox
+            &__label
+              cursor: pointer
+              display: block
+            &__text
+              font-size: 0.95rem
+            &__input
+              cursor: pointer
+              width: 1.1rem
+              height: 1.1rem
+              vertical-align: middle        
+      &__time, &__portions
+        flex-basis: 35%
+        text-align: center
+      &__portions
+        margin-left: 5%
+        & input
+          width: 20%    
+         
     &-description
       & input
         width: 100%
+
+    &-ingredients
+      &__list
+        & li
+          border: none
+          justify-content: flex-start
+          & .ingredient
+            &__name
+              flex-basis: 80%
+            &__number
+              margin: 0 3%
+              flex-basis: 8%
+              width: 100%
+            &__value
+              flex-basis: 5%
+              display: block
+              cursor: pointer
+              background-image: url('../img/caret-down-outline.svg') 
+              background-position: right
+              background-repeat: no-repeat
+              background-size: 30%
+              font-size: 0.9rem
+              & option
+                // color: $blue
+      & .btn
+        margin-top: 1% 
+        font-size: 0.8rem
+        opacity: 0.3
+        padding: 0.5%
+        &:hover
+          opacity: 0.8

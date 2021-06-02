@@ -32,51 +32,113 @@
 
 <main class="add-recipe">
   <section class="recipe-info flex">
-    <img class="recipe-info__img" src="img/borsh.jpg" alt="Картинка рецепта">
-    <div class="recipe-info__text">
-      <ion-icon name="pencil-outline"></ion-icon><input class="header__input" type="text" placeholder="Название блюда">    
-      <div class="flex"> 
-        <select name="" id="" multiple>
-          <option value="firstCourse">Первое блюдо</option>
-          <option value="secondCourse">Второе блюдо</option>
-          <option value="breakfast">Завтрак</option>
-          <option value="salads">Салаты</option>
-          <option value="meat">Мясо</option>
-          <option value="fish">Рыба</option>
-          <option value="healthlyFood">ПП-блюда</option>
-          <option value="bakeryProd">Выпечка</option>
-        </select>
-        <label>Выберите категорию<input type="checkbox"></label>
+    <div class="recipe-info__header">
+      <ion-icon name="pencil-outline"></ion-icon>
+      <input class="header__input" type="text" placeholder="Название блюда">  
+    </div>
+
+    <div class="recipe-info__category">
+      <p class="input-group__header">Добавить категорию</p>
+      <label> 
+        <input type="checkbox" name="" id="firstCourse">
+        <span>Первое блюдо</span>
+      </label>
+      <label> 
+        <input type="checkbox" name="" id="secondCourse">
+        <span>Второе блюдо</span>
+      </label>
+      <label> 
+        <input type="checkbox" name="" id="breakfast">
+        <span>Завтрак</span>
+      </label>
+      <label> 
+        <input type="checkbox" name="" id="meat">
+        <span>Мясо</span>
+      </label>
+      <label> 
+        <input type="checkbox" name="" id="fish">
+        <span>Рыба</span>
+      </label>
+      <label> 
+        <input type="checkbox" name="" id="salads">
+        <span>Салаты</span>
+      </label>
+      <label> 
+        <input type="checkbox" name="" id="healthlyFood">
+        <span>ПП-блюда</span>
+      </label>
+      <label> 
+        <input type="checkbox" name="" id="bakeryProd">
+        <span>Выпечка</span>
+      </label>
+    </div>
+    
+    <div class="flex-wrapper">
+      <div class="recipe-info__time">
+        <p class="input-group__header">Добавить время приготовления</p>
+        <label> 
+          <input type="time" name="" id="">
+          <span>ч : мин</span>
+        </label>
+      </div>
+      <div class="recipe-info__portions">
+        <p class="input-group__header">Добавить количество порций</p>
+        <label>
+          <input type="number" name="" id="">
+          <span>порций</span>
+        </label>
+      </div>
+      <div class="recipe-info__img">
+        <p class="input-group__header">Загрузить главное фото</p>
+        <label class="img-load__label"> 
+          <input class="img-load__input" type="file">
+        </label>
+        <label class="img-checkbox__label">
+          <input class="img-checkbox__input" type="checkbox" name="" id="without-photo">
+          <span class="img-checkbox__text">без фото</span> 
+        </label>
       </div>
     </div>
+    
+    
+
   </section>
+
   <section class="recipe-description">
     <h3 class="recipe-description__header">Описание блюда</h3>
     <div class="recipe-description__text">
       <input type="text" placeholder="Небольшое описание блюда(1-2 небольших предложения)">
     </div>
   </section>
+
   <section class="recipe-ingredients">
     <h3>Ингредиенты</h3>
-    <ul class="recipe-ingredients__list">
+    <ol class="recipe-ingredients__list">
       <li class="flex">
-        <input type="text" placeholder="Название ингредиента">
-        <input type="number" placeholder="Количество">
-        <select>
+        <input class="ingredient__name" type="text" placeholder="Название ингредиента">
+        <input class="ingredient__number" type="number" placeholder="Кол-во">
+        <select class="ingredient__value">
           <option value="gr">гр</option>
           <option value="kg">кг</option>
           <option value="litr">л</option>
           <option value="mililitr">мл</option>
+          <option value="pieces">шт</option>
         </select>
       </li>
-      <button class="btn_blue">Добавить ингредиент</button>
-    </ul>
+    </ol>
+    <button class="btn btn_blue">&plus; <span>Добавить ингредиент</span></button>
   </section>
+
   <section class="recipe-instruction">
     <h3>Пошаговый рецепт</h3>
     <div class="recipe-instruction__step flex">
-      <img src="img/borsh.jpg" alt="Пошаговый рецепт">
-      <p>Глубокую, небольшую кастрюлю поместите на плиту, бросьте в нее сливочное масло (можно растопить масло заранее и залить уже растаявшим) и на среднем огне растопите.</p>
+      <label> <span>Загрузить главное фото</span>
+        <input type="file">
+      </label>
+      <label><span>Без фотографии</span> 
+        <input type="checkbox" name="" id="without-photo">
+      </label>
+      <textarea name="" id="" cols="20" rows="3"></textarea>
     </div>
   </section>
 </main>
