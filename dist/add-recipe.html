@@ -36,7 +36,6 @@
       <ion-icon name="pencil-outline"></ion-icon>
       <input class="header__input" type="text" placeholder="Название блюда">  
     </div>
-
     <div class="recipe-info__category">
       <p class="input-group__header">Добавить категорию</p>
       <label> 
@@ -71,8 +70,7 @@
         <input type="checkbox" name="" id="bakeryProd">
         <span>Выпечка</span>
       </label>
-    </div>
-    
+    </div>   
     <div class="flex-wrapper">
       <div class="recipe-info__time">
         <p class="input-group__header">Добавить время приготовления</p>
@@ -99,9 +97,6 @@
         </label>
       </div>
     </div>
-    
-    
-
   </section>
 
   <section class="recipe-description">
@@ -113,7 +108,7 @@
 
   <section class="recipe-ingredients">
     <h3>Ингредиенты</h3>
-    <ol class="recipe-ingredients__list">
+    <ul class="recipe-ingredients__list">
       <li class="flex">
         <input class="ingredient__name" type="text" placeholder="Название ингредиента">
         <input class="ingredient__number" type="number" placeholder="Кол-во">
@@ -125,21 +120,79 @@
           <option value="pieces">шт</option>
         </select>
       </li>
-    </ol>
-    <button class="btn btn_blue">&plus; <span>Добавить ингредиент</span></button>
+      <li class="flex">
+        <input class="ingredient__name" type="text" placeholder="Название ингредиента">
+        <input class="ingredient__number" type="number" placeholder="Кол-во">
+        <select class="ingredient__value">
+          <option value="gr">гр</option>
+          <option value="kg">кг</option>
+          <option value="litr">л</option>
+          <option value="mililitr">мл</option>
+          <option value="pieces">шт</option>
+        </select>
+      </li>
+      <li class="flex">
+        <input class="ingredient__name" type="text" placeholder="Название ингредиента">
+        <input class="ingredient__number" type="number" placeholder="Кол-во">
+        <select class="ingredient__value">
+          <option value="gr">гр</option>
+          <option value="kg">кг</option>
+          <option value="litr">л</option>
+          <option value="mililitr">мл</option>
+          <option value="pieces">шт</option>
+        </select>
+      </li>
+    </>
+    <button class="btn btn_blue btn_transparent">&plus; <span>Добавить ингредиент</span></button>
   </section>
 
   <section class="recipe-instruction">
     <h3>Пошаговый рецепт</h3>
-    <div class="recipe-instruction__step flex">
-      <label> <span>Загрузить главное фото</span>
-        <input type="file">
-      </label>
-      <label><span>Без фотографии</span> 
-        <input type="checkbox" name="" id="without-photo">
-      </label>
-      <textarea name="" id="" cols="20" rows="3"></textarea>
-    </div>
+    <ul>
+      <li class="recipe-instruction__step flex">
+        <p class="input-group__header"><span>1</span> шаг</p>
+        <div class="recipe-instruction__img">
+          <label class="img-load__label"> 
+            <input class="img-load__input" type="file">
+          </label>
+          <label class="img-checkbox__label">
+            <input class="img-checkbox__input" type="checkbox" name="" id="without-photo">
+            <span class="img-checkbox__text">без фото</span> 
+          </label>
+        </div>
+        <textarea class="recipe-instruction__text" name="" id="" placeholder="Подробное описание шага рецепта..."></textarea>
+      </li>
+      <li class="recipe-instruction__step flex">
+        <p class="input-group__header"><span>2</span> шаг</p>
+        <div class="recipe-instruction__img">
+          <label class="img-load__label"> 
+            <input class="img-load__input" type="file">
+          </label>
+          <label class="img-checkbox__label">
+            <input class="img-checkbox__input" type="checkbox" name="" id="without-photo">
+            <span class="img-checkbox__text">без фото</span> 
+          </label>
+        </div>
+        <textarea class="recipe-instruction__text" name="" id="" placeholder="Подробное описание шага рецепта..."></textarea>
+      </li>
+      <li class="recipe-instruction__step flex">
+        <p class="input-group__header"><span>3</span> шаг</p>
+        <div class="recipe-instruction__img">
+          <label class="img-load__label"> 
+            <input class="img-load__input" type="file">
+          </label>
+          <label class="img-checkbox__label">
+            <input class="img-checkbox__input" type="checkbox" name="" id="without-photo">
+            <span class="img-checkbox__text">без фото</span> 
+          </label>
+        </div>
+        <textarea class="recipe-instruction__text" name="" id="" placeholder="Подробное описание шага рецепта..."></textarea>
+      </li>
+    </ul>
+    <button class="btn btn_blue btn_transparent">&plus; <span>Добавить шаг</span></button>
+  </section>
+  <section class="right-context">
+    <button class="btn btn_red"><ion-icon name="save-sharp"></ion-icon> Сохранить</button>
   </section>
 </main>
 
