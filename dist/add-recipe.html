@@ -34,7 +34,7 @@
   <section class="recipe-info flex">
     <div class="recipe-info__header">
       <ion-icon name="pencil-outline"></ion-icon>
-      <input class="header__input" type="text" placeholder="Название блюда">  
+      <input class="header__input" type="text" placeholder="Название блюда" autofocus>  
     </div>
     <div class="recipe-info__category">
       <p class="input-group__header">Добавить категорию</p>
@@ -82,7 +82,7 @@
       <div class="recipe-info__portions">
         <p class="input-group__header">Добавить количество порций</p>
         <label>
-          <input type="number" name="" id="">
+          <input type="number" name="" id="" min="1">
           <span>порций</span>
         </label>
       </div>
@@ -102,16 +102,16 @@
   <section class="recipe-description">
     <h3 class="recipe-description__header">Описание блюда</h3>
     <div class="recipe-description__text">
-      <input type="text" placeholder="Небольшое описание блюда(1-2 небольших предложения)">
+      <input type="text" placeholder="1-2 небольших предложения" maxlength="150">
     </div>
   </section>
 
   <section class="recipe-ingredients">
     <h3>Ингредиенты</h3>
     <ul class="recipe-ingredients__list">
-      <li class="flex">
-        <input class="ingredient__name" type="text" placeholder="Название ингредиента">
-        <input class="ingredient__number" type="number" placeholder="Кол-во">
+      <li class="flex recipe-ingredients__list-item">
+        <input class="ingredient__name" type="text" placeholder="Название ингредиента" maxlength="100">
+        <input class="ingredient__number" type="number" placeholder="Кол-во" min="1">
         <select class="ingredient__value">
           <option value="gr">гр</option>
           <option value="kg">кг</option>
@@ -120,9 +120,9 @@
           <option value="pieces">шт</option>
         </select>
       </li>
-      <li class="flex">
-        <input class="ingredient__name" type="text" placeholder="Название ингредиента">
-        <input class="ingredient__number" type="number" placeholder="Кол-во">
+      <li class="flex recipe-ingredients__list-item">
+        <input class="ingredient__name" type="text" placeholder="Название ингредиента" maxlength="100">
+        <input class="ingredient__number" type="number" placeholder="Кол-во" min="1">
         <select class="ingredient__value">
           <option value="gr">гр</option>
           <option value="kg">кг</option>
@@ -131,9 +131,9 @@
           <option value="pieces">шт</option>
         </select>
       </li>
-      <li class="flex">
-        <input class="ingredient__name" type="text" placeholder="Название ингредиента">
-        <input class="ingredient__number" type="number" placeholder="Кол-во">
+      <li class="flex recipe-ingredients__list-item">
+        <input class="ingredient__name" type="text" placeholder="Название ингредиента" maxlength="100">
+        <input class="ingredient__number" type="number" placeholder="Кол-во" min="1">
         <select class="ingredient__value">
           <option value="gr">гр</option>
           <option value="kg">кг</option>
@@ -142,17 +142,18 @@
           <option value="pieces">шт</option>
         </select>
       </li>
-    </>
-    <button class="btn btn_blue btn_transparent">&plus; <span>Добавить ингредиент</span></button>
+    </ul>
+    <button id="add-ingredient" class="btn btn_blue btn_transparent">&plus; <span>Добавить ингредиент</span></button>
   </section>
 
   <section class="recipe-instruction">
     <h3>Пошаговый рецепт</h3>
-    <ul>
+    <ul class="recipe-instruction__list">
       <li class="recipe-instruction__step flex">
         <p class="input-group__header"><span>1</span> шаг</p>
         <div class="recipe-instruction__img">
           <label class="img-load__label"> 
+            <p class="input-group__header">Загрузить фото</p>
             <input class="img-load__input" type="file">
           </label>
           <label class="img-checkbox__label">
@@ -160,12 +161,13 @@
             <span class="img-checkbox__text">без фото</span> 
           </label>
         </div>
-        <textarea class="recipe-instruction__text" name="" id="" placeholder="Подробное описание шага рецепта..."></textarea>
+        <textarea class="recipe-instruction__text" name="" id="" placeholder="Подробное описание шага рецепта..." maxlength="700"></textarea>
       </li>
       <li class="recipe-instruction__step flex">
         <p class="input-group__header"><span>2</span> шаг</p>
         <div class="recipe-instruction__img">
           <label class="img-load__label"> 
+            <p class="input-group__header">Загрузить фото</p>
             <input class="img-load__input" type="file">
           </label>
           <label class="img-checkbox__label">
@@ -173,12 +175,13 @@
             <span class="img-checkbox__text">без фото</span> 
           </label>
         </div>
-        <textarea class="recipe-instruction__text" name="" id="" placeholder="Подробное описание шага рецепта..."></textarea>
+        <textarea class="recipe-instruction__text" name="" id="" placeholder="Подробное описание шага рецепта..." maxlength="700"></textarea>
       </li>
       <li class="recipe-instruction__step flex">
         <p class="input-group__header"><span>3</span> шаг</p>
         <div class="recipe-instruction__img">
           <label class="img-load__label"> 
+            <p class="input-group__header">Загрузить фото</p>
             <input class="img-load__input" type="file">
           </label>
           <label class="img-checkbox__label">
@@ -186,10 +189,10 @@
             <span class="img-checkbox__text">без фото</span> 
           </label>
         </div>
-        <textarea class="recipe-instruction__text" name="" id="" placeholder="Подробное описание шага рецепта..."></textarea>
+        <textarea class="recipe-instruction__text" name="" id="" placeholder="Подробное описание шага рецепта..." maxlength="700"></textarea>
       </li>
     </ul>
-    <button class="btn btn_blue btn_transparent">&plus; <span>Добавить шаг</span></button>
+    <button id="add-step" class="btn btn_blue btn_transparent">&plus; <span>Добавить шаг</span></button>
   </section>
   <section class="right-context">
     <button class="btn btn_red"><ion-icon name="save-sharp"></ion-icon> Сохранить</button>

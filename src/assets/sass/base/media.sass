@@ -71,6 +71,46 @@
           flex-basis: 100%
           padding: 2% 0            
 
+  .add-recipe 
+    & .recipe
+      &-info
+        &__header
+          & .header__input
+            width: 85%
+        &__category
+          flex-basis: 100%
+          margin-right: 0
+          & label
+            display: inline-block
+            width: 45%
+        & .flex-wrapper
+          flex-basis: 100%
+          margin-top: 2%
+        &__time, &__portions
+          flex-basis: 46%
+          margin-bottom: 2%
+        &__portions
+          & input
+            width: 40%
+        &__img
+          flex-basis: 100%
+      &-ingredients
+        &__list li
+          & .ingredient
+            &__name
+              flex-basis: 65%
+            &__number
+              flex-basis: 19%
+      &-instruction
+        &__img
+          flex-basis: 45%
+          & .img-load__input
+            width: 100%
+        &__text
+          flex-basis: 50%    
+    & .right-context
+      & .btn_red
+        padding: 1.5%
 @media screen and (min-width: 456px) and (max-width: 767px)
   html 
     font-size: 14px
@@ -127,6 +167,33 @@
         & p 
           flex-basis: 67%
 
+  .add-recipe 
+    & .recipe
+      &-info
+        &__category
+          flex-basis: 30%
+        & .flex-wrapper
+          flex-basis: 70%
+        &__portions
+          & input
+            width: 35%
+      &-ingredients
+        &__list li
+          & .ingredient
+            &__name
+              flex-basis: 75%
+            &__number
+              flex-basis: 10%
+      &-instruction
+        &__img
+          flex-basis: 45%
+          & .img-load__input
+            width: 100%
+        &__text
+          flex-basis: 52%    
+    & .right-context
+      & .btn_red
+        padding: 1%
 @media screen and (min-width: 768px) and (max-width: 1024px)
   html 
     font-size: 15px
@@ -175,6 +242,23 @@
           height: auto
         & p 
           flex-basis: 67%
+  .add-recipe 
+    & .recipe
+      &-info
+        &__category
+          flex-basis: 30%
+        & .flex-wrapper
+          flex-basis: 70%
+        &__portions
+          & input
+            width: 35%
+      &-ingredients
+        &__list li
+          & .ingredient
+            &__name
+              flex-basis: 73%
+            &__number
+              flex-basis: 12%
 @media screen and (min-width: 1025px) and (max-width: 1290px)
   .search
     height: clamp(55px, 9vh, 70px)

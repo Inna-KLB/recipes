@@ -1,3 +1,4 @@
-import addToFavorites from "./modules/addToFavorites";
+import addStep from "./modules/addStep";
 
-addToFavorites('.main-page', '.add-fav');
+addStep('.recipe-ingredients__list', '.recipe-ingredients__list-item', '#add-ingredient');
+addStep('.recipe-instruction__list', '.recipe-instruction__step', '#add-step');
