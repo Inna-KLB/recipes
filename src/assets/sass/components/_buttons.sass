@@ -7,9 +7,12 @@
   &:focus
     outline: none
   &_brown
+    padding: 0.8% 1.2%
     background-color: $brown
     border-color: $brown
-    &:hover, &:focus
+    text-align: center
+    &:hover, &:focus, &:active
+      color: $white
       filter: saturate(180%)
   &_red
     background-color: $red
@@ -25,6 +28,20 @@
     display: none
     & ion-icon
       vertical-align: middle
+  &__delete
+    border: none
+    color: $red
+    opacity: 0.7
+    padding: 0.1% 0.2%
+    &:focus
+      outline: none
+    &:hover 
+      opacity: 1
+    & ion-icon
+      // vertical-align: middle
+    --ionicon-stroke-width: 2.2rem  
+
+
 
 .add-fav
   border: none
