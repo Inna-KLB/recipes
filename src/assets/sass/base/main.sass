@@ -35,6 +35,46 @@ a:hover
   justify-content: space-between
   flex-wrap: wrap
 
+.show-menu
+  animation-name: show-menu 
+  animation-duration: 0.5s
+  animation-fill-mode: forwards
+
+@keyframes show-menu
+  0%
+    height: 0
+    margin-top: -30%
+    opacity: 0
+    display: none
+  60% 
+    opacity: 0.2
+    display: flex
+  100%
+    height: 100%
+    margin-top: 0
+    opacity: 1
+    display: flex
+
+// .hide-menu
+//   animation-name: hide-menu 
+//   animation-duration: .5s
+//   animation-fill-mode: forwards
+
+// @keyframes hide-menu
+//   0%
+//     height: 100%
+//     margin-top: 0
+//     opacity: 1
+//     display: flex
+//   // 60% 
+//   //   opacity: 0.2
+//   100%
+//     height: 0
+//     margin-top: -5%
+//     opacity: 0
+//     display: none
+
+
 ul
   list-style: none
   padding-left: 0

@@ -98,6 +98,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_addStep__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/addStep */ "./src/assets/js/modules/addStep.js");
 /* harmony import */ var _modules_deleteStep__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/deleteStep */ "./src/assets/js/modules/deleteStep.js");
 /* harmony import */ var _modules_scroolToUp__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/scroolToUp */ "./src/assets/js/modules/scroolToUp.js");
+/* harmony import */ var _modules_showMobileMenu__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/showMobileMenu */ "./src/assets/js/modules/showMobileMenu.js");
+
 
 
 
@@ -108,6 +110,7 @@ Object(_modules_addStep__WEBPACK_IMPORTED_MODULE_0__["default"])('.recipe-instru
 Object(_modules_deleteStep__WEBPACK_IMPORTED_MODULE_1__["default"])('.recipe-ingredients__list', '.ingredient__delete');
 Object(_modules_deleteStep__WEBPACK_IMPORTED_MODULE_1__["default"])('.recipe-instruction__list', '.instruction__delete');
 Object(_modules_scroolToUp__WEBPACK_IMPORTED_MODULE_2__["default"])();
+Object(_modules_showMobileMenu__WEBPACK_IMPORTED_MODULE_3__["default"])();
 
 /***/ }),
 
@@ -194,6 +197,29 @@ var scrollToUp = function scrollToUp() {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (scrollToUp);
+
+/***/ }),
+
+/***/ "./src/assets/js/modules/showMobileMenu.js":
+/*!*************************************************!*\
+  !*** ./src/assets/js/modules/showMobileMenu.js ***!
+  \*************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var showMobileMenu = function showMobileMenu() {
+  var btn = document.querySelector('#show-menu'),
+      mobileMenu = document.querySelector('#header-navbar');
+  var display = window.getComputedStyle(mobileMenu, null).display;
+  btn.addEventListener('click', function () {
+    display = display === 'flex' ? 'none' : 'flex';
+    mobileMenu.style.display = display;
+  });
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (showMobileMenu);
 
 /***/ })
 
