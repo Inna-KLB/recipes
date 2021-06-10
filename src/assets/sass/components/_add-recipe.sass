@@ -47,7 +47,7 @@
   & .recipe
     &-info
       justify-content: center
-      &__img, &__category, &__time, &__portions
+      &__image, &__category, &__time, &__portions
         padding: 1.5% 1.5%
         border: 1px dashed $blue
         border-radius: 10px
@@ -85,9 +85,10 @@
           width: 0.9rem
           &:checked + span
             color: $blue
-      &__img
+      &__image
         flex-basis: 75%
-        text-align: center             
+        text-align: center   
+        background: none          
       &__time, &__portions
         flex-basis: 35%
         text-align: center

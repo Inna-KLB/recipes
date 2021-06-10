@@ -19,7 +19,9 @@
   &-info
     &__img
       flex-basis: 40%
-      width: 100%
+      height: clamp(300px, 25vh, 400px)
+      background: url('../img/1.jpg') center no-repeat
+      background-size: cover
     &__text
       flex-basis: 55%
       & h2
@@ -42,7 +44,6 @@
 
   &-ingredients
     &__list
-      // padding-left: 0
       text-transform: lowercase
       font-size: 1rem
       & li > span::first-letter
@@ -50,6 +51,8 @@
       & li
         border-bottom: 1px dotted $blue
         margin-bottom: 0.8%
+        & span
+          flex-basis: content
 
   &-instruction
     &__step
