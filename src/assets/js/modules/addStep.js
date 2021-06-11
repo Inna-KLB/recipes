@@ -1,3 +1,5 @@
+import checkInputs from "./checkInputs";
+
 const addStep = (listSelector,  btnSelector) => {
   try {
     const list = document.querySelector(listSelector),
@@ -17,11 +19,11 @@ const addStep = (listSelector,  btnSelector) => {
               <input class="img-load__input" type="file">
             </label>
             <label class="img-checkbox__label">
-              <input class="img-checkbox__input" type="checkbox" name="" id="without-photo">
+              <input class="img-checkbox__input" type="checkbox" value="false">
               <span class="img-checkbox__text">без фото</span> 
             </label>
           </div>
-          <textarea class="recipe-instruction__text" name="" id="" placeholder="Подробное описание шага рецепта..." maxlength="700"></textarea>`;
+          <textarea class="recipe-instruction__text" placeholder="Подробное описание шага рецепта..." maxlength="700"></textarea>`;
       } else {
         li.classList.add('flex', 'recipe-ingredients__list-item')
         li.innerHTML =  `
@@ -38,7 +40,7 @@ const addStep = (listSelector,  btnSelector) => {
       }
       list.append(li);
       // console.log(list);
-      
+      checkInputs();
     });    
   }
   catch {
