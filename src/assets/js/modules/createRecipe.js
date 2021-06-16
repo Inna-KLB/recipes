@@ -1,5 +1,6 @@
 import postData from "../services/postData";
 import checkInputs from "./checkInputs";
+import showModal from "./showModal";
 
 const createRecipe = (link) => {
 
@@ -17,10 +18,13 @@ const createRecipe = (link) => {
     btnSave.addEventListener('click', () => { 
       const ingredients = document.querySelectorAll('.recipe-ingredients__list-item'),
       instructions = document.querySelectorAll('.recipe-instruction__step');
+      
       let arrIngredient = [],
           arrCategory = [],
-          arrInstruction = [];
-  
+          arrInstruction = [],
+          checkArrInstruction;
+      
+      
       // Создание массива с категориями
       categories.forEach(category => {
         if(category.hasAttribute('checked', 'true')) {
@@ -51,35 +55,47 @@ const createRecipe = (link) => {
           noPhoto: checkNoPhoto.value, 
           description: description.value.trim()
         } 
+        arrInstruction.push(instruction); 
+        // checkArrInstruction = (photo.value === '' && checkNoPhoto.value === 'false') ? 'false' : 'true';
       });
   
       checkMainPhoto.value = (checkMainPhoto.hasAttribute('checked', 'true')) ? 'true' : 'false';
   
       // Основной объект рецепта, который сохраняется в базе данных
       let recipeBody = {
-        name: name.value.trim(), //+
-        category: arrCategory, // -
-        time: time.value,  // +
-        portions: +portions.value,  // +
-        description: description.value.trim(), // +
-        mainPhoto: { // -
+        name: name.value.trim(),
+        category: arrCategory, 
+        time: time.value,  
+        portions: +portions.value,  
+        description: description.value.trim(), 
+        mainPhoto: { 
           url: mainImg.value,
           noPhoto: checkMainPhoto.value 
         }, 
-        ingredients: arrIngredient, // +-
-        instructions: arrInstruction // +-
+        ingredients: arrIngredient, 
+        instructions: arrInstruction 
       } 
+
       
+      let checkCategory = (recipeBody.category.length === 0) ? 'false' : 'true',
+          checkMainImg = (recipeBody.mainPhoto.url === '' && recipeBody.mainPhoto.noPhoto === 'false') ? 'false' : 'true';
       
       checkInputs();  
-      console.log(checkInputs());
+      // console.log(recipeBody);
+      // showModal('#good-modal');
+      showModal('#error-modal');
+
+      // console.log(checkArrInstruction);
+
       
-      if(recipeBody.category.length == 0 || checkInputs() === 'false')    {
-        alert('Error');
-      } else {
-        alert('Good')
-        // postData(link, recipeBody);
-      }
+      // console.log(checkInputs(), checkCategory, checkMainImg);
+      
+      // if(checkInputs() === 'false' || checkCategory === 'false' || checkMainImg === 'false') {
+      //   // 
+      // } else {
+      //   alert('Good');
+      //   // postData(link, recipeBody);
+      // }
     });
   }
   catch {

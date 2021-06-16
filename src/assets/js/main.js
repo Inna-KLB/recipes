@@ -1,4 +1,5 @@
 import addStep from "./modules/addStep";
+import checkInputs from "./modules/checkInputs";
 import createRecipe from "./modules/createRecipe";
 import deleteStep from "./modules/deleteStep";
 import scrollToUp from "./modules/scroolToUp";
@@ -14,3 +15,4 @@ deleteStep('.recipe-instruction__list', '.instruction__delete');
 scrollToUp();
 showMobileMenu();
 createRecipe(linkDb);
+checkInputs();

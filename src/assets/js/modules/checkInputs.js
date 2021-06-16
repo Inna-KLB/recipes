@@ -3,19 +3,19 @@ const checkInputs = () => {
         numbers = document.querySelectorAll('input[type="number"]'),
         textInputs = document.querySelectorAll('input[type="text"]'),
         textAreas = document.querySelectorAll('textarea'),
-        time = document.querySelector('#time');
-
-
+        time = document.querySelector('#time'),
+        images = document.querySelectorAll('.recipe-instruction__img');
 
   let checkNum,
       checkText,
       checkTextarea,
-      checkTime;
+      checkTime,
+      checkImages;
   
   checkboxes.forEach(checkbox => {
-    checkbox.addEventListener('click', () => {
+    checkbox.addEventListener('click', (e) => {
       if(checkbox.hasAttribute('checked', 'true')) {
-        checkbox.removeAttribute('checked', 'true');
+        checkbox.removeAttribute('checked', 'true');       
       } else {
         checkbox.setAttribute('checked', 'true');
       }
@@ -39,7 +39,17 @@ const checkInputs = () => {
 
   checkTime = (time.value === '00:00' || time.value === '') ? 'false' : 'true';
 
-  return (checkNum === 'true' && checkText === 'true' && checkTextarea === 'true' && checkTime === 'true') ? 'true' : 'false';
+  // images.forEach(image => {
+  //   const input = image.querySelector('.img-load__input'),
+  //       checkbox = image.querySelector('.img-checkbox__input');
+
+  //   checkImages = (input.value === '' && checkbox.value === 'false') ? 'false' : 'true';
+    
+  // });
+  
+  // console.log(checkImages);
+  
+  return (checkNum === 'true' && checkText === 'true' && checkTextarea === 'true' && checkTime === 'true' && checkImages === 'true') ? 'true' : 'false';
   
 };
 export default checkInputs;
