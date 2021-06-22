@@ -11,11 +11,12 @@ const checkInputs = () => {
       checkTextarea,
       checkTime,
       checkImages;
-  
+      
+  // проверка инпутов на корректные и пустые значения
   checkboxes.forEach(checkbox => {
-    checkbox.addEventListener('click', (e) => {
+    checkbox.addEventListener('click', () => {
       if(checkbox.hasAttribute('checked', 'true')) {
-        checkbox.removeAttribute('checked', 'true');       
+        checkbox.removeAttribute('checked', 'true'); 
       } else {
         checkbox.setAttribute('checked', 'true');
       }
@@ -39,17 +40,17 @@ const checkInputs = () => {
 
   checkTime = (time.value === '00:00' || time.value === '') ? 'false' : 'true';
 
-  // images.forEach(image => {
-  //   const input = image.querySelector('.img-load__input'),
-  //       checkbox = image.querySelector('.img-checkbox__input');
+  images.forEach(image => {
+    const input = image.querySelector('.img-load__input'),
+        checkbox = image.querySelector('.img-checkbox__input');
 
-  //   checkImages = (input.value === '' && checkbox.value === 'false') ? 'false' : 'true';
+    checkImages = (input.value === '' && checkbox.value === 'false') ? 'false' : 'true';
     
-  // });
+  });
   
-  // console.log(checkImages);
   
   return (checkNum === 'true' && checkText === 'true' && checkTextarea === 'true' && checkTime === 'true' && checkImages === 'true') ? 'true' : 'false';
   
 };
 export default checkInputs;
+

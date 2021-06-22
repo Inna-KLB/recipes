@@ -113,22 +113,22 @@
         <input class="ingredient__name" type="text" placeholder="Название ингредиента" maxlength="100">
         <input class="ingredient__number" type="number" placeholder="Кол-во" min="1">
         <select class="ingredient__value">
-          <option value="gr">гр</option>
-          <option value="kg">кг</option>
-          <option value="litr">л</option>
-          <option value="mililitr">мл</option>
-          <option value="pieces">шт</option>
+          <option value="гр">гр</option>
+          <option value="кг">кг</option>
+          <option value="л">л</option>
+          <option value="мл">мл</option>
+          <option value="шт">шт</option>
         </select>
       </li>
       <li class="flex recipe-ingredients__list-item">
         <input class="ingredient__name" type="text" placeholder="Название ингредиента" maxlength="100">
         <input class="ingredient__number" type="number" placeholder="Кол-во" min="1">
         <select class="ingredient__value">
-          <option value="gr">гр</option>
-          <option value="kg">кг</option>
-          <option value="litr">л</option>
-          <option value="mililitr">мл</option>
-          <option value="pieces">шт</option>
+          <option value="гр">гр</option>
+          <option value="кг">кг</option>
+          <option value="л">л</option>
+          <option value="мл">мл</option>
+          <option value="шт">шт</option>
         </select>
         <button class="btn__delete ingredient__delete"><ion-icon class="ingredient__delete" name="close-outline"></ion-icon></button>
       </li>
@@ -136,11 +136,11 @@
         <input class="ingredient__name" type="text" placeholder="Название ингредиента" maxlength="100">
         <input class="ingredient__number" type="number" placeholder="Кол-во" min="1">
         <select class="ingredient__value">
-          <option value="gr">гр</option>
-          <option value="kg">кг</option>
-          <option value="litr">л</option>
-          <option value="mililitr">мл</option>
-          <option value="pieces">шт</option>
+          <option value="гр">гр</option>
+          <option value="кг">кг</option>
+          <option value="л">л</option>
+          <option value="мл">мл</option>
+          <option value="шт">шт</option>
         </select>
         <button class="btn__delete"><ion-icon class="ingredient__delete" name="close-outline"></ion-icon></button>
       </li>
@@ -226,18 +226,25 @@
 
     </footer>
     <script src="js/script.js"></script>
-  <!-- <div class="modal-substrate hide"> -->
+  <div class="modal-substrate hide">
   <div class="modal hide" id="error-modal">
-    <p>Пожалуйста заполните все поля! Числа не должны быть отрицательными.</p>
+    <p>Упс.. неудача!</p>
+    <ul class="modal__list">
+      <li>Заполните все поля</li>
+      <li>Установите числа больше 0</li>
+      <li>Установите время больше "00:00"</li>
+      <li>Выберите категорию</li>
+      <li>Загрузите фото или выберите функцию "без фото"</li>
+    </ul>
     <button class="btn btn_red">ОК</button>
   </div>
   
   <div class="modal hide" id="good-modal">
     <p>Рецепт успешно создан!</p>
-    <a class="btn btn_red">Перейти к рецепту</a>
-    <a class="btn btn_brown">Перейти на главную</a>
+    <a href="recipe.html" class="btn btn_red">Перейти к рецепту</a>
+    <a href="index.html" class="btn btn_brown">Перейти на главную</a>
   </div>
-<!-- </div> -->
+</div>
 
   </body>
 </html>

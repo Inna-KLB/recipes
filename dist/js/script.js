@@ -4293,9 +4293,10 @@ var checkInputs = function checkInputs() {
       textAreas = document.querySelectorAll('textarea'),
       time = document.querySelector('#time'),
       images = document.querySelectorAll('.recipe-instruction__img');
-  var checkNum, checkText, checkTextarea, checkTime, checkImages;
+  var checkNum, checkText, checkTextarea, checkTime, checkImages; // проверка инпутов на корректные и пустые значения
+
   checkboxes.forEach(function (checkbox) {
-    checkbox.addEventListener('click', function (e) {
+    checkbox.addEventListener('click', function () {
       if (checkbox.hasAttribute('checked', 'true')) {
         checkbox.removeAttribute('checked', 'true');
       } else {
@@ -4315,13 +4316,12 @@ var checkInputs = function checkInputs() {
     checkTextarea = textarea.value === '' ? 'false' : 'true';
     return checkText;
   });
-  checkTime = time.value === '00:00' || time.value === '' ? 'false' : 'true'; // images.forEach(image => {
-  //   const input = image.querySelector('.img-load__input'),
-  //       checkbox = image.querySelector('.img-checkbox__input');
-  //   checkImages = (input.value === '' && checkbox.value === 'false') ? 'false' : 'true';
-  // });
-  // console.log(checkImages);
-
+  checkTime = time.value === '00:00' || time.value === '' ? 'false' : 'true';
+  images.forEach(function (image) {
+    var input = image.querySelector('.img-load__input'),
+        checkbox = image.querySelector('.img-checkbox__input');
+    checkImages = input.value === '' && checkbox.value === 'false' ? 'false' : 'true';
+  });
   return checkNum === 'true' && checkText === 'true' && checkTextarea === 'true' && checkTime === 'true' && checkImages === 'true' ? 'true' : 'false';
 };
 
@@ -4369,8 +4369,7 @@ var createRecipe = function createRecipe(link) {
           instructions = document.querySelectorAll('.recipe-instruction__step');
       var arrIngredient = [],
           arrCategory = [],
-          arrInstruction = [],
-          checkArrInstruction; // Создание массива с категориями
+          arrInstruction = []; // Создание массива с категориями
 
       categories.forEach(function (category) {
         if (category.hasAttribute('checked', 'true')) {
@@ -4397,9 +4396,10 @@ var createRecipe = function createRecipe(link) {
           noPhoto: checkNoPhoto.value,
           description: description.value.trim()
         };
-        arrInstruction.push(instruction); // checkArrInstruction = (photo.value === '' && checkNoPhoto.value === 'false') ? 'false' : 'true';
-      });
-      checkMainPhoto.value = checkMainPhoto.hasAttribute('checked', 'true') ? 'true' : 'false'; // Основной объект рецепта, который сохраняется в базе данных
+        arrInstruction.push(instruction);
+      }); // Проверка значения checkboxа у главного фото
+
+      checkMainPhoto.value = checkMainPhoto.hasAttribute('checked', 'true') ? 'true' : 'false'; // Основной объект рецепта, который передается в базу данных
 
       var recipeBody = {
         name: name.value.trim(),
@@ -4413,20 +4413,20 @@ var createRecipe = function createRecipe(link) {
         },
         ingredients: arrIngredient,
         instructions: arrInstruction
-      };
-      var checkCategory = recipeBody.category.length === 0 ? 'false' : 'true',
-          checkMainImg = recipeBody.mainPhoto.url === '' && recipeBody.mainPhoto.noPhoto === 'false' ? 'false' : 'true';
-      Object(_checkInputs__WEBPACK_IMPORTED_MODULE_4__["default"])(); // console.log(recipeBody);
-      // showModal('#good-modal');
+      }; // Валидация массива с категориями и значений для главного фото
 
-      Object(_showModal__WEBPACK_IMPORTED_MODULE_5__["default"])('#error-modal'); // console.log(checkArrInstruction);
-      // console.log(checkInputs(), checkCategory, checkMainImg);
-      // if(checkInputs() === 'false' || checkCategory === 'false' || checkMainImg === 'false') {
-      //   // 
-      // } else {
-      //   alert('Good');
-      //   // postData(link, recipeBody);
-      // }
+      var checkCategory = recipeBody.category.length === 0 ? 'false' : 'true',
+          checkMainImg = recipeBody.mainPhoto.url === '' && recipeBody.mainPhoto.noPhoto === 'false' ? 'false' : 'true'; // console.log('checkInputs:', checkInputs());
+      // console.log('checkCategory:', checkCategory);
+      // console.log('checkMainImg:', checkMainImg);
+      // console.log(recipeBody);
+
+      if (Object(_checkInputs__WEBPACK_IMPORTED_MODULE_4__["default"])() === 'false' || checkCategory === 'false' || checkMainImg === 'false') {
+        Object(_showModal__WEBPACK_IMPORTED_MODULE_5__["default"])('#error-modal');
+      } else {
+        Object(_showModal__WEBPACK_IMPORTED_MODULE_5__["default"])('#good-modal');
+        Object(_services_postData__WEBPACK_IMPORTED_MODULE_3__["default"])(link, recipeBody);
+      }
     });
   } catch (_unused) {
     console.log('It is not that page');
@@ -4520,23 +4520,41 @@ var showMobileMenu = function showMobileMenu() {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var core_js_modules_es_array_for_each_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.for-each.js */ "./node_modules/core-js/modules/es.array.for-each.js");
+/* harmony import */ var core_js_modules_es_array_for_each_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_for_each_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each.js */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_1__);
+
+
+
 var showModal = function showModal(modalSelector) {
-  // const substrate = document.querySelector('.modal-substrate'),
-  var modal = document.querySelector(modalSelector);
+  var substrate = document.querySelector('.modal-substrate'),
+      modal = document.querySelector(modalSelector);
+  var idModal = modal.id;
 
   if (modal.classList.contains('hide')) {
-    // substrate.classList.remove('hide');
-    // substrate.classList.add('show');
+    substrate.classList.remove('hide');
     modal.classList.remove('hide');
-    modal.classList.add('show');
-    document.body.style.overflowY = 'hidden';
-    document.body.style.position = 'relative'; // substrate.style.overflowY = 'hidden';
-  } else {
-    // substrate.classList.remove('show');
-    // substrate.classList.add('hide');
-    modal.classList.remove('show');
-    modal.classList.add('hide');
-    document.body.style.position = '';
+    document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.bottom = '0';
+
+    if (idModal === 'error-modal') {
+      var btnClose = modal.querySelector('button');
+      btnClose.addEventListener('click', function () {
+        substrate.classList.add('hide');
+        modal.classList.add('hide');
+        document.body.style.position = '';
+        document.body.style.bottom = '';
+        document.body.style.position = '';
+      });
+    } else {
+      var links = modal.querySelectorAll('a');
+      links.forEach(function (link) {
+        link.addEventListener('click', function (e) {// e.preventDefault();
+        });
+      });
+    }
   }
 };
 

@@ -21,8 +21,7 @@ const createRecipe = (link) => {
       
       let arrIngredient = [],
           arrCategory = [],
-          arrInstruction = [],
-          checkArrInstruction;
+          arrInstruction = [];
       
       
       // Создание массива с категориями
@@ -56,12 +55,12 @@ const createRecipe = (link) => {
           description: description.value.trim()
         } 
         arrInstruction.push(instruction); 
-        // checkArrInstruction = (photo.value === '' && checkNoPhoto.value === 'false') ? 'false' : 'true';
       });
-  
+      
+      // Проверка значения checkboxа у главного фото
       checkMainPhoto.value = (checkMainPhoto.hasAttribute('checked', 'true')) ? 'true' : 'false';
   
-      // Основной объект рецепта, который сохраняется в базе данных
+      // Основной объект рецепта, который передается в базу данных
       let recipeBody = {
         name: name.value.trim(),
         category: arrCategory, 
@@ -76,26 +75,22 @@ const createRecipe = (link) => {
         instructions: arrInstruction 
       } 
 
-      
+      // Валидация массива с категориями и значений для главного фото
       let checkCategory = (recipeBody.category.length === 0) ? 'false' : 'true',
           checkMainImg = (recipeBody.mainPhoto.url === '' && recipeBody.mainPhoto.noPhoto === 'false') ? 'false' : 'true';
       
-      checkInputs();  
+      // console.log('checkInputs:', checkInputs());
+      // console.log('checkCategory:', checkCategory);
+      // console.log('checkMainImg:', checkMainImg);
+      
       // console.log(recipeBody);
-      // showModal('#good-modal');
-      showModal('#error-modal');
-
-      // console.log(checkArrInstruction);
-
       
-      // console.log(checkInputs(), checkCategory, checkMainImg);
-      
-      // if(checkInputs() === 'false' || checkCategory === 'false' || checkMainImg === 'false') {
-      //   // 
-      // } else {
-      //   alert('Good');
-      //   // postData(link, recipeBody);
-      // }
+      if(checkInputs() === 'false' || checkCategory === 'false' || checkMainImg === 'false') {
+        showModal('#error-modal');
+      } else {
+        showModal('#good-modal');
+        postData(link, recipeBody);
+      }
     });
   }
   catch {
