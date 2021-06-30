@@ -18,7 +18,7 @@
       <a href="add-recipe.html" class="btn btn_brown">&plus;  <span> Добавить рецепт</span></a>
       <button id="show-menu" class="btn btn_mobile btn_blue"><ion-icon name="menu"></ion-icon></button>
     </div>
-    <nav id="header-navbar" class="navbar-menu show-menu flex">
+    <nav id="header-navbar" class="navbar-menu flex">
       <a href="#" class="navbar-menu__item">Первые блюда</a>
       <a href="#" class="navbar-menu__item">Вторые блюда</a>
       <a href="#" class="navbar-menu__item">Завтрак</a>
@@ -112,10 +112,13 @@
       </div>
 
     </footer>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-storage.js"></script>
+
     <script src="js/script.js"></script>
   <div class="modal-substrate hide">
   <div class="modal hide" id="error-modal">
-    <p>Упс.. неудача!</p>
+    <p class="modal__header">Упс.. неудача!</p>
     <ul class="modal__list">
       <li>Заполните все поля</li>
       <li>Установите числа больше 0</li>
@@ -127,7 +130,7 @@
   </div>
   
   <div class="modal hide" id="good-modal">
-    <p>Рецепт успешно создан!</p>
+    <p class="modal__header">Рецепт успешно создан!</p>
     <a href="recipe.html" class="btn btn_red">Перейти к рецепту</a>
     <a href="index.html" class="btn btn_brown">Перейти на главную</a>
   </div>
@@ -135,3 +138,4 @@
 
   </body>
 </html>
+

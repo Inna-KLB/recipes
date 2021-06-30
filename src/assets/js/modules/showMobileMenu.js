@@ -6,6 +6,7 @@ const showMobileMenu = () => {
   btn.addEventListener('click', () => {
     display = (display === 'flex') ? 'none' : 'flex';
     mobileMenu.style.display = display;         
+    mobileMenu.classList.toggle('show-menu');
   });
 };
 export default showMobileMenu;
