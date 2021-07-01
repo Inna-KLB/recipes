@@ -18,10 +18,7 @@ const addStep = (listSelector,  btnSelector) => {
               <p class="input-group__header">Загрузить фото</p>
               <input class="img-load__input" type="file">
             </label>
-            <label class="img-checkbox__label">
-              <input class="img-checkbox__input" type="checkbox" value="false">
-              <span class="img-checkbox__text">без фото</span> 
-            </label>
+          <p class="warning">Если нет подходящего фото, то сайт автоматически вставит картинку по умолчанию.</p>
           </div>
           <textarea class="recipe-instruction__text" placeholder="Подробное описание шага рецепта..." maxlength="700"></textarea>`;
       } else {

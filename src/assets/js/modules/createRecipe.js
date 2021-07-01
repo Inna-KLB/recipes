@@ -1,5 +1,8 @@
 import postData from "../services/postData";
 import checkInputs from "./checkInputs";
+import createRecipePage from "./createRecipePage";
+import getImg from "./getImg";
+import loadImg from "./loadImg";
 import showModal from "./showModal";
 
 const createRecipe = (link) => {
@@ -10,37 +13,28 @@ const createRecipe = (link) => {
           portions = document.querySelector('#portions'),
           categories = document.querySelectorAll('.recipe-info__category input'),
           mainImg = document.querySelector('#main-img'),
-          checkMainPhoto = document.querySelector('#without-main-photo'),
           description = document.querySelector('#description'),
           btnSave = document.querySelector('#save-recipe');
     
-    let file = {};
-    let storageRef,
-        mainImgUrl;
-    
-    mainImg.addEventListener('change', (e) => {
-      file = e.target.files[0];
-      storageRef = firebase.storage().ref(`/${name.value.trim()}/main_img`);
+    // Загрузка в storage изображения 
+    loadImg(mainImg, name);
+          
+    const createRecipeBody = async() => {
+      let imgUrl; 
+      // Получение ссылки изображения
+      await getImg(name)
+        .then(url => {
+          imgUrl = url;
+        });
 
-      storageRef.put(file)
-        .then(function() {
-          console.log('uploaded');
-        }).catch(error => {
-          console.log(error.message);    
-        })
- 
-    });
-    
-      
-  
-    btnSave.addEventListener('click', () => { 
       const ingredients = document.querySelectorAll('.recipe-ingredients__list-item'),
-      instructions = document.querySelectorAll('.recipe-instruction__step');
-      
+            instructions = document.querySelectorAll('.recipe-instruction__step');
+    
       let arrIngredient = [],
           arrCategory = [],
           arrInstruction = [];
-
+      
+      
       // Создание массива с категориями
       categories.forEach(category => {
         if(category.hasAttribute('checked', 'true')) {
@@ -61,27 +55,14 @@ const createRecipe = (link) => {
       // Создание массива с инструкциями
       instructions.forEach(instruction => {
         const photo = instruction.querySelector('.img-load__input'),
-              checkNoPhoto = instruction.querySelector('.img-checkbox__input'),
               description = instruction.querySelector('.recipe-instruction__text');
-  
-        checkNoPhoto.value = (checkNoPhoto.hasAttribute('checked', 'true')) ? 'true' : 'false';
-      
+        
         instruction = {
           photo: photo.value,
-          noPhoto: checkNoPhoto.value, 
           description: description.value.trim()
         } 
         arrInstruction.push(instruction); 
-      });
-      
-      // Проверка значения checkboxа у главного фото
-      checkMainPhoto.value = (checkMainPhoto.hasAttribute('checked', 'true')) ? 'true' : 'false';
-           
-      
-      storageRef.getDownloadURL()
-        .then(mainUrl => {
-          recipeBody.mainPhoto.url = mainUrl;
-      });
+      });     
       
       // Основной объект рецепта, который передается в базу данных
       let recipeBody = {
@@ -90,32 +71,33 @@ const createRecipe = (link) => {
         time: time.value,  
         portions: +portions.value,  
         description: description.value.trim(), 
-        mainPhoto: { 
-          url: null,
-          noPhoto: checkMainPhoto.value 
-        }, 
+        mainPhoto: imgUrl, 
         ingredients: arrIngredient, 
         instructions: arrInstruction 
       };
-     
-      
-      // Валидация массива с категориями и значений для главного фото
-      // let checkCategory = (recipeBody.category.length === 0) ? 'false' : 'true';
-          // checkMainImg = (recipeBody.mainPhoto.url === '' && recipeBody.mainPhoto.noPhoto === 'false') ? 'false' : 'true';
-      
-      // console.log('checkInputs:', checkInputs());
-      // console.log('checkCategory:', checkCategory);     
+
+       // Валидация массива с категориями
+      let checkCategory = (recipeBody.category.length === 0) ? 'false' : 'true';
+             
       console.log(recipeBody);
-      
+
+      // Проверка заполненной формы, и показ модального окна в соответствии наличия или отсутствия ошибок
+       
       // if(checkInputs() === 'false' || checkCategory === 'false') {
       //   showModal('#error-modal');
       // } else {
       //   showModal('#good-modal');
       // }
-      
-      postData(link, recipeBody);
-    });
 
+      // Отправка объекта рецепта в базу данных
+      postData(link, recipeBody);
+        
+    };
+  
+    btnSave.addEventListener('click', () => { 
+      createRecipeBody();
+      // createRecipePage(link);
+    });
   }
   catch {
     console.log('It is not that page');
@@ -123,22 +105,6 @@ const createRecipe = (link) => {
 };
 export default createRecipe;
 
-
-
-/* 
-Your web app's Firebase configuration
-  const firebaseConfig = {
-    apiKey: "AIzaSyBQAXBtG-KChFIMvyNQZ7DVXLxlJY0SpyU",
-    authDomain: "recipe-55b0e.firebaseapp.com",
-    databaseURL: "https://recipe-55b0e-default-rtdb.firebaseio.com",
-    projectId: "recipe-55b0e",
-    storageBucket: "recipe-55b0e.appspot.com",
-    messagingSenderId: "1092446233726",
-    appId: "1:1092446233726:web:146033b45c4da27934e42f"
-  };
-  // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
-*/
 
 /* old rules storage
 

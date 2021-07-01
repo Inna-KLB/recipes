@@ -10,20 +10,19 @@ const createRecipePage = async(link) => {
         ...recipes[key]
       }
     })
-    recipes.forEach(({name, category, time, portions, description, mainPhoto, ingredients, instructions}) => {
-      let photo = (mainPhoto.url);
+    recipes.forEach(({mainPhoto}) => {
+      // let photo = (mainPhoto);
       let img = document.createElement('div');
-      img.innerHTML = `<img src="${mainPhoto}" alt="Пошаговый рецепт">
-      `;
+      img.innerHTML = `<img src="${mainPhoto}">`;
       mainContainer.append(img);
-      console.log('name:', name);
-      console.log('category:', category);
-      console.log('time:', time);
-      console.log('portions:', portions);
-      console.log('description:', description);
-      console.log('mainPhoto:', mainPhoto);
-      console.log('ingredients:', ingredients);
-      console.log('instructions:', instructions); 
+        // console.log('name:', name);
+        // console.log('category:', category);
+        // console.log('time:', time);
+        // console.log('portions:', portions);
+        // console.log('description:', description);
+        // console.log('mainPhoto:', mainPhoto);
+        // console.log('ingredients:', ingredients);
+        // console.log('instructions:', instructions); 
     })
   })
   

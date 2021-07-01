@@ -3161,39 +3161,6 @@ $({ target: 'Array', proto: true, forced: !HAS_SPECIES_SUPPORT }, {
 
 /***/ }),
 
-/***/ "./node_modules/core-js/modules/es.function.name.js":
-/*!**********************************************************!*\
-  !*** ./node_modules/core-js/modules/es.function.name.js ***!
-  \**********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var DESCRIPTORS = __webpack_require__(/*! ../internals/descriptors */ "./node_modules/core-js/internals/descriptors.js");
-var defineProperty = __webpack_require__(/*! ../internals/object-define-property */ "./node_modules/core-js/internals/object-define-property.js").f;
-
-var FunctionPrototype = Function.prototype;
-var FunctionPrototypeToString = FunctionPrototype.toString;
-var nameRE = /^\s*function ([^ (]*)/;
-var NAME = 'name';
-
-// Function instances `.name` property
-// https://tc39.es/ecma262/#sec-function-instances-name
-if (DESCRIPTORS && !(NAME in FunctionPrototype)) {
-  defineProperty(FunctionPrototype, NAME, {
-    configurable: true,
-    get: function () {
-      try {
-        return FunctionPrototypeToString.call(this).match(nameRE)[1];
-      } catch (error) {
-        return '';
-      }
-    }
-  });
-}
-
-
-/***/ }),
-
 /***/ "./node_modules/core-js/modules/es.object.define-properties.js":
 /*!*********************************************************************!*\
   !*** ./node_modules/core-js/modules/es.object.define-properties.js ***!
@@ -3842,68 +3809,6 @@ $({ target: 'String', proto: true, forced: forcedStringTrimMethod('trim') }, {
     return $trim(this);
   }
 });
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/modules/es.symbol.description.js":
-/*!***************************************************************!*\
-  !*** ./node_modules/core-js/modules/es.symbol.description.js ***!
-  \***************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-// `Symbol.prototype.description` getter
-// https://tc39.es/ecma262/#sec-symbol.prototype.description
-
-var $ = __webpack_require__(/*! ../internals/export */ "./node_modules/core-js/internals/export.js");
-var DESCRIPTORS = __webpack_require__(/*! ../internals/descriptors */ "./node_modules/core-js/internals/descriptors.js");
-var global = __webpack_require__(/*! ../internals/global */ "./node_modules/core-js/internals/global.js");
-var has = __webpack_require__(/*! ../internals/has */ "./node_modules/core-js/internals/has.js");
-var isObject = __webpack_require__(/*! ../internals/is-object */ "./node_modules/core-js/internals/is-object.js");
-var defineProperty = __webpack_require__(/*! ../internals/object-define-property */ "./node_modules/core-js/internals/object-define-property.js").f;
-var copyConstructorProperties = __webpack_require__(/*! ../internals/copy-constructor-properties */ "./node_modules/core-js/internals/copy-constructor-properties.js");
-
-var NativeSymbol = global.Symbol;
-
-if (DESCRIPTORS && typeof NativeSymbol == 'function' && (!('description' in NativeSymbol.prototype) ||
-  // Safari 12 bug
-  NativeSymbol().description !== undefined
-)) {
-  var EmptyStringDescriptionStore = {};
-  // wrap Symbol constructor for correct work with undefined description
-  var SymbolWrapper = function Symbol() {
-    var description = arguments.length < 1 || arguments[0] === undefined ? undefined : String(arguments[0]);
-    var result = this instanceof SymbolWrapper
-      ? new NativeSymbol(description)
-      // in Edge 13, String(Symbol(undefined)) === 'Symbol(undefined)'
-      : description === undefined ? NativeSymbol() : NativeSymbol(description);
-    if (description === '') EmptyStringDescriptionStore[result] = true;
-    return result;
-  };
-  copyConstructorProperties(SymbolWrapper, NativeSymbol);
-  var symbolPrototype = SymbolWrapper.prototype = NativeSymbol.prototype;
-  symbolPrototype.constructor = SymbolWrapper;
-
-  var symbolToString = symbolPrototype.toString;
-  var native = String(NativeSymbol('test')) == 'Symbol(test)';
-  var regexp = /^Symbol\((.*)\)[^)]+$/;
-  defineProperty(symbolPrototype, 'description', {
-    configurable: true,
-    get: function description() {
-      var symbol = isObject(this) ? this.valueOf() : this;
-      var string = symbolToString.call(symbol);
-      if (has(EmptyStringDescriptionStore, symbol)) return '';
-      var desc = native ? string.slice(7, -1) : string.replace(regexp, '$1');
-      return desc === '' ? undefined : desc;
-    }
-  });
-
-  $({ global: true, forced: true }, {
-    Symbol: SymbolWrapper
-  });
-}
 
 
 /***/ }),
@@ -5059,11 +4964,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_addStep__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/addStep */ "./src/assets/js/modules/addStep.js");
 /* harmony import */ var _modules_checkInputs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/checkInputs */ "./src/assets/js/modules/checkInputs.js");
 /* harmony import */ var _modules_createRecipe__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/createRecipe */ "./src/assets/js/modules/createRecipe.js");
-/* harmony import */ var _modules_createRecipePage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/createRecipePage */ "./src/assets/js/modules/createRecipePage.js");
-/* harmony import */ var _modules_deleteStep__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/deleteStep */ "./src/assets/js/modules/deleteStep.js");
-/* harmony import */ var _modules_scroolToUp__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/scroolToUp */ "./src/assets/js/modules/scroolToUp.js");
-/* harmony import */ var _modules_showMobileMenu__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/showMobileMenu */ "./src/assets/js/modules/showMobileMenu.js");
-
+/* harmony import */ var _modules_deleteStep__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/deleteStep */ "./src/assets/js/modules/deleteStep.js");
+/* harmony import */ var _modules_scroolToUp__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/scroolToUp */ "./src/assets/js/modules/scroolToUp.js");
+/* harmony import */ var _modules_showMobileMenu__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/showMobileMenu */ "./src/assets/js/modules/showMobileMenu.js");
 
 
 
@@ -5087,12 +4990,12 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 Object(_modules_addStep__WEBPACK_IMPORTED_MODULE_0__["default"])('.recipe-ingredients__list', '#add-ingredient');
 Object(_modules_addStep__WEBPACK_IMPORTED_MODULE_0__["default"])('.recipe-instruction__list', '#add-step');
-Object(_modules_deleteStep__WEBPACK_IMPORTED_MODULE_4__["default"])('.recipe-ingredients__list', '.ingredient__delete');
-Object(_modules_deleteStep__WEBPACK_IMPORTED_MODULE_4__["default"])('.recipe-instruction__list', '.instruction__delete');
-Object(_modules_scroolToUp__WEBPACK_IMPORTED_MODULE_5__["default"])();
-Object(_modules_showMobileMenu__WEBPACK_IMPORTED_MODULE_6__["default"])();
+Object(_modules_deleteStep__WEBPACK_IMPORTED_MODULE_3__["default"])('.recipe-ingredients__list', '.ingredient__delete');
+Object(_modules_deleteStep__WEBPACK_IMPORTED_MODULE_3__["default"])('.recipe-instruction__list', '.instruction__delete');
+Object(_modules_scroolToUp__WEBPACK_IMPORTED_MODULE_4__["default"])();
+Object(_modules_showMobileMenu__WEBPACK_IMPORTED_MODULE_5__["default"])();
 Object(_modules_createRecipe__WEBPACK_IMPORTED_MODULE_2__["default"])(linkDb);
-Object(_modules_checkInputs__WEBPACK_IMPORTED_MODULE_1__["default"])(); // createRecipePage(linkDb);
+Object(_modules_checkInputs__WEBPACK_IMPORTED_MODULE_1__["default"])();
 
 /***/ }),
 
@@ -5117,7 +5020,7 @@ var addStep = function addStep(listSelector, btnSelector) {
 
       if (list.className == 'recipe-instruction__list') {
         li.classList.add('recipe-instruction__step', 'flex');
-        li.innerHTML = "\n          <p class=\"input-group__header\">\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u043E\u043F\u0438\u0441\u0430\u043D\u0438\u0435 \u0440\u0435\u0446\u0435\u043F\u0442\u0430</p>\n          <button class=\"btn__delete\"><ion-icon class=\"instruction__delete\" name=\"close-outline\"></ion-icon></button>\n          <div class=\"recipe-instruction__img\">\n            <label class=\"img-load__label\"> \n              <p class=\"input-group__header\">\u0417\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u044C \u0444\u043E\u0442\u043E</p>\n              <input class=\"img-load__input\" type=\"file\">\n            </label>\n            <label class=\"img-checkbox__label\">\n              <input class=\"img-checkbox__input\" type=\"checkbox\" value=\"false\">\n              <span class=\"img-checkbox__text\">\u0431\u0435\u0437 \u0444\u043E\u0442\u043E</span> \n            </label>\n          </div>\n          <textarea class=\"recipe-instruction__text\" placeholder=\"\u041F\u043E\u0434\u0440\u043E\u0431\u043D\u043E\u0435 \u043E\u043F\u0438\u0441\u0430\u043D\u0438\u0435 \u0448\u0430\u0433\u0430 \u0440\u0435\u0446\u0435\u043F\u0442\u0430...\" maxlength=\"700\"></textarea>";
+        li.innerHTML = "\n          <p class=\"input-group__header\">\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u043E\u043F\u0438\u0441\u0430\u043D\u0438\u0435 \u0440\u0435\u0446\u0435\u043F\u0442\u0430</p>\n          <button class=\"btn__delete\"><ion-icon class=\"instruction__delete\" name=\"close-outline\"></ion-icon></button>\n          <div class=\"recipe-instruction__img\">\n            <label class=\"img-load__label\"> \n              <p class=\"input-group__header\">\u0417\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u044C \u0444\u043E\u0442\u043E</p>\n              <input class=\"img-load__input\" type=\"file\">\n            </label>\n          <p class=\"warning\">\u0415\u0441\u043B\u0438 \u043D\u0435\u0442 \u043F\u043E\u0434\u0445\u043E\u0434\u044F\u0449\u0435\u0433\u043E \u0444\u043E\u0442\u043E, \u0442\u043E \u0441\u0430\u0439\u0442 \u0430\u0432\u0442\u043E\u043C\u0430\u0442\u0438\u0447\u0435\u0441\u043A\u0438 \u0432\u0441\u0442\u0430\u0432\u0438\u0442 \u043A\u0430\u0440\u0442\u0438\u043D\u043A\u0443 \u043F\u043E \u0443\u043C\u043E\u043B\u0447\u0430\u043D\u0438\u044E.</p>\n          </div>\n          <textarea class=\"recipe-instruction__text\" placeholder=\"\u041F\u043E\u0434\u0440\u043E\u0431\u043D\u043E\u0435 \u043E\u043F\u0438\u0441\u0430\u043D\u0438\u0435 \u0448\u0430\u0433\u0430 \u0440\u0435\u0446\u0435\u043F\u0442\u0430...\" maxlength=\"700\"></textarea>";
       } else {
         li.classList.add('flex', 'recipe-ingredients__list-item');
         li.innerHTML = "\n          <input class=\"ingredient__name\" type=\"text\" placeholder=\"\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 \u0438\u043D\u0433\u0440\u0435\u0434\u0438\u0435\u043D\u0442\u0430\" maxlength=\"100\">\n          <input class=\"ingredient__number\" type=\"number\" placeholder=\"\u041A\u043E\u043B-\u0432\u043E\" min=\"1\">\n          <select class=\"ingredient__value\">\n            <option value=\"gr\">\u0433\u0440</option>\n            <option value=\"kg\">\u043A\u0433</option>\n            <option value=\"litr\">\u043B</option>\n            <option value=\"mililitr\">\u043C\u043B</option>\n            <option value=\"pieces\">\u0448\u0442</option>\n          </select> \n          <button class=\"btn__delete ingredient__delete\"><ion-icon class=\"ingredient__delete\" name=\"close-outline\"></ion-icon></button>";
@@ -5163,9 +5066,8 @@ var checkInputs = function checkInputs() {
       numbers = document.querySelectorAll('input[type="number"]'),
       textInputs = document.querySelectorAll('input[type="text"]'),
       textAreas = document.querySelectorAll('textarea'),
-      time = document.querySelector('#time'),
-      images = document.querySelectorAll('.recipe-instruction__img');
-  var checkNum, checkText, checkTextarea, checkTime, checkImages; // проверка инпутов на корректные и пустые значения
+      time = document.querySelector('#time');
+  var checkNum, checkText, checkTextarea, checkTime; // проверка инпутов на корректные и пустые значения
 
   checkboxes.forEach(function (checkbox) {
     checkbox.addEventListener('click', function () {
@@ -5189,12 +5091,7 @@ var checkInputs = function checkInputs() {
     return checkText;
   });
   checkTime = time.value === '00:00' || time.value === '' ? 'false' : 'true';
-  images.forEach(function (image) {
-    var input = image.querySelector('.img-load__input'),
-        checkbox = image.querySelector('.img-checkbox__input');
-    checkImages = input.value === '' && checkbox.value === 'false' ? 'false' : 'true';
-  });
-  return checkNum === 'true' && checkText === 'true' && checkTextarea === 'true' && checkTime === 'true' && checkImages === 'true' ? 'true' : 'false';
+  return checkNum === 'true' && checkText === 'true' && checkTextarea === 'true' && checkTime === 'true' ? 'true' : 'false';
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (checkInputs);
@@ -5210,15 +5107,35 @@ var checkInputs = function checkInputs() {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.string.trim.js */ "./node_modules/core-js/modules/es.string.trim.js");
-/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var regenerator_runtime_runtime_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! regenerator-runtime/runtime.js */ "./node_modules/regenerator-runtime/runtime.js");
+/* harmony import */ var regenerator_runtime_runtime_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(regenerator_runtime_runtime_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var core_js_modules_es_array_for_each_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.array.for-each.js */ "./node_modules/core-js/modules/es.array.for-each.js");
 /* harmony import */ var core_js_modules_es_array_for_each_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_for_each_js__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each.js */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
 /* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _services_postData__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../services/postData */ "./src/assets/js/services/postData.js");
-/* harmony import */ var _checkInputs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./checkInputs */ "./src/assets/js/modules/checkInputs.js");
-/* harmony import */ var _showModal__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./showModal */ "./src/assets/js/modules/showModal.js");
+/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es.string.trim.js */ "./node_modules/core-js/modules/es.string.trim.js");
+/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/es.object.to-string.js */ "./node_modules/core-js/modules/es.object.to-string.js");
+/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var core_js_modules_es_promise_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/es.promise.js */ "./node_modules/core-js/modules/es.promise.js");
+/* harmony import */ var core_js_modules_es_promise_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_promise_js__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _services_postData__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../services/postData */ "./src/assets/js/services/postData.js");
+/* harmony import */ var _checkInputs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./checkInputs */ "./src/assets/js/modules/checkInputs.js");
+/* harmony import */ var _createRecipePage__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./createRecipePage */ "./src/assets/js/modules/createRecipePage.js");
+/* harmony import */ var _getImg__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./getImg */ "./src/assets/js/modules/getImg.js");
+/* harmony import */ var _loadImg__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./loadImg */ "./src/assets/js/modules/loadImg.js");
+/* harmony import */ var _showModal__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./showModal */ "./src/assets/js/modules/showModal.js");
+
+
+
+
+
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 
 
 
@@ -5233,85 +5150,89 @@ var createRecipe = function createRecipe(link) {
         portions = document.querySelector('#portions'),
         categories = document.querySelectorAll('.recipe-info__category input'),
         mainImg = document.querySelector('#main-img'),
-        checkMainPhoto = document.querySelector('#without-main-photo'),
         description = document.querySelector('#description'),
-        btnSave = document.querySelector('#save-recipe');
-    var file = {};
-    var storageRef, mainImgUrl;
-    mainImg.addEventListener('change', function (e) {
-      file = e.target.files[0];
-      storageRef = firebase.storage().ref("/".concat(name.value.trim(), "/main_img"));
-      storageRef.put(file).then(function () {
-        console.log('uploaded');
-      })["catch"](function (error) {
-        console.log(error.message);
-      });
-    });
+        btnSave = document.querySelector('#save-recipe'); // Загрузка в storage изображения 
+
+    Object(_loadImg__WEBPACK_IMPORTED_MODULE_10__["default"])(mainImg, name);
+
+    var createRecipeBody = /*#__PURE__*/function () {
+      var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+        var imgUrl, ingredients, instructions, arrIngredient, arrCategory, arrInstruction, recipeBody, checkCategory;
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return Object(_getImg__WEBPACK_IMPORTED_MODULE_9__["default"])(name).then(function (url) {
+                  imgUrl = url;
+                });
+
+              case 2:
+                ingredients = document.querySelectorAll('.recipe-ingredients__list-item'), instructions = document.querySelectorAll('.recipe-instruction__step');
+                arrIngredient = [], arrCategory = [], arrInstruction = []; // Создание массива с категориями
+
+                categories.forEach(function (category) {
+                  if (category.hasAttribute('checked', 'true')) {
+                    arrCategory.push(category.value);
+                  }
+                }); // Создание массива с ингредиентами
+
+                ingredients.forEach(function (ingredient) {
+                  ingredient = {
+                    name: ingredient.children[0].value.trim(),
+                    quantity: ingredient.children[1].value,
+                    value: ingredient.children[2].value
+                  };
+                  arrIngredient.push(ingredient);
+                }); // Создание массива с инструкциями
+
+                instructions.forEach(function (instruction) {
+                  var photo = instruction.querySelector('.img-load__input'),
+                      description = instruction.querySelector('.recipe-instruction__text');
+                  instruction = {
+                    photo: photo.value,
+                    description: description.value.trim()
+                  };
+                  arrInstruction.push(instruction);
+                }); // Основной объект рецепта, который передается в базу данных
+
+                recipeBody = {
+                  name: name.value.trim(),
+                  category: arrCategory,
+                  time: time.value,
+                  portions: +portions.value,
+                  description: description.value.trim(),
+                  mainPhoto: imgUrl,
+                  ingredients: arrIngredient,
+                  instructions: arrInstruction
+                }; // Валидация массива с категориями
+
+                checkCategory = recipeBody.category.length === 0 ? 'false' : 'true';
+                console.log(recipeBody); // Проверка заполненной формы, и показ модального окна в соответствии наличия или отсутствия ошибок
+                // if(checkInputs() === 'false' || checkCategory === 'false') {
+                //   showModal('#error-modal');
+                // } else {
+                //   showModal('#good-modal');
+                // }
+                // Отправка объекта рецепта в базу данных
+
+                Object(_services_postData__WEBPACK_IMPORTED_MODULE_6__["default"])(link, recipeBody);
+
+              case 11:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }));
+
+      return function createRecipeBody() {
+        return _ref.apply(this, arguments);
+      };
+    }();
+
     btnSave.addEventListener('click', function () {
-      var ingredients = document.querySelectorAll('.recipe-ingredients__list-item'),
-          instructions = document.querySelectorAll('.recipe-instruction__step');
-      var arrIngredient = [],
-          arrCategory = [],
-          arrInstruction = []; // Создание массива с категориями
-
-      categories.forEach(function (category) {
-        if (category.hasAttribute('checked', 'true')) {
-          arrCategory.push(category.value);
-        }
-      }); // Создание массива с ингредиентами
-
-      ingredients.forEach(function (ingredient) {
-        ingredient = {
-          name: ingredient.children[0].value.trim(),
-          quantity: ingredient.children[1].value,
-          value: ingredient.children[2].value
-        };
-        arrIngredient.push(ingredient);
-      }); // Создание массива с инструкциями
-
-      instructions.forEach(function (instruction) {
-        var photo = instruction.querySelector('.img-load__input'),
-            checkNoPhoto = instruction.querySelector('.img-checkbox__input'),
-            description = instruction.querySelector('.recipe-instruction__text');
-        checkNoPhoto.value = checkNoPhoto.hasAttribute('checked', 'true') ? 'true' : 'false';
-        instruction = {
-          photo: photo.value,
-          noPhoto: checkNoPhoto.value,
-          description: description.value.trim()
-        };
-        arrInstruction.push(instruction);
-      }); // Проверка значения checkboxа у главного фото
-
-      checkMainPhoto.value = checkMainPhoto.hasAttribute('checked', 'true') ? 'true' : 'false';
-      storageRef.getDownloadURL().then(function (mainUrl) {
-        recipeBody.mainPhoto.url = mainUrl;
-      }); // Основной объект рецепта, который передается в базу данных
-
-      var recipeBody = {
-        name: name.value.trim(),
-        category: arrCategory,
-        time: time.value,
-        portions: +portions.value,
-        description: description.value.trim(),
-        mainPhoto: {
-          url: null,
-          noPhoto: checkMainPhoto.value
-        },
-        ingredients: arrIngredient,
-        instructions: arrInstruction
-      }; // Валидация массива с категориями и значений для главного фото
-      // let checkCategory = (recipeBody.category.length === 0) ? 'false' : 'true';
-      // checkMainImg = (recipeBody.mainPhoto.url === '' && recipeBody.mainPhoto.noPhoto === 'false') ? 'false' : 'true';
-      // console.log('checkInputs:', checkInputs());
-      // console.log('checkCategory:', checkCategory);     
-
-      console.log(recipeBody); // if(checkInputs() === 'false' || checkCategory === 'false') {
-      //   showModal('#error-modal');
-      // } else {
-      //   showModal('#good-modal');
-      // }
-
-      Object(_services_postData__WEBPACK_IMPORTED_MODULE_3__["default"])(link, recipeBody);
+      createRecipeBody(); // createRecipePage(link);
     });
   } catch (_unused) {
     console.log('It is not that page');
@@ -5319,21 +5240,6 @@ var createRecipe = function createRecipe(link) {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (createRecipe);
-/* 
-Your web app's Firebase configuration
-  const firebaseConfig = {
-    apiKey: "AIzaSyBQAXBtG-KChFIMvyNQZ7DVXLxlJY0SpyU",
-    authDomain: "recipe-55b0e.firebaseapp.com",
-    databaseURL: "https://recipe-55b0e-default-rtdb.firebaseio.com",
-    projectId: "recipe-55b0e",
-    storageBucket: "recipe-55b0e.appspot.com",
-    messagingSenderId: "1092446233726",
-    appId: "1:1092446233726:web:146033b45c4da27934e42f"
-  };
-  // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
-*/
-
 /* old rules storage
 
 rules_version = '2';
@@ -5368,27 +5274,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_es_array_for_each_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_for_each_js__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each.js */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
 /* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var core_js_modules_es_function_name_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/es.function.name.js */ "./node_modules/core-js/modules/es.function.name.js");
-/* harmony import */ var core_js_modules_es_function_name_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_function_name_js__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var core_js_modules_es_symbol_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/es.symbol.js */ "./node_modules/core-js/modules/es.symbol.js");
-/* harmony import */ var core_js_modules_es_symbol_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_symbol_js__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var core_js_modules_es_symbol_description_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core-js/modules/es.symbol.description.js */ "./node_modules/core-js/modules/es.symbol.description.js");
-/* harmony import */ var core_js_modules_es_symbol_description_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_symbol_description_js__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core-js/modules/es.object.to-string.js */ "./node_modules/core-js/modules/es.object.to-string.js");
-/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var core_js_modules_es_promise_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! core-js/modules/es.promise.js */ "./node_modules/core-js/modules/es.promise.js");
-/* harmony import */ var core_js_modules_es_promise_js__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_promise_js__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var core_js_modules_es_object_define_property_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! core-js/modules/es.object.define-property.js */ "./node_modules/core-js/modules/es.object.define-property.js");
-/* harmony import */ var core_js_modules_es_object_define_property_js__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_define_property_js__WEBPACK_IMPORTED_MODULE_10__);
-/* harmony import */ var core_js_modules_es_array_filter_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! core-js/modules/es.array.filter.js */ "./node_modules/core-js/modules/es.array.filter.js");
-/* harmony import */ var core_js_modules_es_array_filter_js__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_filter_js__WEBPACK_IMPORTED_MODULE_11__);
-/* harmony import */ var core_js_modules_es_object_get_own_property_descriptor_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! core-js/modules/es.object.get-own-property-descriptor.js */ "./node_modules/core-js/modules/es.object.get-own-property-descriptor.js");
-/* harmony import */ var core_js_modules_es_object_get_own_property_descriptor_js__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_get_own_property_descriptor_js__WEBPACK_IMPORTED_MODULE_12__);
-/* harmony import */ var core_js_modules_es_object_get_own_property_descriptors_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! core-js/modules/es.object.get-own-property-descriptors.js */ "./node_modules/core-js/modules/es.object.get-own-property-descriptors.js");
-/* harmony import */ var core_js_modules_es_object_get_own_property_descriptors_js__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_get_own_property_descriptors_js__WEBPACK_IMPORTED_MODULE_13__);
-/* harmony import */ var core_js_modules_es_object_define_properties_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! core-js/modules/es.object.define-properties.js */ "./node_modules/core-js/modules/es.object.define-properties.js");
-/* harmony import */ var core_js_modules_es_object_define_properties_js__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_define_properties_js__WEBPACK_IMPORTED_MODULE_14__);
-/* harmony import */ var _services_getData__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../services/getData */ "./src/assets/js/services/getData.js");
+/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/es.object.to-string.js */ "./node_modules/core-js/modules/es.object.to-string.js");
+/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var core_js_modules_es_promise_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/es.promise.js */ "./node_modules/core-js/modules/es.promise.js");
+/* harmony import */ var core_js_modules_es_promise_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_promise_js__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var core_js_modules_es_object_define_property_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core-js/modules/es.object.define-property.js */ "./node_modules/core-js/modules/es.object.define-property.js");
+/* harmony import */ var core_js_modules_es_object_define_property_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_define_property_js__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var core_js_modules_es_symbol_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core-js/modules/es.symbol.js */ "./node_modules/core-js/modules/es.symbol.js");
+/* harmony import */ var core_js_modules_es_symbol_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_symbol_js__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var core_js_modules_es_array_filter_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! core-js/modules/es.array.filter.js */ "./node_modules/core-js/modules/es.array.filter.js");
+/* harmony import */ var core_js_modules_es_array_filter_js__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_filter_js__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var core_js_modules_es_object_get_own_property_descriptor_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! core-js/modules/es.object.get-own-property-descriptor.js */ "./node_modules/core-js/modules/es.object.get-own-property-descriptor.js");
+/* harmony import */ var core_js_modules_es_object_get_own_property_descriptor_js__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_get_own_property_descriptor_js__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var core_js_modules_es_object_get_own_property_descriptors_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! core-js/modules/es.object.get-own-property-descriptors.js */ "./node_modules/core-js/modules/es.object.get-own-property-descriptors.js");
+/* harmony import */ var core_js_modules_es_object_get_own_property_descriptors_js__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_get_own_property_descriptors_js__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var core_js_modules_es_object_define_properties_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! core-js/modules/es.object.define-properties.js */ "./node_modules/core-js/modules/es.object.define-properties.js");
+/* harmony import */ var core_js_modules_es_object_define_properties_js__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_define_properties_js__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var _services_getData__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../services/getData */ "./src/assets/js/services/getData.js");
 
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
@@ -5396,8 +5298,6 @@ function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (O
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-
 
 
 
@@ -5427,33 +5327,25 @@ var createRecipePage = /*#__PURE__*/function () {
           case 0:
             mainContainer = document.querySelector('.add-recipe');
             _context.next = 3;
-            return Object(_services_getData__WEBPACK_IMPORTED_MODULE_15__["default"])(link).then(function (recipes) {
+            return Object(_services_getData__WEBPACK_IMPORTED_MODULE_13__["default"])(link).then(function (recipes) {
               recipes = Object.keys(recipes).map(function (key) {
                 return _objectSpread({
                   id: key
                 }, recipes[key]);
               });
               recipes.forEach(function (_ref2) {
-                var name = _ref2.name,
-                    category = _ref2.category,
-                    time = _ref2.time,
-                    portions = _ref2.portions,
-                    description = _ref2.description,
-                    mainPhoto = _ref2.mainPhoto,
-                    ingredients = _ref2.ingredients,
-                    instructions = _ref2.instructions;
-                var photo = mainPhoto.url;
+                var mainPhoto = _ref2.mainPhoto;
+                // let photo = (mainPhoto);
                 var img = document.createElement('div');
-                img.innerHTML = "<img src=\"".concat(mainPhoto, "\" alt=\"\u041F\u043E\u0448\u0430\u0433\u043E\u0432\u044B\u0439 \u0440\u0435\u0446\u0435\u043F\u0442\">\n      ");
-                mainContainer.append(img);
-                console.log('name:', name);
-                console.log('category:', category);
-                console.log('time:', time);
-                console.log('portions:', portions);
-                console.log('description:', description);
-                console.log('mainPhoto:', mainPhoto);
-                console.log('ingredients:', ingredients);
-                console.log('instructions:', instructions);
+                img.innerHTML = "<img src=\"".concat(mainPhoto, "\">");
+                mainContainer.append(img); // console.log('name:', name);
+                // console.log('category:', category);
+                // console.log('time:', time);
+                // console.log('portions:', portions);
+                // console.log('description:', description);
+                // console.log('mainPhoto:', mainPhoto);
+                // console.log('ingredients:', ingredients);
+                // console.log('instructions:', instructions); 
               });
             });
 
@@ -5501,6 +5393,96 @@ var deleteStep = function deleteStep(listSelector, btnSelector) {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (deleteStep);
+
+/***/ }),
+
+/***/ "./src/assets/js/modules/getImg.js":
+/*!*****************************************!*\
+  !*** ./src/assets/js/modules/getImg.js ***!
+  \*****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var regenerator_runtime_runtime_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! regenerator-runtime/runtime.js */ "./node_modules/regenerator-runtime/runtime.js");
+/* harmony import */ var regenerator_runtime_runtime_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(regenerator_runtime_runtime_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.string.trim.js */ "./node_modules/core-js/modules/es.string.trim.js");
+/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.object.to-string.js */ "./node_modules/core-js/modules/es.object.to-string.js");
+/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var core_js_modules_es_promise_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es.promise.js */ "./node_modules/core-js/modules/es.promise.js");
+/* harmony import */ var core_js_modules_es_promise_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_promise_js__WEBPACK_IMPORTED_MODULE_3__);
+
+
+
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+var getImg = /*#__PURE__*/function () {
+  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(folderName) {
+    var folder, srcImg;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            folder = folderName.value.trim();
+            _context.next = 3;
+            return firebase.storage().ref("/".concat(folder, "/main_img")).getDownloadURL().then(function (url) {
+              srcImg = url;
+            })["catch"](function (error) {
+              console.log(error.message);
+            });
+
+          case 3:
+            return _context.abrupt("return", srcImg);
+
+          case 4:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee);
+  }));
+
+  return function getImg(_x) {
+    return _ref.apply(this, arguments);
+  };
+}();
+
+/* harmony default export */ __webpack_exports__["default"] = (getImg);
+
+/***/ }),
+
+/***/ "./src/assets/js/modules/loadImg.js":
+/*!******************************************!*\
+  !*** ./src/assets/js/modules/loadImg.js ***!
+  \******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.string.trim.js */ "./node_modules/core-js/modules/es.string.trim.js");
+/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_0__);
+
+
+var loadImg = function loadImg(imgSelector, folderName) {
+  imgSelector.addEventListener('change', function (e) {
+    var file = e.target.files[0],
+        folder = folderName.value.trim();
+    firebase.storage().ref("/".concat(folder, "/main_img")).put(file).then(function () {
+      console.log('Succsecfully uploaded');
+    })["catch"](function (error) {
+      console.log(error.message);
+    });
+  });
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (loadImg);
 
 /***/ }),
 
