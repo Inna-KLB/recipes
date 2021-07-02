@@ -11,7 +11,6 @@ const createRecipePage = async(link) => {
       }
     })
     recipes.forEach(({mainPhoto}) => {
-      // let photo = (mainPhoto);
       let img = document.createElement('div');
       img.innerHTML = `<img src="${mainPhoto}">`;
       mainContainer.append(img);

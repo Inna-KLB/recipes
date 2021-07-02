@@ -1,9 +1,8 @@
+import loadIntoStorage from "../services/loadIntoStorage";
 import postData from "../services/postData";
 import checkInputs from "./checkInputs";
-import createRecipePage from "./createRecipePage";
-import getImg from "./getImg";
-import loadImg from "./loadImg";
 import showModal from "./showModal";
+import showSpinner from "./showSpinner";
 
 const createRecipe = (link) => {
 
@@ -16,25 +15,26 @@ const createRecipe = (link) => {
           description = document.querySelector('#description'),
           btnSave = document.querySelector('#save-recipe');
     
-    // Загрузка в storage изображения 
-    loadImg(mainImg, name);
-          
-    const createRecipeBody = async() => {
-      let imgUrl; 
-      // Получение ссылки изображения
-      await getImg(name)
-        .then(url => {
-          imgUrl = url;
-        });
+    // Создание id для названия папки для изображений
+    let id = new Date().getDate() + new Date().getTime() + Math.random();
+   
 
+    const createRecipeBody = async() => {
       const ingredients = document.querySelectorAll('.recipe-ingredients__list-item'),
             instructions = document.querySelectorAll('.recipe-instruction__step');
-    
+            
       let arrIngredient = [],
           arrCategory = [],
-          arrInstruction = [];
-      
-      
+          arrInstruction = [],
+          mainImgUrl, 
+          imgStepUrl;
+
+      // Получение ссылки главного изображения
+      await loadIntoStorage(mainImg, id)
+        .then(url => {
+          mainImgUrl = url;
+        });   
+
       // Создание массива с категориями
       categories.forEach(category => {
         if(category.hasAttribute('checked', 'true')) {
@@ -53,17 +53,23 @@ const createRecipe = (link) => {
       });
   
       // Создание массива с инструкциями
-      instructions.forEach(instruction => {
-        const photo = instruction.querySelector('.img-load__input'),
-              description = instruction.querySelector('.recipe-instruction__text');
-        
-        instruction = {
-          photo: photo.value,
+      for (let i = 0; i < instructions.length; i++) {
+        const imgStep = instructions[i].querySelector('.img-load__input'),
+              description = instructions[i].querySelector('.recipe-instruction__text');
+
+      // Получение ссылки на изображение каждом шаге рецепта
+        await loadIntoStorage(imgStep, id, i)
+          .then(url => {
+            imgStepUrl = url;
+          });   
+
+        let instruction = {
+          imgStep: imgStepUrl,
           description: description.value.trim()
         } 
         arrInstruction.push(instruction); 
-      });     
-      
+      }   
+
       // Основной объект рецепта, который передается в базу данных
       let recipeBody = {
         name: name.value.trim(),
@@ -71,7 +77,7 @@ const createRecipe = (link) => {
         time: time.value,  
         portions: +portions.value,  
         description: description.value.trim(), 
-        mainPhoto: imgUrl, 
+        mainPhoto: mainImgUrl, 
         ingredients: arrIngredient, 
         instructions: arrInstruction 
       };
@@ -80,23 +86,20 @@ const createRecipe = (link) => {
       let checkCategory = (recipeBody.category.length === 0) ? 'false' : 'true';
              
       console.log(recipeBody);
-
-      // Проверка заполненной формы, и показ модального окна в соответствии наличия или отсутствия ошибок
-       
-      // if(checkInputs() === 'false' || checkCategory === 'false') {
-      //   showModal('#error-modal');
-      // } else {
-      //   showModal('#good-modal');
-      // }
-
-      // Отправка объекта рецепта в базу данных
-      postData(link, recipeBody);
-        
+      // showSpinner();
+      
+      // Проверка заполненной формы, и показ модального окна в соответствии наличия или отсутствия ошибок     
+      if(checkInputs() === 'false' || checkCategory === 'false') {
+        showModal('#error-modal');
+      } else {
+        // Загрузка рецепта в базу данных
+        postData(link, recipeBody);     
+        showModal('#good-modal');
+      }
     };
   
     btnSave.addEventListener('click', () => { 
       createRecipeBody();
-      // createRecipePage(link);
     });
   }
   catch {
