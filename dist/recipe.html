@@ -31,19 +31,23 @@
   </header>
 
 <main class="recipe-page">
-  <section class="recipe-info flex">
+  <!-- <section class="recipe-info flex">
     <div class="recipe-info__img"></div>
     <div class="recipe-info__text">
       <h2>Борщ</h2>    
       <div class="flex"> 
-        <p><ion-icon name="pricetags-outline"></ion-icon><span>Первые блюда</span></p>
+        <p>
+          <span><ion-icon name="pricetags-outline"></ion-icon> Первые блюда</span>
+          <span><ion-icon name="pricetags-outline"></ion-icon> Первые блюда</span>
+          <span><ion-icon name="pricetags-outline"></ion-icon> Первые блюда</span>
+        </p>
         <p><ion-icon name="stopwatch-outline"></ion-icon><span>1 час 20 минут</span></p>
         <p><ion-icon name="people-outline"></ion-icon><span>10 порций</span></p>
       </div>
       <button class="btn btn_brown"><ion-icon name="pencil-outline"></ion-icon> Редактировать рецепт</button>
       <button class="btn btn_red"><ion-icon name="trash-outline"></ion-icon> Удалить рецепт</button>
     </div>
-  </section>
+  </section> 
   <section class="recipe-description">
     <h3 class="recipe-description__header">Описание блюда</h3>
     <div class="recipe-description__text">
@@ -87,7 +91,7 @@
       <img src="https://via.placeholder.com/750x500/c3d5ee/333?text=&#10072;+6+шаг" alt="Пошаговый рецепт">
       <p>Взбивайте содержимое чаши блендера до однородности, около 1 минуты. Затем вылейте образовавшуюся огуречную смесь на самое мелкое сито и тщательно отцедите в миску, отделив небольшое количество лишней шелухи, которую сразу выбросите. Отцеженную огуречную жидкость в миске накройте пищевой пленкой и поставьте охлаждаться в холодильник на 1-2 часа.</p>
     </div>
-  </section>
+  </section>  -->
   <a href="#header" class="arrow-up"><ion-icon name="arrow-up-sharp"></ion-icon></a>
 </main>
 
@@ -130,8 +134,8 @@
   
   <div class="modal hide" id="good-modal">
     <p class="modal__header">Рецепт успешно создан!</p>
-    <a href="recipe.html" class="btn btn_red">Перейти к рецепту</a>
-    <a href="index.html" class="btn btn_brown">Перейти на главную</a>
+    <a href="recipe.html" id="to-recipe" class="btn btn_red">Перейти к рецепту</a>
+    <a href="index.html" id="to-main" class="btn btn_brown">Перейти на главную</a>
   </div>
 </div>
 

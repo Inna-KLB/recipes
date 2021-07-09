@@ -39,7 +39,12 @@ const checkInputs = () => {
     });
   
     checkTime = (time.value === '00:00' || time.value === '') ? 'false' : 'true';
-    
+
+    console.log('num', checkNum);
+    console.log('checkText', checkText);
+    console.log('checkTextarea', checkTextarea);
+    console.log('checkTime', checkTime);
+
     return (checkNum === 'true' && checkText === 'true' && checkTextarea === 'true' && checkTime === 'true') ? 'true' : 'false';
   }
   catch {

@@ -3,7 +3,6 @@ const getData = async(link) => {
     method: 'GET'
   });
   let res = await responce.json();
-  console.log(res);
   return res;
 };
 export default getData;

@@ -1,8 +1,8 @@
 import loadIntoStorage from "../services/loadIntoStorage";
 import postData from "../services/postData";
 import checkInputs from "./checkInputs";
+import createRecipePage from "./createRecipePage";
 import showModal from "./showModal";
-import showSpinner from "./showSpinner";
 
 const createRecipe = (link) => {
 
@@ -16,7 +16,7 @@ const createRecipe = (link) => {
           btnSave = document.querySelector('#save-recipe');
     
     // Создание id для названия папки для изображений
-    let id = new Date().getDate() + new Date().getTime() + Math.random();
+    let idImgFolder = new Date().getDate() + new Date().getTime() + Math.random();
    
 
     const createRecipeBody = async() => {
@@ -27,10 +27,11 @@ const createRecipe = (link) => {
           arrCategory = [],
           arrInstruction = [],
           mainImgUrl, 
-          imgStepUrl;
+          imgStepUrl,
+          idRecipe;
 
       // Получение ссылки главного изображения
-      await loadIntoStorage(mainImg, id)
+      await loadIntoStorage(mainImg, idImgFolder)
         .then(url => {
           mainImgUrl = url;
         });   
@@ -58,7 +59,7 @@ const createRecipe = (link) => {
               description = instructions[i].querySelector('.recipe-instruction__text');
 
       // Получение ссылки на изображение каждом шаге рецепта
-        await loadIntoStorage(imgStep, id, i)
+        await loadIntoStorage(imgStep, idImgFolder, i)
           .then(url => {
             imgStepUrl = url;
           });   
@@ -86,15 +87,20 @@ const createRecipe = (link) => {
       let checkCategory = (recipeBody.category.length === 0) ? 'false' : 'true';
              
       console.log(recipeBody);
-      // showSpinner();
-      
+      console.log('category', checkCategory);
+      console.log(checkInputs());
+
+      // let check = postData(link, recipeBody);
       // Проверка заполненной формы, и показ модального окна в соответствии наличия или отсутствия ошибок     
       if(checkInputs() === 'false' || checkCategory === 'false') {
         showModal('#error-modal');
       } else {
         // Загрузка рецепта в базу данных
-        postData(link, recipeBody);     
-        showModal('#good-modal');
+        await postData(link, recipeBody)
+        .then((res) => {
+          idRecipe = res.name;
+        });            
+        showModal('#good-modal', link, idRecipe);
       }
     };
   

@@ -18,20 +18,20 @@ const addStep = (listSelector,  btnSelector) => {
               <p class="input-group__header">Загрузить фото</p>
               <input class="img-load__input" type="file">
             </label>
-          <p class="warning">Если нет подходящего фото, то сайт автоматически вставит картинку по умолчанию.</p>
+          <p class="warning">Если нет подходящего фото,  сайт автоматически вставит картинку по умолчанию.</p>
           </div>
           <textarea class="recipe-instruction__text" placeholder="Подробное описание шага рецепта..." maxlength="700"></textarea>`;
       } else {
         li.classList.add('flex', 'recipe-ingredients__list-item')
         li.innerHTML =  `
           <input class="ingredient__name" type="text" placeholder="Название ингредиента" maxlength="100">
-          <input class="ingredient__number" type="number" placeholder="Кол-во" min="1">
+          <input class="ingredient__number" type="number" placeholder="Кол-во" min="1" step="0.5">
           <select class="ingredient__value">
-            <option value="gr">гр</option>
-            <option value="kg">кг</option>
-            <option value="litr">л</option>
-            <option value="mililitr">мл</option>
-            <option value="pieces">шт</option>
+            <option value="гр">гр</option>
+            <option value="кг">кг</option>
+            <option value="л">л</option>
+            <option value="мл">мл</option>
+            <option value="шт">шт</option>
           </select> 
           <button class="btn__delete ingredient__delete"><ion-icon class="ingredient__delete" name="close-outline"></ion-icon></button>`; 
       }
