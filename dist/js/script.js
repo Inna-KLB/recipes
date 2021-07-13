@@ -5264,9 +5264,8 @@ var checkInputs = function checkInputs() {
     var checkboxes = document.querySelectorAll('input[type="checkbox"]'),
         numbers = document.querySelectorAll('input[type="number"]'),
         textInputs = document.querySelectorAll('input[type="text"]'),
-        textAreas = document.querySelectorAll('textarea'),
-        time = document.querySelector('#time');
-    var checkNum, checkText, checkTextarea, checkTime; // проверка инпутов на корректные и пустые значения
+        textAreas = document.querySelectorAll('textarea');
+    var checkNum, checkText, checkTextarea; // проверка инпутов на корректные и пустые значения
 
     checkboxes.forEach(function (checkbox) {
       checkbox.addEventListener('click', function () {
@@ -5288,13 +5287,14 @@ var checkInputs = function checkInputs() {
     textAreas.forEach(function (textarea) {
       checkTextarea = textarea.value === '' ? 'false' : 'true';
       return checkText;
-    });
-    checkTime = time.value === '00:00' || time.value === '' ? 'false' : 'true';
-    console.log('num', checkNum);
-    console.log('checkText', checkText);
-    console.log('checkTextarea', checkTextarea);
-    console.log('checkTime', checkTime);
-    return checkNum === 'true' && checkText === 'true' && checkTextarea === 'true' && checkTime === 'true' ? 'true' : 'false';
+    }); // console.log('num', checkNum);
+    // console.log('checkText', checkText);
+    // console.log('checkTextarea', checkTextarea);
+    // alert('num:', checkNum);
+    // alert('checkText:', checkText);
+    // alert('checkTextarea:', checkTextarea);
+
+    return checkNum === 'true' && checkText === 'true' && checkTextarea === 'true' ? 'true' : 'false';
   } catch (_unused) {
     console.log('It is not that page');
   }
@@ -5332,8 +5332,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _services_loadIntoStorage__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../services/loadIntoStorage */ "./src/assets/js/services/loadIntoStorage.js");
 /* harmony import */ var _services_postData__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../services/postData */ "./src/assets/js/services/postData.js");
 /* harmony import */ var _checkInputs__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./checkInputs */ "./src/assets/js/modules/checkInputs.js");
-/* harmony import */ var _createRecipePage__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./createRecipePage */ "./src/assets/js/modules/createRecipePage.js");
-/* harmony import */ var _showModal__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./showModal */ "./src/assets/js/modules/showModal.js");
+/* harmony import */ var _showModal__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./showModal */ "./src/assets/js/modules/showModal.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -5352,11 +5351,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 
-
 var createRecipe = function createRecipe(link) {
   try {
     var name = document.querySelector('.header__input'),
-        time = document.querySelector('#time'),
+        timeHours = document.querySelector('#time_hours'),
+        timeMinutes = document.querySelector('#time_minutes'),
         portions = document.querySelector('#portions'),
         categories = document.querySelectorAll('.recipe-info__category input'),
         mainImg = document.querySelector('#main-img'),
@@ -5430,7 +5429,10 @@ var createRecipe = function createRecipe(link) {
                 recipeBody = {
                   name: name.value.trim(),
                   category: arrCategory,
-                  time: time.value,
+                  time: {
+                    hours: timeHours.value,
+                    minutes: timeMinutes.value
+                  },
                   portions: +portions.value,
                   description: description.value.trim(),
                   mainPhoto: mainImgUrl,
@@ -5439,30 +5441,31 @@ var createRecipe = function createRecipe(link) {
                 }; // Валидация массива с категориями
 
                 checkCategory = recipeBody.category.length === 0 ? 'false' : 'true';
-                console.log(recipeBody);
-                console.log('category', checkCategory);
-                console.log(Object(_checkInputs__WEBPACK_IMPORTED_MODULE_10__["default"])()); // let check = postData(link, recipeBody);
+                console.log(recipeBody); // console.log('category', checkCategory);
+                // alert(checkInputs());
                 // Проверка заполненной формы, и показ модального окна в соответствии наличия или отсутствия ошибок     
 
                 if (!(Object(_checkInputs__WEBPACK_IMPORTED_MODULE_10__["default"])() === 'false' || checkCategory === 'false')) {
-                  _context.next = 25;
+                  _context.next = 23;
                   break;
                 }
 
-                Object(_showModal__WEBPACK_IMPORTED_MODULE_12__["default"])('#error-modal');
-                _context.next = 28;
+                // alert('bad');
+                Object(_showModal__WEBPACK_IMPORTED_MODULE_11__["default"])('#error-modal');
+                _context.next = 26;
                 break;
 
-              case 25:
-                _context.next = 27;
+              case 23:
+                _context.next = 25;
                 return Object(_services_postData__WEBPACK_IMPORTED_MODULE_9__["default"])(link, recipeBody).then(function (res) {
                   idRecipe = res.name;
                 });
 
-              case 27:
-                Object(_showModal__WEBPACK_IMPORTED_MODULE_12__["default"])('#good-modal', link, idRecipe);
+              case 25:
+                // alert('good');          
+                Object(_showModal__WEBPACK_IMPORTED_MODULE_11__["default"])('#good-modal', link, idRecipe);
 
-              case 28:
+              case 26:
               case "end":
                 return _context.stop();
             }
@@ -5548,7 +5551,7 @@ var createRecipePage = function createRecipePage(recipe) {
   recipeInfoText.innerHTML = "<h2>".concat(recipe.name, "</h2>");
   var recipeInfoBox = document.createElement('div');
   recipeInfoBox.classList.add('flex');
-  recipeInfoBox.innerHTML = "\n    <p><ion-icon name=\"stopwatch-outline\"></ion-icon><span>".concat(recipe.time, " (\u0447 : \u043C\u0438\u043D)</span></p>\n    <p><ion-icon name=\"people-outline\"></ion-icon><span>").concat(recipe.portions, " \u043F\u043E\u0440\u0446\u0438\u0438</span></p>\n  ");
+  recipeInfoBox.innerHTML = "\n    <p><ion-icon name=\"stopwatch-outline\"></ion-icon><span>".concat(recipe.time.hours, "\u0447 ").concat(recipe.time.minutes, "\u043C\u0438\u043D</span></p>\n    <p><ion-icon name=\"people-outline\"></ion-icon><span>").concat(recipe.portions, " \u043F\u043E\u0440\u0446\u0438\u0438</span></p>\n  ");
   var category = document.createElement('p');
 
   for (var i = 0; i < recipe.category.length; i++) {

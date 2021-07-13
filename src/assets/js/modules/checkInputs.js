@@ -3,13 +3,11 @@ const checkInputs = () => {
     const checkboxes = document.querySelectorAll('input[type="checkbox"]'),
           numbers = document.querySelectorAll('input[type="number"]'),
           textInputs = document.querySelectorAll('input[type="text"]'),
-          textAreas = document.querySelectorAll('textarea'),
-          time = document.querySelector('#time');
+          textAreas = document.querySelectorAll('textarea');
   
     let checkNum,
         checkText,
-        checkTextarea,
-        checkTime;
+        checkTextarea;
   
   
     // проверка инпутов на корректные и пустые значения
@@ -38,14 +36,16 @@ const checkInputs = () => {
       return checkText;
     });
   
-    checkTime = (time.value === '00:00' || time.value === '') ? 'false' : 'true';
 
-    console.log('num', checkNum);
-    console.log('checkText', checkText);
-    console.log('checkTextarea', checkTextarea);
-    console.log('checkTime', checkTime);
+    // console.log('num', checkNum);
+    // console.log('checkText', checkText);
+    // console.log('checkTextarea', checkTextarea);
 
-    return (checkNum === 'true' && checkText === 'true' && checkTextarea === 'true' && checkTime === 'true') ? 'true' : 'false';
+    // alert('num:', checkNum);
+    // alert('checkText:', checkText);
+    // alert('checkTextarea:', checkTextarea);
+
+    return (checkNum === 'true' && checkText === 'true' && checkTextarea === 'true') ? 'true' : 'false';
   }
   catch {
     console.log('It is not that page');

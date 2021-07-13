@@ -32,7 +32,7 @@ const createRecipePage = (recipe) => {
   let recipeInfoBox = document.createElement('div');
   recipeInfoBox.classList.add('flex');
   recipeInfoBox.innerHTML = `
-    <p><ion-icon name="stopwatch-outline"></ion-icon><span>${recipe.time} (ч : мин)</span></p>
+    <p><ion-icon name="stopwatch-outline"></ion-icon><span>${recipe.time.hours}ч ${recipe.time.minutes}мин</span></p>
     <p><ion-icon name="people-outline"></ion-icon><span>${recipe.portions} порции</span></p>
   `;
   let category = document.createElement('p');

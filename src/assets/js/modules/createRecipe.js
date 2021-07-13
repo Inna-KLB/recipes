@@ -1,14 +1,14 @@
 import loadIntoStorage from "../services/loadIntoStorage";
 import postData from "../services/postData";
 import checkInputs from "./checkInputs";
-import createRecipePage from "./createRecipePage";
 import showModal from "./showModal";
 
 const createRecipe = (link) => {
 
   try {
     const name = document.querySelector('.header__input'),
-          time = document.querySelector('#time'),
+          timeHours = document.querySelector('#time_hours'),
+          timeMinutes = document.querySelector('#time_minutes'),
           portions = document.querySelector('#portions'),
           categories = document.querySelectorAll('.recipe-info__category input'),
           mainImg = document.querySelector('#main-img'),
@@ -75,7 +75,10 @@ const createRecipe = (link) => {
       let recipeBody = {
         name: name.value.trim(),
         category: arrCategory, 
-        time: time.value,  
+        time: {
+          hours: timeHours.value,
+          minutes: timeMinutes.value
+        },  
         portions: +portions.value,  
         description: description.value.trim(), 
         mainPhoto: mainImgUrl, 
@@ -87,19 +90,20 @@ const createRecipe = (link) => {
       let checkCategory = (recipeBody.category.length === 0) ? 'false' : 'true';
              
       console.log(recipeBody);
-      console.log('category', checkCategory);
-      console.log(checkInputs());
+      // console.log('category', checkCategory);
+      // alert(checkInputs());
 
-      // let check = postData(link, recipeBody);
       // Проверка заполненной формы, и показ модального окна в соответствии наличия или отсутствия ошибок     
       if(checkInputs() === 'false' || checkCategory === 'false') {
+        // alert('bad');
         showModal('#error-modal');
       } else {
         // Загрузка рецепта в базу данных
         await postData(link, recipeBody)
         .then((res) => {
           idRecipe = res.name;
-        });            
+        });  
+        // alert('good');          
         showModal('#good-modal', link, idRecipe);
       }
     };
