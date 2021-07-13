@@ -5173,7 +5173,7 @@ __webpack_require__.r(__webpack_exports__);
 
 'use strict';
 
-var linkDb = 'http://recipe-55b0e-default-rtdb.firebaseio.com/data.json'; // Firebase настройка
+var linkDb = 'https://recipe-55b0e-default-rtdb.firebaseio.com/data.json'; // Firebase настройка
 
 var firebaseConfig = {
   apiKey: "AIzaSyBQAXBtG-KChFIMvyNQZ7DVXLxlJY0SpyU",
@@ -5940,7 +5940,7 @@ var loadIntoStorage = /*#__PURE__*/function () {
             document.body.style.bottom = '0';
             document.body.append(statusMessage);
             statusImg = document.createElement('img');
-            statusImg.setAttribute('src', '../img/spinner.gif');
+            statusImg.setAttribute('src', 'dist/img/spinner.gif');
             statusImg.setAttribute('width', '40vw');
             statusMessage.append(statusImg); // Загрузка изображения в storage
 
