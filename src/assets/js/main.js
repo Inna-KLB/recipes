@@ -8,7 +8,7 @@ import showMobileMenu from "./modules/showMobileMenu";
 
 
 'use strict';
-const linkDb = 'http://recipe-55b0e-default-rtdb.firebaseio.com/data.json';
+const linkDb = 'https://recipe-55b0e-default-rtdb.firebaseio.com/data.json';
 
 // Firebase настройка
   const firebaseConfig = {
