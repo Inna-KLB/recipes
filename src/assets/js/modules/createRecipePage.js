@@ -3,6 +3,7 @@ import getData from "../services/getData";
 const createRecipePage = (recipe) => {
   const mainContainer = document.querySelector('.add-recipe');
   mainContainer.classList.remove('add-recipe');
+  mainContainer.style.display = 'none';
   mainContainer.classList.add('recipe-page');
 
         

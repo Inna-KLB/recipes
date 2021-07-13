@@ -20,13 +20,15 @@
     &__img
       flex-basis: 40%
       height: clamp(300px, 25vh, 400px)
-      background: url('../img/1.jpg') center no-repeat
+      background: url('../img/main-photo.jpg') center no-repeat
       background-size: cover
     &__text
       flex-basis: 55%
       & h2
         font-weight: 500
         font-size: 2rem
+        &::first-letter
+          text-transform: capitalize
       & div
         margin-bottom: 5%
         & p
@@ -42,9 +44,12 @@
       & .btn_brown
         margin-right: 5%
 
+  &-description__text
+    p::first-letter
+      text-transform: capitalize
+
   &-ingredients
     &__list
-      text-transform: lowercase
       font-size: 1rem
       & li > span::first-letter
         text-transform: capitalize
@@ -64,3 +69,6 @@
         height: auto
       & p 
         flex-basis: 70%
+        &::first-letter
+          text-transform: capitalize
+          

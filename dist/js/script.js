@@ -5366,7 +5366,7 @@ var createRecipe = function createRecipe(link) {
 
     var createRecipeBody = /*#__PURE__*/function () {
       var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-        var ingredients, instructions, arrIngredient, arrCategory, arrInstruction, mainImgUrl, imgStepUrl, idRecipe, i, imgStep, _description, instruction, recipeBody, checkCategory;
+        var ingredients, instructions, arrIngredient, arrCategory, arrInstruction, mainImgUrl, imgStepUrl, idRecipe, i, imgStep, _description, step, instruction, recipeBody, checkCategory;
 
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
@@ -5375,12 +5375,30 @@ var createRecipe = function createRecipe(link) {
                 ingredients = document.querySelectorAll('.recipe-ingredients__list-item'), instructions = document.querySelectorAll('.recipe-instruction__step');
                 arrIngredient = [], arrCategory = [], arrInstruction = []; // Получение ссылки главного изображения
 
-                _context.next = 4;
+                if (!(mainImg.value !== '')) {
+                  _context.next = 8;
+                  break;
+                }
+
+                if (!(mainImg.files[0].type === 'image/png' || mainImg.files[0].type === 'image/jpeg')) {
+                  _context.next = 6;
+                  break;
+                }
+
+                _context.next = 6;
                 return Object(_services_loadIntoStorage__WEBPACK_IMPORTED_MODULE_8__["default"])(mainImg, idImgFolder).then(function (url) {
                   mainImgUrl = url;
                 });
 
-              case 4:
+              case 6:
+                _context.next = 9;
+                break;
+
+              case 8:
+                // Если изображение не было загружено, то вставляется изображение по умолчанию
+                mainImgUrl = '../img/main-photo.jpg';
+
+              case 9:
                 // Создание массива с категориями
                 categories.forEach(function (category) {
                   if (category.hasAttribute('checked', 'true')) {
@@ -5390,7 +5408,7 @@ var createRecipe = function createRecipe(link) {
 
                 ingredients.forEach(function (ingredient) {
                   ingredient = {
-                    name: ingredient.children[0].value.trim(),
+                    name: ingredient.children[0].value.trim().toLowerCase(),
                     quantity: ingredient.children[1].value,
                     value: ingredient.children[2].value
                   };
@@ -5399,73 +5417,88 @@ var createRecipe = function createRecipe(link) {
 
                 i = 0;
 
-              case 7:
+              case 12:
                 if (!(i < instructions.length)) {
-                  _context.next = 16;
+                  _context.next = 27;
                   break;
                 }
 
                 imgStep = instructions[i].querySelector('.img-load__input'), _description = instructions[i].querySelector('.recipe-instruction__text'); // Получение ссылки на изображение каждом шаге рецепта
 
-                _context.next = 11;
+                if (!(imgStep.value !== '')) {
+                  _context.next = 20;
+                  break;
+                }
+
+                if (!(imgStep.files[0].type === 'image/png' || imgStep.files[0].type === 'image/jpeg')) {
+                  _context.next = 18;
+                  break;
+                }
+
+                _context.next = 18;
                 return Object(_services_loadIntoStorage__WEBPACK_IMPORTED_MODULE_8__["default"])(imgStep, idImgFolder, i).then(function (url) {
                   imgStepUrl = url;
                 });
 
-              case 11:
+              case 18:
+                _context.next = 22;
+                break;
+
+              case 20:
+                // Если изображение не было загружено, то вставляется картинка-заглушка
+                step = i + 1;
+                imgStepUrl = "https://via.placeholder.com/750x500/c3d5ee/333?text=&#10072;+".concat(step, "+\u0448\u0430\u0433");
+
+              case 22:
                 instruction = {
                   imgStep: imgStepUrl,
-                  description: _description.value.trim()
+                  description: _description.value.trim().toLowerCase()
                 };
                 arrInstruction.push(instruction);
 
-              case 13:
+              case 24:
                 i++;
-                _context.next = 7;
+                _context.next = 12;
                 break;
 
-              case 16:
+              case 27:
                 // Основной объект рецепта, который передается в базу данных
                 recipeBody = {
-                  name: name.value.trim(),
+                  name: name.value.trim().toLowerCase(),
                   category: arrCategory,
                   time: {
                     hours: timeHours.value,
                     minutes: timeMinutes.value
                   },
                   portions: +portions.value,
-                  description: description.value.trim(),
+                  description: description.value.trim().toLowerCase(),
                   mainPhoto: mainImgUrl,
                   ingredients: arrIngredient,
                   instructions: arrInstruction
                 }; // Валидация массива с категориями
 
                 checkCategory = recipeBody.category.length === 0 ? 'false' : 'true';
-                console.log(recipeBody); // console.log('category', checkCategory);
-                // alert(checkInputs());
-                // Проверка заполненной формы, и показ модального окна в соответствии наличия или отсутствия ошибок     
+                console.log(recipeBody); // Проверка заполненной формы, и показ модального окна в соответствии наличия или отсутствия ошибок     
 
                 if (!(Object(_checkInputs__WEBPACK_IMPORTED_MODULE_10__["default"])() === 'false' || checkCategory === 'false')) {
-                  _context.next = 23;
+                  _context.next = 34;
                   break;
                 }
 
-                // alert('bad');
                 Object(_showModal__WEBPACK_IMPORTED_MODULE_11__["default"])('#error-modal');
-                _context.next = 26;
+                _context.next = 37;
                 break;
 
-              case 23:
-                _context.next = 25;
+              case 34:
+                _context.next = 36;
                 return Object(_services_postData__WEBPACK_IMPORTED_MODULE_9__["default"])(link, recipeBody).then(function (res) {
                   idRecipe = res.name;
                 });
 
-              case 25:
-                // alert('good');          
+              case 36:
                 Object(_showModal__WEBPACK_IMPORTED_MODULE_11__["default"])('#good-modal', link, idRecipe);
 
-              case 26:
+              case 37:
               case "end":
                 return _context.stop();
             }
@@ -5529,6 +5562,7 @@ __webpack_require__.r(__webpack_exports__);
 var createRecipePage = function createRecipePage(recipe) {
   var mainContainer = document.querySelector('.add-recipe');
   mainContainer.classList.remove('add-recipe');
+  mainContainer.style.display = 'none';
   mainContainer.classList.add('recipe-page'); // return await getData(link)
   // .then(recipes => {
   //   recipes = Object.keys(recipes).map(key => {
@@ -5940,13 +5974,14 @@ var loadIntoStorage = /*#__PURE__*/function () {
             document.body.style.bottom = '0';
             document.body.append(statusMessage);
             statusImg = document.createElement('img');
-            statusImg.setAttribute('src', 'dist/img/spinner.gif');
+            statusImg.setAttribute('src', '../img/spinner.gif');
             statusImg.setAttribute('width', '40vw');
             statusMessage.append(statusImg); // Загрузка изображения в storage
 
             _context.next = 13;
             return storageRef.put(file).then(function () {
               console.log('Succsecfully uploaded');
+              console.log('type:', file.type);
             })["catch"](function (error) {
               console.log(error.message);
             });
@@ -5960,6 +5995,7 @@ var loadIntoStorage = /*#__PURE__*/function () {
             });
 
           case 15:
+            // Удаление спинера после загрузки изображений
             document.body.removeChild(statusMessage);
             return _context.abrupt("return", srcImg);
 

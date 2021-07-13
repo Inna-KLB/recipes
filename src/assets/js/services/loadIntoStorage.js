@@ -12,14 +12,17 @@ const loadIntoStorage = async(imgSelector, id, i) => {
   document.body.append(statusMessage);
 
   let statusImg = document.createElement('img');
-  statusImg.setAttribute('src', 'dist/img/spinner.gif');
+  statusImg.setAttribute('src', '../img/spinner.gif');
   statusImg.setAttribute('width', '40vw');
   statusMessage.append(statusImg);
     
+
   // Загрузка изображения в storage
   await storageRef.put(file)
     .then(function() {
       console.log('Succsecfully uploaded');
+      console.log('type:', file.type);
+      
     })
     .catch(error => {
       console.log(error.message);    
@@ -32,6 +35,8 @@ const loadIntoStorage = async(imgSelector, id, i) => {
     }).catch(error => {
       console.log(error.message);
     });
+
+  // Удаление спинера после загрузки изображений
   document.body.removeChild(statusMessage);
   return srcImg;  
 };

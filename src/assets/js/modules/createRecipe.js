@@ -31,10 +31,17 @@ const createRecipe = (link) => {
           idRecipe;
 
       // Получение ссылки главного изображения
-      await loadIntoStorage(mainImg, idImgFolder)
-        .then(url => {
-          mainImgUrl = url;
-        });   
+      if(mainImg.value !== '') {
+        if(mainImg.files[0].type === 'image/png' || mainImg.files[0].type === 'image/jpeg') {
+          await loadIntoStorage(mainImg, idImgFolder)
+            .then(url => {
+              mainImgUrl = url;
+            });   
+        }
+      } else {
+        // Если изображение не было загружено, то вставляется изображение по умолчанию
+        mainImgUrl = '../img/main-photo.jpg';
+      }
 
       // Создание массива с категориями
       categories.forEach(category => {
@@ -46,7 +53,7 @@ const createRecipe = (link) => {
       // Создание массива с ингредиентами
       ingredients.forEach(ingredient => {
         ingredient = {
-          name: ingredient.children[0].value.trim(),
+          name: ingredient.children[0].value.trim().toLowerCase(),
           quantity: ingredient.children[1].value,
           value: ingredient.children[2].value
         }
@@ -59,28 +66,36 @@ const createRecipe = (link) => {
               description = instructions[i].querySelector('.recipe-instruction__text');
 
       // Получение ссылки на изображение каждом шаге рецепта
-        await loadIntoStorage(imgStep, idImgFolder, i)
-          .then(url => {
-            imgStepUrl = url;
-          });   
+        if(imgStep.value !== '') {
+          if(imgStep.files[0].type === 'image/png' || imgStep.files[0].type === 'image/jpeg') {
+            await loadIntoStorage(imgStep, idImgFolder, i)
+              .then(url => {
+                imgStepUrl = url;
+              });   
+          }
+        } else {
+          // Если изображение не было загружено, то вставляется картинка-заглушка
+          let step = i + 1;
+          imgStepUrl = `https://via.placeholder.com/750x500/c3d5ee/333?text=&#10072;+${step}+шаг`;
+        }
 
         let instruction = {
           imgStep: imgStepUrl,
-          description: description.value.trim()
+          description: description.value.trim().toLowerCase()
         } 
         arrInstruction.push(instruction); 
       }   
 
       // Основной объект рецепта, который передается в базу данных
       let recipeBody = {
-        name: name.value.trim(),
+        name: name.value.trim().toLowerCase(),
         category: arrCategory, 
         time: {
           hours: timeHours.value,
           minutes: timeMinutes.value
         },  
         portions: +portions.value,  
-        description: description.value.trim(), 
+        description: description.value.trim().toLowerCase(), 
         mainPhoto: mainImgUrl, 
         ingredients: arrIngredient, 
         instructions: arrInstruction 
@@ -90,20 +105,16 @@ const createRecipe = (link) => {
       let checkCategory = (recipeBody.category.length === 0) ? 'false' : 'true';
              
       console.log(recipeBody);
-      // console.log('category', checkCategory);
-      // alert(checkInputs());
 
       // Проверка заполненной формы, и показ модального окна в соответствии наличия или отсутствия ошибок     
       if(checkInputs() === 'false' || checkCategory === 'false') {
-        // alert('bad');
         showModal('#error-modal');
       } else {
         // Загрузка рецепта в базу данных
         await postData(link, recipeBody)
         .then((res) => {
           idRecipe = res.name;
-        });  
-        // alert('good');          
+        });         
         showModal('#good-modal', link, idRecipe);
       }
     };
