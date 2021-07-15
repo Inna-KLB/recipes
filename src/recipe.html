@@ -1,67 +1,173 @@
 @@include('parts/header.html')
 
-<main class="recipe-page">
-  <!-- <section class="recipe-info flex">
-    <div class="recipe-info__img"></div>
-    <div class="recipe-info__text">
-      <h2>Борщ</h2>    
-      <div class="flex"> 
-        <p>
-          <span><ion-icon name="pricetags-outline"></ion-icon> Первые блюда</span>
-          <span><ion-icon name="pricetags-outline"></ion-icon> Первые блюда</span>
-          <span><ion-icon name="pricetags-outline"></ion-icon> Первые блюда</span>
-        </p>
-        <p><ion-icon name="stopwatch-outline"></ion-icon><span>1 час 20 минут</span></p>
-        <p><ion-icon name="people-outline"></ion-icon><span>10 порций</span></p>
-      </div>
-      <button class="btn btn_brown"><ion-icon name="pencil-outline"></ion-icon> Редактировать рецепт</button>
-      <button class="btn btn_red"><ion-icon name="trash-outline"></ion-icon> Удалить рецепт</button>
+<main class="add-recipe">
+  <section class="recipe-info flex">
+    <div class="recipe-info__header">
+      <ion-icon name="pencil-outline"></ion-icon>
+      <input class="header__input" type="text" placeholder="Название блюда" autofocus>  
     </div>
-  </section> 
+    <div class="recipe-info__category">
+      <p class="input-group__header">Добавить категорию</p>
+      <label> 
+        <input type="checkbox" id="firstCourse" value="Первое блюдо">
+        <span>Первое блюдо</span>
+      </label>
+      <label> 
+        <input type="checkbox" value="Второе блюдо" id="secondCourse">
+        <span>Второе блюдо</span>
+      </label>
+      <label> 
+        <input type="checkbox" value="Завтрак" id="breakfast">
+        <span>Завтрак</span>
+      </label>
+      <label> 
+        <input type="checkbox" value="Мясо" id="meat">
+        <span>Мясо</span>
+      </label>
+      <label> 
+        <input type="checkbox" value="Рыба" id="fish">
+        <span>Рыба</span>
+      </label>
+      <label> 
+        <input type="checkbox" value="Салаты" id="salads">
+        <span>Салаты</span>
+      </label>
+      <label> 
+        <input type="checkbox" value="ПП-блюда" id="healthlyFood">
+        <span>ПП-блюда</span>
+      </label>
+      <label> 
+        <input type="checkbox" value="Выпечка" id="bakeryProd">
+        <span>Выпечка</span>
+      </label>
+    </div>   
+    <div class="flex-wrapper">
+      <div class="recipe-info__time">
+        <p class="input-group__header">Добавить время приготовления</p>
+          <input type="number" id="time_hours" value="" min="0">
+          <span>ч</span>
+          <input type="number" id="time_minutes" value="" min="0" max="60">
+          <span>мин</span>
+      </div>
+      <div class="recipe-info__portions">
+        <p class="input-group__header">Добавить количество порций</p>
+        <label>
+          <input type="number" id="portions" min="1" value="">
+          <span>порций</span>
+        </label>
+      </div>
+      <div class="recipe-info__image">
+        <p class="input-group__header">Загрузить главное фото</p>
+        <label class="img-load__label"> 
+          <input class="img-load__input" type="file" id="main-img" accept="image/*">
+        </label>
+        <p class="warning">Если нет подходящего фото,  сайт автоматически вставит картинку по умолчанию.</p>
+      </div>
+    </div>
+  </section>
+
   <section class="recipe-description">
     <h3 class="recipe-description__header">Описание блюда</h3>
     <div class="recipe-description__text">
-      <p>Это очень вкусное первое блюдо на основе мяса и свеклы</p>
+      <input type="text" placeholder="1-2 небольших предложения" maxlength="150" id="description" value="">
     </div>
   </section>
+
   <section class="recipe-ingredients">
     <h3>Ингредиенты</h3>
     <ul class="recipe-ingredients__list">
-      <li class="flex"><span>Свекла</span><span>1 кг</span></li>
-      <li class="flex"><span>КАРТОШКА</span><span>200 гр</span></li>
-      <li class="flex"><span>cвинина</span><span>500 гр</span></li>
-      <li class="flex"><span>Капуста</span><span>300 гр</span></li>
-      <li class="flex"><span>Лук репчатый</span><span>100 гр</span></li>
-      <li class="flex"><span>Вода</span><span>5 л</span></li>
+      <li class="flex recipe-ingredients__list-item">
+        <input class="ingredient__name" type="text" placeholder="Название ингредиента" maxlength="100">
+        <input class="ingredient__number" type="number" placeholder="Кол-во" min="1" step="0.5">
+        <select class="ingredient__value">
+          <option value="гр">гр</option>
+          <option value="кг">кг</option>
+          <option value="л">л</option>
+          <option value="мл">мл</option>
+          <option value="шт">шт</option>
+          <option value="ст.л.">ст.л.</option>
+          <option value="ч.л.">ч.л.</option>
+          <option value="ст">ст</option>
+        </select>
+      </li>
+      <li class="flex recipe-ingredients__list-item">
+        <input class="ingredient__name" type="text" placeholder="Название ингредиента" maxlength="100">
+        <input class="ingredient__number" type="number" placeholder="Кол-во" min="1" step="0.5">
+        <select class="ingredient__value">
+          <option value="гр">гр</option>
+          <option value="кг">кг</option>
+          <option value="л">л</option>
+          <option value="мл">мл</option>
+          <option value="шт">шт</option>
+          <option value="ст.л.">ст.л.</option>
+          <option value="ч.л.">ч.л.</option>
+          <option value="ст">ст</option>
+        </select>
+        <button class="btn__delete ingredient__delete"><ion-icon class="ingredient__delete" name="close-outline"></ion-icon></button>
+      </li>
+      <li class="flex recipe-ingredients__list-item">
+        <input class="ingredient__name" type="text" placeholder="Название ингредиента" maxlength="100">
+        <input class="ingredient__number" type="number" placeholder="Кол-во" min="1" step="0.5">
+        <select class="ingredient__value">
+          <option value="гр">гр</option>
+          <option value="кг">кг</option>
+          <option value="л">л</option>
+          <option value="мл">мл</option>
+          <option value="шт">шт</option>
+          <option value="ст.л.">ст.л.</option>
+          <option value="ч.л.">ч.л.</option>
+          <option value="ст">ст</option>
+        </select>
+        <button class="btn__delete"><ion-icon class="ingredient__delete" name="close-outline"></ion-icon></button>
+      </li>
     </ul>
+    <button id="add-ingredient" class="btn btn_blue btn_transparent">&plus; <span>Добавить ингредиент</span></button>
   </section>
+
   <section class="recipe-instruction">
     <h3>Пошаговый рецепт</h3>
-    <div class="recipe-instruction__step flex">
-      <img src="https://via.placeholder.com/750x500/c3d5ee/333?text=&#10072;+1+шаг" alt="Пошаговый рецепт">
-      <p>Глубокую, небольшую кастрюлю поместите на плиту, бросьте в нее сливочное масло (можно растопить масло заранее и залить уже растаявшим) и на среднем огне растопите.</p>
-    </div>
-    <div class="recipe-instruction__step flex">
-      <img src="https://via.placeholder.com/750x500/c3d5ee/333?text=&#10072;+2+шаг" alt="Пошаговый рецепт">
-      <p>Бросьте в растаявшее масло заранее вымытый и мелко нарезанный лук-порей. Обжаривайте, постоянно перемешивая, до мягкости, от 10 до 15 минут. Затем переложите на тарелку и дайте ему остыть.</p>
-    </div>
-    <div class="recipe-instruction__step flex">
-      <img src="https://via.placeholder.com/750x500/c3d5ee/333?text=&#10072;+3+шаг" alt="Пошаговый рецепт">
-      <p>Берите большого размера огурцы (но старайтесь выбрать сорт, в котором меньше косточек), очистите от кожуры и нарежьте на разделочной доске крупными кольцами.</p>
-    </div>
-    <div class="recipe-instruction__step flex">
-      <img src="https://via.placeholder.com/750x500/c3d5ee/333?text=&#10072;+4+шаг" alt="Пошаговый рецепт">
-      <p>Поместите нарезанные огурцы в чашу блендера, добавьте ягоды зеленого винограда (без косточек), мелко измельченный миндаль.</p>
-    </div>
-    <div class="recipe-instruction__step flex">
-      <img src="https://via.placeholder.com/750x500/c3d5ee/333?text=&#10072;+5+шаг" alt="Пошаговый рецепт">
-      <p>Залейте огурцы одной столовой ложкой оливкового масла, присыпьте крупной солью.  Далее добавьте жирные сливки, заранее подготовленные хлебные кубики, залейте немного яблочного уксуса и накройте все охлажденным луком-пореем и водой.</p>
-    </div>
-    <div class="recipe-instruction__step flex">
-      <img src="https://via.placeholder.com/750x500/c3d5ee/333?text=&#10072;+6+шаг" alt="Пошаговый рецепт">
-      <p>Взбивайте содержимое чаши блендера до однородности, около 1 минуты. Затем вылейте образовавшуюся огуречную смесь на самое мелкое сито и тщательно отцедите в миску, отделив небольшое количество лишней шелухи, которую сразу выбросите. Отцеженную огуречную жидкость в миске накройте пищевой пленкой и поставьте охлаждаться в холодильник на 1-2 часа.</p>
-    </div>
-  </section>  -->
+    <ul class="recipe-instruction__list">
+      <li class="recipe-instruction__step flex">
+        <p class="input-group__header">Добавить описание рецепта</p> 
+        <div class="recipe-instruction__img">
+          <label class="img-load__label"> 
+            <p class="input-group__header">Загрузить фото</p>
+            <input class="img-load__input" type="file" >
+          </label>
+          <p class="warning">Если нет подходящего фото,  сайт автоматически вставит картинку по умолчанию.</p>
+        </div>
+        <textarea class="recipe-instruction__text" placeholder="Подробное описание шага рецепта..." maxlength="700" ></textarea>
+      </li>
+      <li class="recipe-instruction__step flex">
+        <p class="input-group__header">Добавить описание рецепта</p>
+        <button class="btn__delete"><ion-icon class="instruction__delete" name="close-outline"></ion-icon></button>
+        <div class="recipe-instruction__img">
+          <label class="img-load__label"> 
+            <p class="input-group__header">Загрузить фото</p>
+            <input class="img-load__input" type="file">
+          </label>
+          <p class="warning">Если нет подходящего фото,  сайт автоматически вставит картинку по умолчанию.</p>
+        </div>
+        <textarea class="recipe-instruction__text" placeholder="Подробное описание шага рецепта..." maxlength="700"></textarea>
+      </li>
+      <li class="recipe-instruction__step flex">
+        <p class="input-group__header">Добавить описание рецепта</p>
+        <button class="btn__delete"><ion-icon class="instruction__delete" name="close-outline"></ion-icon></button>
+        <div class="recipe-instruction__img">
+          <label class="img-load__label"> 
+            <p class="input-group__header">Загрузить фото</p>
+            <input class="img-load__input" type="file" >
+          </label>
+          <p class="warning">Если нет подходящего фото,  сайт автоматически вставит картинку по умолчанию.</p>
+        </div>
+        <textarea class="recipe-instruction__text" placeholder="Подробное описание шага рецепта..." maxlength="700"></textarea>
+      </li>
+    </ul>
+    <button id="add-step" class="btn btn_blue btn_transparent">&plus; <span>Добавить шаг</span></button>
+  </section>
+  <section class="right-context">
+    <button class="btn btn_red" id="save-recipe"><ion-icon name="save-sharp"></ion-icon> Сохранить</button>
+  </section>
   @@include('parts/arrow.html')
 </main>
 

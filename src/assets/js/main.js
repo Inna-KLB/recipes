@@ -5,6 +5,7 @@ import createRecipePage from "./modules/createRecipePage";
 import deleteStep from "./modules/deleteStep";
 import scrollToUp from "./modules/scroolToUp";
 import showMobileMenu from "./modules/showMobileMenu";
+import showModal from "./modules/showModal";
 
 
 'use strict';
@@ -31,4 +32,3 @@ scrollToUp();
 showMobileMenu();
 createRecipe(linkDb);
 checkInputs();
-// createRecipePage(linkDb, '#to-recipe');

@@ -1127,6 +1127,57 @@ module.exports = function (it) {
 
 /***/ }),
 
+/***/ "./node_modules/core-js/internals/get-substitution.js":
+/*!************************************************************!*\
+  !*** ./node_modules/core-js/internals/get-substitution.js ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var toObject = __webpack_require__(/*! ../internals/to-object */ "./node_modules/core-js/internals/to-object.js");
+
+var floor = Math.floor;
+var replace = ''.replace;
+var SUBSTITUTION_SYMBOLS = /\$([$&'`]|\d{1,2}|<[^>]*>)/g;
+var SUBSTITUTION_SYMBOLS_NO_NAMED = /\$([$&'`]|\d{1,2})/g;
+
+// https://tc39.es/ecma262/#sec-getsubstitution
+module.exports = function (matched, str, position, captures, namedCaptures, replacement) {
+  var tailPos = position + matched.length;
+  var m = captures.length;
+  var symbols = SUBSTITUTION_SYMBOLS_NO_NAMED;
+  if (namedCaptures !== undefined) {
+    namedCaptures = toObject(namedCaptures);
+    symbols = SUBSTITUTION_SYMBOLS;
+  }
+  return replace.call(replacement, symbols, function (match, ch) {
+    var capture;
+    switch (ch.charAt(0)) {
+      case '$': return '$';
+      case '&': return matched;
+      case '`': return str.slice(0, position);
+      case "'": return str.slice(tailPos);
+      case '<':
+        capture = namedCaptures[ch.slice(1, -1)];
+        break;
+      default: // \d\d?
+        var n = +ch;
+        if (n === 0) return match;
+        if (n > m) {
+          var f = floor(n / 10);
+          if (f === 0) return match;
+          if (f <= m) return captures[f - 1] === undefined ? ch.charAt(1) : captures[f - 1] + ch.charAt(1);
+          return match;
+        }
+        capture = captures[n - 1];
+    }
+    return capture === undefined ? '' : capture;
+  });
+};
+
+
+/***/ }),
+
 /***/ "./node_modules/core-js/internals/global.js":
 /*!**************************************************!*\
   !*** ./node_modules/core-js/internals/global.js ***!
@@ -1457,6 +1508,29 @@ module.exports = function (it) {
 /***/ (function(module, exports) {
 
 module.exports = false;
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/internals/is-regexp.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/core-js/internals/is-regexp.js ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var isObject = __webpack_require__(/*! ../internals/is-object */ "./node_modules/core-js/internals/is-object.js");
+var classof = __webpack_require__(/*! ../internals/classof-raw */ "./node_modules/core-js/internals/classof-raw.js");
+var wellKnownSymbol = __webpack_require__(/*! ../internals/well-known-symbol */ "./node_modules/core-js/internals/well-known-symbol.js");
+
+var MATCH = wellKnownSymbol('match');
+
+// `IsRegExp` abstract operation
+// https://tc39.es/ecma262/#sec-isregexp
+module.exports = function (it) {
+  var isRegExp;
+  return isObject(it) && ((isRegExp = it[MATCH]) !== undefined ? !!isRegExp : classof(it) == 'RegExp');
+};
 
 
 /***/ }),
@@ -3923,6 +3997,262 @@ fixRegExpWellKnownSymbolLogic('match', 1, function (MATCH, nativeMatch, maybeCal
 
 /***/ }),
 
+/***/ "./node_modules/core-js/modules/es.string.replace.js":
+/*!***********************************************************!*\
+  !*** ./node_modules/core-js/modules/es.string.replace.js ***!
+  \***********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var fixRegExpWellKnownSymbolLogic = __webpack_require__(/*! ../internals/fix-regexp-well-known-symbol-logic */ "./node_modules/core-js/internals/fix-regexp-well-known-symbol-logic.js");
+var anObject = __webpack_require__(/*! ../internals/an-object */ "./node_modules/core-js/internals/an-object.js");
+var toLength = __webpack_require__(/*! ../internals/to-length */ "./node_modules/core-js/internals/to-length.js");
+var toInteger = __webpack_require__(/*! ../internals/to-integer */ "./node_modules/core-js/internals/to-integer.js");
+var requireObjectCoercible = __webpack_require__(/*! ../internals/require-object-coercible */ "./node_modules/core-js/internals/require-object-coercible.js");
+var advanceStringIndex = __webpack_require__(/*! ../internals/advance-string-index */ "./node_modules/core-js/internals/advance-string-index.js");
+var getSubstitution = __webpack_require__(/*! ../internals/get-substitution */ "./node_modules/core-js/internals/get-substitution.js");
+var regExpExec = __webpack_require__(/*! ../internals/regexp-exec-abstract */ "./node_modules/core-js/internals/regexp-exec-abstract.js");
+
+var max = Math.max;
+var min = Math.min;
+
+var maybeToString = function (it) {
+  return it === undefined ? it : String(it);
+};
+
+// @@replace logic
+fixRegExpWellKnownSymbolLogic('replace', 2, function (REPLACE, nativeReplace, maybeCallNative, reason) {
+  var REGEXP_REPLACE_SUBSTITUTES_UNDEFINED_CAPTURE = reason.REGEXP_REPLACE_SUBSTITUTES_UNDEFINED_CAPTURE;
+  var REPLACE_KEEPS_$0 = reason.REPLACE_KEEPS_$0;
+  var UNSAFE_SUBSTITUTE = REGEXP_REPLACE_SUBSTITUTES_UNDEFINED_CAPTURE ? '$' : '$0';
+
+  return [
+    // `String.prototype.replace` method
+    // https://tc39.es/ecma262/#sec-string.prototype.replace
+    function replace(searchValue, replaceValue) {
+      var O = requireObjectCoercible(this);
+      var replacer = searchValue == undefined ? undefined : searchValue[REPLACE];
+      return replacer !== undefined
+        ? replacer.call(searchValue, O, replaceValue)
+        : nativeReplace.call(String(O), searchValue, replaceValue);
+    },
+    // `RegExp.prototype[@@replace]` method
+    // https://tc39.es/ecma262/#sec-regexp.prototype-@@replace
+    function (regexp, replaceValue) {
+      if (
+        (!REGEXP_REPLACE_SUBSTITUTES_UNDEFINED_CAPTURE && REPLACE_KEEPS_$0) ||
+        (typeof replaceValue === 'string' && replaceValue.indexOf(UNSAFE_SUBSTITUTE) === -1)
+      ) {
+        var res = maybeCallNative(nativeReplace, regexp, this, replaceValue);
+        if (res.done) return res.value;
+      }
+
+      var rx = anObject(regexp);
+      var S = String(this);
+
+      var functionalReplace = typeof replaceValue === 'function';
+      if (!functionalReplace) replaceValue = String(replaceValue);
+
+      var global = rx.global;
+      if (global) {
+        var fullUnicode = rx.unicode;
+        rx.lastIndex = 0;
+      }
+      var results = [];
+      while (true) {
+        var result = regExpExec(rx, S);
+        if (result === null) break;
+
+        results.push(result);
+        if (!global) break;
+
+        var matchStr = String(result[0]);
+        if (matchStr === '') rx.lastIndex = advanceStringIndex(S, toLength(rx.lastIndex), fullUnicode);
+      }
+
+      var accumulatedResult = '';
+      var nextSourcePosition = 0;
+      for (var i = 0; i < results.length; i++) {
+        result = results[i];
+
+        var matched = String(result[0]);
+        var position = max(min(toInteger(result.index), S.length), 0);
+        var captures = [];
+        // NOTE: This is equivalent to
+        //   captures = result.slice(1).map(maybeToString)
+        // but for some reason `nativeSlice.call(result, 1, result.length)` (called in
+        // the slice polyfill when slicing native arrays) "doesn't work" in safari 9 and
+        // causes a crash (https://pastebin.com/N21QzeQA) when trying to debug it.
+        for (var j = 1; j < result.length; j++) captures.push(maybeToString(result[j]));
+        var namedCaptures = result.groups;
+        if (functionalReplace) {
+          var replacerArgs = [matched].concat(captures, position, S);
+          if (namedCaptures !== undefined) replacerArgs.push(namedCaptures);
+          var replacement = String(replaceValue.apply(undefined, replacerArgs));
+        } else {
+          replacement = getSubstitution(matched, S, position, captures, namedCaptures, replaceValue);
+        }
+        if (position >= nextSourcePosition) {
+          accumulatedResult += S.slice(nextSourcePosition, position) + replacement;
+          nextSourcePosition = position + matched.length;
+        }
+      }
+      return accumulatedResult + S.slice(nextSourcePosition);
+    }
+  ];
+});
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/modules/es.string.split.js":
+/*!*********************************************************!*\
+  !*** ./node_modules/core-js/modules/es.string.split.js ***!
+  \*********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var fixRegExpWellKnownSymbolLogic = __webpack_require__(/*! ../internals/fix-regexp-well-known-symbol-logic */ "./node_modules/core-js/internals/fix-regexp-well-known-symbol-logic.js");
+var isRegExp = __webpack_require__(/*! ../internals/is-regexp */ "./node_modules/core-js/internals/is-regexp.js");
+var anObject = __webpack_require__(/*! ../internals/an-object */ "./node_modules/core-js/internals/an-object.js");
+var requireObjectCoercible = __webpack_require__(/*! ../internals/require-object-coercible */ "./node_modules/core-js/internals/require-object-coercible.js");
+var speciesConstructor = __webpack_require__(/*! ../internals/species-constructor */ "./node_modules/core-js/internals/species-constructor.js");
+var advanceStringIndex = __webpack_require__(/*! ../internals/advance-string-index */ "./node_modules/core-js/internals/advance-string-index.js");
+var toLength = __webpack_require__(/*! ../internals/to-length */ "./node_modules/core-js/internals/to-length.js");
+var callRegExpExec = __webpack_require__(/*! ../internals/regexp-exec-abstract */ "./node_modules/core-js/internals/regexp-exec-abstract.js");
+var regexpExec = __webpack_require__(/*! ../internals/regexp-exec */ "./node_modules/core-js/internals/regexp-exec.js");
+var stickyHelpers = __webpack_require__(/*! ../internals/regexp-sticky-helpers */ "./node_modules/core-js/internals/regexp-sticky-helpers.js");
+
+var UNSUPPORTED_Y = stickyHelpers.UNSUPPORTED_Y;
+var arrayPush = [].push;
+var min = Math.min;
+var MAX_UINT32 = 0xFFFFFFFF;
+
+// @@split logic
+fixRegExpWellKnownSymbolLogic('split', 2, function (SPLIT, nativeSplit, maybeCallNative) {
+  var internalSplit;
+  if (
+    'abbc'.split(/(b)*/)[1] == 'c' ||
+    // eslint-disable-next-line regexp/no-empty-group -- required for testing
+    'test'.split(/(?:)/, -1).length != 4 ||
+    'ab'.split(/(?:ab)*/).length != 2 ||
+    '.'.split(/(.?)(.?)/).length != 4 ||
+    // eslint-disable-next-line regexp/no-assertion-capturing-group, regexp/no-empty-group -- required for testing
+    '.'.split(/()()/).length > 1 ||
+    ''.split(/.?/).length
+  ) {
+    // based on es5-shim implementation, need to rework it
+    internalSplit = function (separator, limit) {
+      var string = String(requireObjectCoercible(this));
+      var lim = limit === undefined ? MAX_UINT32 : limit >>> 0;
+      if (lim === 0) return [];
+      if (separator === undefined) return [string];
+      // If `separator` is not a regex, use native split
+      if (!isRegExp(separator)) {
+        return nativeSplit.call(string, separator, lim);
+      }
+      var output = [];
+      var flags = (separator.ignoreCase ? 'i' : '') +
+                  (separator.multiline ? 'm' : '') +
+                  (separator.unicode ? 'u' : '') +
+                  (separator.sticky ? 'y' : '');
+      var lastLastIndex = 0;
+      // Make `global` and avoid `lastIndex` issues by working with a copy
+      var separatorCopy = new RegExp(separator.source, flags + 'g');
+      var match, lastIndex, lastLength;
+      while (match = regexpExec.call(separatorCopy, string)) {
+        lastIndex = separatorCopy.lastIndex;
+        if (lastIndex > lastLastIndex) {
+          output.push(string.slice(lastLastIndex, match.index));
+          if (match.length > 1 && match.index < string.length) arrayPush.apply(output, match.slice(1));
+          lastLength = match[0].length;
+          lastLastIndex = lastIndex;
+          if (output.length >= lim) break;
+        }
+        if (separatorCopy.lastIndex === match.index) separatorCopy.lastIndex++; // Avoid an infinite loop
+      }
+      if (lastLastIndex === string.length) {
+        if (lastLength || !separatorCopy.test('')) output.push('');
+      } else output.push(string.slice(lastLastIndex));
+      return output.length > lim ? output.slice(0, lim) : output;
+    };
+  // Chakra, V8
+  } else if ('0'.split(undefined, 0).length) {
+    internalSplit = function (separator, limit) {
+      return separator === undefined && limit === 0 ? [] : nativeSplit.call(this, separator, limit);
+    };
+  } else internalSplit = nativeSplit;
+
+  return [
+    // `String.prototype.split` method
+    // https://tc39.es/ecma262/#sec-string.prototype.split
+    function split(separator, limit) {
+      var O = requireObjectCoercible(this);
+      var splitter = separator == undefined ? undefined : separator[SPLIT];
+      return splitter !== undefined
+        ? splitter.call(separator, O, limit)
+        : internalSplit.call(String(O), separator, limit);
+    },
+    // `RegExp.prototype[@@split]` method
+    // https://tc39.es/ecma262/#sec-regexp.prototype-@@split
+    //
+    // NOTE: This cannot be properly polyfilled in engines that don't support
+    // the 'y' flag.
+    function (regexp, limit) {
+      var res = maybeCallNative(internalSplit, regexp, this, limit, internalSplit !== nativeSplit);
+      if (res.done) return res.value;
+
+      var rx = anObject(regexp);
+      var S = String(this);
+      var C = speciesConstructor(rx, RegExp);
+
+      var unicodeMatching = rx.unicode;
+      var flags = (rx.ignoreCase ? 'i' : '') +
+                  (rx.multiline ? 'm' : '') +
+                  (rx.unicode ? 'u' : '') +
+                  (UNSUPPORTED_Y ? 'g' : 'y');
+
+      // ^(? + rx + ) is needed, in combination with some S slicing, to
+      // simulate the 'y' flag.
+      var splitter = new C(UNSUPPORTED_Y ? '^(?:' + rx.source + ')' : rx, flags);
+      var lim = limit === undefined ? MAX_UINT32 : limit >>> 0;
+      if (lim === 0) return [];
+      if (S.length === 0) return callRegExpExec(splitter, S) === null ? [S] : [];
+      var p = 0;
+      var q = 0;
+      var A = [];
+      while (q < S.length) {
+        splitter.lastIndex = UNSUPPORTED_Y ? 0 : q;
+        var z = callRegExpExec(splitter, UNSUPPORTED_Y ? S.slice(q) : S);
+        var e;
+        if (
+          z === null ||
+          (e = min(toLength(splitter.lastIndex + (UNSUPPORTED_Y ? q : 0)), S.length)) === p
+        ) {
+          q = advanceStringIndex(S, q, unicodeMatching);
+        } else {
+          A.push(S.slice(p, q));
+          if (A.length === lim) return A;
+          for (var i = 1; i <= z.length - 1; i++) {
+            A.push(z[i]);
+            if (A.length === lim) return A;
+          }
+          q = p = e;
+        }
+      }
+      A.push(S.slice(p));
+      return A;
+    }
+  ];
+}, UNSUPPORTED_Y);
+
+
+/***/ }),
+
 /***/ "./node_modules/core-js/modules/es.string.trim.js":
 /*!********************************************************!*\
   !*** ./node_modules/core-js/modules/es.string.trim.js ***!
@@ -5164,6 +5494,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_deleteStep__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/deleteStep */ "./src/assets/js/modules/deleteStep.js");
 /* harmony import */ var _modules_scroolToUp__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/scroolToUp */ "./src/assets/js/modules/scroolToUp.js");
 /* harmony import */ var _modules_showMobileMenu__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/showMobileMenu */ "./src/assets/js/modules/showMobileMenu.js");
+/* harmony import */ var _modules_showModal__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./modules/showModal */ "./src/assets/js/modules/showModal.js");
+
 
 
 
@@ -5193,7 +5525,7 @@ Object(_modules_deleteStep__WEBPACK_IMPORTED_MODULE_4__["default"])('.recipe-ins
 Object(_modules_scroolToUp__WEBPACK_IMPORTED_MODULE_5__["default"])();
 Object(_modules_showMobileMenu__WEBPACK_IMPORTED_MODULE_6__["default"])();
 Object(_modules_createRecipe__WEBPACK_IMPORTED_MODULE_2__["default"])(linkDb);
-Object(_modules_checkInputs__WEBPACK_IMPORTED_MODULE_1__["default"])(); // createRecipePage(linkDb, '#to-recipe');
+Object(_modules_checkInputs__WEBPACK_IMPORTED_MODULE_1__["default"])();
 
 /***/ }),
 
@@ -5221,7 +5553,7 @@ var addStep = function addStep(listSelector, btnSelector) {
         li.innerHTML = "\n          <p class=\"input-group__header\">\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u043E\u043F\u0438\u0441\u0430\u043D\u0438\u0435 \u0440\u0435\u0446\u0435\u043F\u0442\u0430</p>\n          <button class=\"btn__delete\"><ion-icon class=\"instruction__delete\" name=\"close-outline\"></ion-icon></button>\n          <div class=\"recipe-instruction__img\">\n            <label class=\"img-load__label\"> \n              <p class=\"input-group__header\">\u0417\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u044C \u0444\u043E\u0442\u043E</p>\n              <input class=\"img-load__input\" type=\"file\">\n            </label>\n          <p class=\"warning\">\u0415\u0441\u043B\u0438 \u043D\u0435\u0442 \u043F\u043E\u0434\u0445\u043E\u0434\u044F\u0449\u0435\u0433\u043E \u0444\u043E\u0442\u043E,  \u0441\u0430\u0439\u0442 \u0430\u0432\u0442\u043E\u043C\u0430\u0442\u0438\u0447\u0435\u0441\u043A\u0438 \u0432\u0441\u0442\u0430\u0432\u0438\u0442 \u043A\u0430\u0440\u0442\u0438\u043D\u043A\u0443 \u043F\u043E \u0443\u043C\u043E\u043B\u0447\u0430\u043D\u0438\u044E.</p>\n          </div>\n          <textarea class=\"recipe-instruction__text\" placeholder=\"\u041F\u043E\u0434\u0440\u043E\u0431\u043D\u043E\u0435 \u043E\u043F\u0438\u0441\u0430\u043D\u0438\u0435 \u0448\u0430\u0433\u0430 \u0440\u0435\u0446\u0435\u043F\u0442\u0430...\" maxlength=\"700\"></textarea>";
       } else {
         li.classList.add('flex', 'recipe-ingredients__list-item');
-        li.innerHTML = "\n          <input class=\"ingredient__name\" type=\"text\" placeholder=\"\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 \u0438\u043D\u0433\u0440\u0435\u0434\u0438\u0435\u043D\u0442\u0430\" maxlength=\"100\">\n          <input class=\"ingredient__number\" type=\"number\" placeholder=\"\u041A\u043E\u043B-\u0432\u043E\" min=\"1\" step=\"0.5\">\n          <select class=\"ingredient__value\">\n            <option value=\"\u0433\u0440\">\u0433\u0440</option>\n            <option value=\"\u043A\u0433\">\u043A\u0433</option>\n            <option value=\"\u043B\">\u043B</option>\n            <option value=\"\u043C\u043B\">\u043C\u043B</option>\n            <option value=\"\u0448\u0442\">\u0448\u0442</option>\n          </select> \n          <button class=\"btn__delete ingredient__delete\"><ion-icon class=\"ingredient__delete\" name=\"close-outline\"></ion-icon></button>";
+        li.innerHTML = "\n          <input class=\"ingredient__name\" type=\"text\" placeholder=\"\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 \u0438\u043D\u0433\u0440\u0435\u0434\u0438\u0435\u043D\u0442\u0430\" maxlength=\"100\">\n          <input class=\"ingredient__number\" type=\"number\" placeholder=\"\u041A\u043E\u043B-\u0432\u043E\" min=\"1\" step=\"0.5\">\n          <select class=\"ingredient__value\">\n            <option value=\"\u0433\u0440\">\u0433\u0440</option>\n            <option value=\"\u043A\u0433\">\u043A\u0433</option>\n            <option value=\"\u043B\">\u043B</option>\n            <option value=\"\u043C\u043B\">\u043C\u043B</option>\n            <option value=\"\u0448\u0442\">\u0448\u0442</option>\n            <option value=\"\u0441\u0442.\u043B.\">\u0441\u0442.\u043B.</option>\n            <option value=\"\u0447.\u043B.\">\u0447.\u043B.</option>\n            <option value=\"\u0441\u0442\">\u0441\u0442</option>\n          </select> \n          <button class=\"btn__delete ingredient__delete\"><ion-icon class=\"ingredient__delete\" name=\"close-outline\"></ion-icon></button>";
       }
 
       list.append(li); // console.log(list);
@@ -5496,7 +5828,7 @@ var createRecipe = function createRecipe(link) {
                 });
 
               case 36:
-                Object(_showModal__WEBPACK_IMPORTED_MODULE_11__["default"])('#good-modal', link, idRecipe);
+                Object(_showModal__WEBPACK_IMPORTED_MODULE_11__["default"])('#modal-without-errors', link, idRecipe);
 
               case 37:
               case "end":
@@ -5544,107 +5876,211 @@ service firebase.storage {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var core_js_modules_es_function_name_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.function.name.js */ "./node_modules/core-js/modules/es.function.name.js");
-/* harmony import */ var core_js_modules_es_function_name_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_function_name_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var core_js_modules_es_array_concat_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.array.concat.js */ "./node_modules/core-js/modules/es.array.concat.js");
-/* harmony import */ var core_js_modules_es_array_concat_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_concat_js__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var core_js_modules_es_symbol_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.symbol.js */ "./node_modules/core-js/modules/es.symbol.js");
-/* harmony import */ var core_js_modules_es_symbol_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_symbol_js__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var core_js_modules_es_symbol_description_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es.symbol.description.js */ "./node_modules/core-js/modules/es.symbol.description.js");
-/* harmony import */ var core_js_modules_es_symbol_description_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_symbol_description_js__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _services_getData__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../services/getData */ "./src/assets/js/services/getData.js");
+/* harmony import */ var regenerator_runtime_runtime_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! regenerator-runtime/runtime.js */ "./node_modules/regenerator-runtime/runtime.js");
+/* harmony import */ var regenerator_runtime_runtime_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(regenerator_runtime_runtime_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_es_array_map_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.array.map.js */ "./node_modules/core-js/modules/es.array.map.js");
+/* harmony import */ var core_js_modules_es_array_map_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_map_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_es_object_keys_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.object.keys.js */ "./node_modules/core-js/modules/es.object.keys.js");
+/* harmony import */ var core_js_modules_es_object_keys_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_keys_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var core_js_modules_es_array_for_each_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es.array.for-each.js */ "./node_modules/core-js/modules/es.array.for-each.js");
+/* harmony import */ var core_js_modules_es_array_for_each_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_for_each_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each.js */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var core_js_modules_es_function_name_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/es.function.name.js */ "./node_modules/core-js/modules/es.function.name.js");
+/* harmony import */ var core_js_modules_es_function_name_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_function_name_js__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var core_js_modules_es_array_concat_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/es.array.concat.js */ "./node_modules/core-js/modules/es.array.concat.js");
+/* harmony import */ var core_js_modules_es_array_concat_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_concat_js__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var core_js_modules_es_symbol_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core-js/modules/es.symbol.js */ "./node_modules/core-js/modules/es.symbol.js");
+/* harmony import */ var core_js_modules_es_symbol_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_symbol_js__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var core_js_modules_es_symbol_description_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core-js/modules/es.symbol.description.js */ "./node_modules/core-js/modules/es.symbol.description.js");
+/* harmony import */ var core_js_modules_es_symbol_description_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_symbol_description_js__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! core-js/modules/es.object.to-string.js */ "./node_modules/core-js/modules/es.object.to-string.js");
+/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var core_js_modules_es_promise_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! core-js/modules/es.promise.js */ "./node_modules/core-js/modules/es.promise.js");
+/* harmony import */ var core_js_modules_es_promise_js__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_promise_js__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var core_js_modules_es_object_define_property_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! core-js/modules/es.object.define-property.js */ "./node_modules/core-js/modules/es.object.define-property.js");
+/* harmony import */ var core_js_modules_es_object_define_property_js__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_define_property_js__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var core_js_modules_es_array_filter_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! core-js/modules/es.array.filter.js */ "./node_modules/core-js/modules/es.array.filter.js");
+/* harmony import */ var core_js_modules_es_array_filter_js__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_filter_js__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var core_js_modules_es_object_get_own_property_descriptor_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! core-js/modules/es.object.get-own-property-descriptor.js */ "./node_modules/core-js/modules/es.object.get-own-property-descriptor.js");
+/* harmony import */ var core_js_modules_es_object_get_own_property_descriptor_js__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_get_own_property_descriptor_js__WEBPACK_IMPORTED_MODULE_13__);
+/* harmony import */ var core_js_modules_es_object_get_own_property_descriptors_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! core-js/modules/es.object.get-own-property-descriptors.js */ "./node_modules/core-js/modules/es.object.get-own-property-descriptors.js");
+/* harmony import */ var core_js_modules_es_object_get_own_property_descriptors_js__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_get_own_property_descriptors_js__WEBPACK_IMPORTED_MODULE_14__);
+/* harmony import */ var core_js_modules_es_object_define_properties_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! core-js/modules/es.object.define-properties.js */ "./node_modules/core-js/modules/es.object.define-properties.js");
+/* harmony import */ var core_js_modules_es_object_define_properties_js__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_define_properties_js__WEBPACK_IMPORTED_MODULE_15__);
+/* harmony import */ var _services_getData__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../services/getData */ "./src/assets/js/services/getData.js");
+/* harmony import */ var _showModal__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./showModal */ "./src/assets/js/modules/showModal.js");
+
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 
 
 
 
 
-var createRecipePage = function createRecipePage(recipe) {
-  var mainContainer = document.querySelector('.add-recipe');
-  mainContainer.classList.remove('add-recipe');
-  mainContainer.style.display = 'none';
-  mainContainer.classList.add('recipe-page'); // return await getData(link)
-  // .then(recipes => {
-  //   recipes = Object.keys(recipes).map(key => {
-  //     return {
-  //       id: key, 
-  //       ...recipes[key]
-  //     }
-  //   })
-  //   recipes.forEach((recipe) => {
-  //     if(recipe.id === idRecipe) {
-  // Создание секции главной информации рецепта
 
-  var recipeInfo = document.createElement('section');
-  recipeInfo.classList.add('recipe-info', 'flex');
-  var recipeMainImg = document.createElement('div');
-  recipeMainImg.classList.add('recipe-info__img');
-  recipeMainImg.style.background = "url(".concat(recipe.mainPhoto, ") center no-repeat");
-  var recipeInfoText = document.createElement('div');
-  recipeInfoText.classList.add('recipe-info__text');
-  recipeInfoText.innerHTML = "<h2>".concat(recipe.name, "</h2>");
-  var recipeInfoBox = document.createElement('div');
-  recipeInfoBox.classList.add('flex');
-  recipeInfoBox.innerHTML = "\n    <p><ion-icon name=\"stopwatch-outline\"></ion-icon><span>".concat(recipe.time.hours, "\u0447 ").concat(recipe.time.minutes, "\u043C\u0438\u043D</span></p>\n    <p><ion-icon name=\"people-outline\"></ion-icon><span>").concat(recipe.portions, " \u043F\u043E\u0440\u0446\u0438\u0438</span></p>\n  ");
-  var category = document.createElement('p');
 
-  for (var i = 0; i < recipe.category.length; i++) {
-    var span = document.createElement('span');
-    span.style.display = 'block';
-    span.innerHTML = "\n      <ion-icon name=\"pricetags-outline\"></ion-icon> ".concat(recipe.category[i], "\n    ");
-    category.append(span);
-  }
 
-  recipeInfoBox.prepend(category);
-  var btnChange = document.createElement('button');
-  btnChange.classList.add('btn', 'btn_brown');
-  btnChange.innerHTML = "<ion-icon name=\"pencil-outline\"></ion-icon> \u0420\u0435\u0434\u0430\u043A\u0442\u0438\u0440\u043E\u0432\u0430\u0442\u044C \u0440\u0435\u0446\u0435\u043F\u0442";
-  var btnDelete = document.createElement('button');
-  btnDelete.classList.add('btn', 'btn_red');
-  btnDelete.innerHTML = "<ion-icon name=\"trash-outline\"></ion-icon> \u0423\u0434\u0430\u043B\u0438\u0442\u044C \u0440\u0435\u0446\u0435\u043F\u0442";
-  recipeInfoText.append(recipeInfoBox);
-  recipeInfoText.append(btnChange);
-  recipeInfoText.append(btnDelete);
-  recipeInfo.prepend(recipeMainImg);
-  recipeInfo.append(recipeInfoText);
-  mainContainer.append(recipeInfo); // Создание секции описания рецепта
 
-  var recipeDescription = document.createElement('section');
-  recipeDescription.classList.add('recipe-description');
-  recipeDescription.innerHTML = "\n    <h3 class=\"recipe-description__header\">\u041E\u043F\u0438\u0441\u0430\u043D\u0438\u0435 \u0431\u043B\u044E\u0434\u0430</h3>\n    <div class=\"recipe-description__text\">\n      <p>".concat(recipe.description, "</p>\n    </div>\n  ");
-  mainContainer.append(recipeDescription); // Создание секции ингредиентов рецепта
 
-  var recipeIngredients = document.createElement('section');
-  recipeIngredients.classList.add('recipe-ingredients');
-  var ingredients = document.createElement('ul');
-  ingredients.classList.add('recipe-ingredients__list');
 
-  for (var _i = 0; _i < recipe.ingredients.length; _i++) {
-    var ingredientsItem = document.createElement('li');
-    ingredientsItem.classList.add('flex');
-    ingredientsItem.innerHTML = "\n      <span>".concat(recipe.ingredients[_i].name, "</span><span>").concat(recipe.ingredients[_i].quantity, " ").concat(recipe.ingredients[_i].value, "</span>\n    ");
-    ingredients.append(ingredientsItem);
-  }
 
-  recipeIngredients.innerHTML = "\n    <h3>\u0418\u043D\u0433\u0440\u0435\u0434\u0438\u0435\u043D\u0442\u044B</h3>\n  ";
-  recipeIngredients.append(ingredients);
-  mainContainer.append(recipeIngredients); // Создание секции инструкции к рецепту
 
-  var recipeInstruction = document.createElement('section');
-  recipeInstruction.classList.add('recipe-instruction');
-  recipeInstruction.innerHTML = "\n    <h3>\u041F\u043E\u0448\u0430\u0433\u043E\u0432\u044B\u0439 \u0440\u0435\u0446\u0435\u043F\u0442</h3>\n  ";
 
-  for (var _i2 = 0; _i2 < recipe.instructions.length; _i2++) {
-    var instructionsItem = document.createElement('div');
-    instructionsItem.classList.add('recipe-instruction__step', 'flex');
-    instructionsItem.innerHTML = "\n      <img src=\"".concat(recipe.instructions[_i2].imgStep, "\" alt=\"\u041F\u043E\u0448\u0430\u0433\u043E\u0432\u044B\u0439 \u0440\u0435\u0446\u0435\u043F\u0442\">\n      <p>").concat(recipe.instructions[_i2].description, "</p>\n    ");
-    recipeInstruction.append(instructionsItem);
-  }
 
-  mainContainer.append(recipeInstruction); // }
-  //   })
-  // })
-};
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+
+
+
+var createRecipePage = /*#__PURE__*/function () {
+  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(link, idRecipe) {
+    var oldContainer, header, mainContainer, statusMessage, statusImg, linksToStorage;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            oldContainer = document.querySelector('.add-recipe'), header = document.querySelector('#header');
+            oldContainer.style.display = 'none';
+            mainContainer = document.createElement('main');
+            mainContainer.classList.add('recipe-page');
+            header.after(mainContainer);
+            statusMessage = document.createElement('div');
+            statusMessage.classList.add('modal-substrate');
+            mainContainer.prepend(statusMessage);
+            statusImg = document.createElement('img');
+            statusImg.setAttribute('src', '../img/spinner.gif');
+            statusImg.setAttribute('width', '40vw');
+            statusMessage.append(statusImg); // Создание массива для хранения ссылок изображений
+
+            linksToStorage = [];
+            _context.next = 15;
+            return Object(_services_getData__WEBPACK_IMPORTED_MODULE_16__["default"])(link).then(function (recipes) {
+              recipes = Object.keys(recipes).map(function (key) {
+                return _objectSpread({
+                  id: key
+                }, recipes[key]);
+              });
+              recipes.forEach(function (recipe) {
+                if (recipe.id === idRecipe) {
+                  // Создание секции главной информации рецепта
+                  var recipeInfo = document.createElement('section');
+                  recipeInfo.classList.add('recipe-info', 'flex');
+                  var recipeMainImg = document.createElement('div');
+                  recipeMainImg.classList.add('recipe-info__img');
+                  recipeMainImg.style.background = "url(".concat(recipe.mainPhoto, ") center no-repeat");
+                  var recipeInfoText = document.createElement('div');
+                  recipeInfoText.classList.add('recipe-info__text');
+                  recipeInfoText.innerHTML = "<h2>".concat(recipe.name, "</h2>");
+                  var recipeInfoBox = document.createElement('div');
+                  recipeInfoBox.classList.add('flex');
+                  recipeInfoBox.innerHTML = "\n          <p><ion-icon name=\"stopwatch-outline\"></ion-icon><span>".concat(recipe.time.hours, "\u0447 ").concat(recipe.time.minutes, "\u043C\u0438\u043D</span></p>\n          <p><ion-icon name=\"people-outline\"></ion-icon><span>").concat(recipe.portions, " \u043F\u043E\u0440\u0446\u0438\u0438</span></p>\n        ");
+                  var category = document.createElement('p');
+
+                  for (var i = 0; i < recipe.category.length; i++) {
+                    var span = document.createElement('span');
+                    span.style.display = 'block';
+                    span.innerHTML = "\n            <ion-icon name=\"pricetags-outline\"></ion-icon> ".concat(recipe.category[i], "\n          ");
+                    category.append(span);
+                  }
+
+                  recipeInfoBox.prepend(category);
+                  var btnChange = document.createElement('button');
+                  btnChange.classList.add('btn', 'btn_brown');
+                  btnChange.innerHTML = "<ion-icon name=\"pencil-outline\"></ion-icon> \u0420\u0435\u0434\u0430\u043A\u0442\u0438\u0440\u043E\u0432\u0430\u0442\u044C \u0440\u0435\u0446\u0435\u043F\u0442";
+
+                  var _btnDelete = document.createElement('button');
+
+                  _btnDelete.classList.add('btn', 'btn_red');
+
+                  _btnDelete.setAttribute('id', 'delete-recipe-page');
+
+                  _btnDelete.innerHTML = "<ion-icon name=\"trash-outline\"></ion-icon> \u0423\u0434\u0430\u043B\u0438\u0442\u044C \u0440\u0435\u0446\u0435\u043F\u0442";
+                  recipeInfoText.append(recipeInfoBox);
+                  recipeInfoText.append(btnChange);
+                  recipeInfoText.append(_btnDelete);
+                  recipeInfo.prepend(recipeMainImg);
+                  recipeInfo.append(recipeInfoText);
+                  mainContainer.append(recipeInfo); // Создание секции описания рецепта
+
+                  // Создание секции описания рецепта
+                  var recipeDescription = document.createElement('section');
+                  recipeDescription.classList.add('recipe-description');
+                  recipeDescription.innerHTML = "\n          <h3 class=\"recipe-description__header\">\u041E\u043F\u0438\u0441\u0430\u043D\u0438\u0435 \u0431\u043B\u044E\u0434\u0430</h3>\n          <div class=\"recipe-description__text\">\n            <p>".concat(recipe.description, "</p>\n          </div>\n        ");
+                  mainContainer.append(recipeDescription); // Создание секции ингредиентов рецепта
+
+                  // Создание секции ингредиентов рецепта
+                  var recipeIngredients = document.createElement('section');
+                  recipeIngredients.classList.add('recipe-ingredients');
+                  var ingredients = document.createElement('ul');
+                  ingredients.classList.add('recipe-ingredients__list');
+
+                  for (var _i = 0; _i < recipe.ingredients.length; _i++) {
+                    var ingredientsItem = document.createElement('li');
+                    ingredientsItem.classList.add('flex');
+                    ingredientsItem.innerHTML = "\n            <span>".concat(recipe.ingredients[_i].name, "</span><span>").concat(recipe.ingredients[_i].quantity, " ").concat(recipe.ingredients[_i].value, "</span>\n          ");
+                    ingredients.append(ingredientsItem);
+                  }
+
+                  recipeIngredients.innerHTML = "\n          <h3>\u0418\u043D\u0433\u0440\u0435\u0434\u0438\u0435\u043D\u0442\u044B</h3>\n        ";
+                  recipeIngredients.append(ingredients);
+                  mainContainer.append(recipeIngredients); // Создание секции инструкции к рецепту
+
+                  // Создание секции инструкции к рецепту
+                  var recipeInstruction = document.createElement('section');
+                  recipeInstruction.classList.add('recipe-instruction');
+                  recipeInstruction.innerHTML = "\n          <h3>\u041F\u043E\u0448\u0430\u0433\u043E\u0432\u044B\u0439 \u0440\u0435\u0446\u0435\u043F\u0442</h3>\n        ";
+
+                  for (var _i2 = 0; _i2 < recipe.instructions.length; _i2++) {
+                    var instructionsItem = document.createElement('div');
+                    instructionsItem.classList.add('recipe-instruction__step', 'flex');
+                    instructionsItem.innerHTML = "\n            <img src=\"".concat(recipe.instructions[_i2].imgStep, "\" alt=\"\u041F\u043E\u0448\u0430\u0433\u043E\u0432\u044B\u0439 \u0440\u0435\u0446\u0435\u043F\u0442\">\n            <p>").concat(recipe.instructions[_i2].description, "</p>\n          ");
+                    recipeInstruction.append(instructionsItem);
+                    linksToStorage.push(recipe.instructions[_i2].imgStep);
+                  }
+
+                  mainContainer.append(recipeInstruction); // Создание и добавление стрелки наверх
+
+                  // Создание и добавление стрелки наверх
+                  var arrowUp = document.createElement('a');
+                  arrowUp.getAttribute('href', '#header');
+                  arrowUp.classList.add('arrow-up');
+                  arrowUp.innerHTML = "<ion-icon name=\"arrow-up-sharp\"></ion-icon>";
+                  mainContainer.append(arrowUp);
+                  window.location.hash = recipe.id;
+                  linksToStorage.push(recipe.mainPhoto);
+                }
+              });
+              mainContainer.removeChild(statusMessage);
+              var btnDelete = document.querySelector('#delete-recipe-page');
+              btnDelete.addEventListener('click', function () {
+                Object(_showModal__WEBPACK_IMPORTED_MODULE_17__["default"])('#modal-delete-recipe', link, idRecipe, linksToStorage);
+              });
+            });
+
+          case 15:
+            return _context.abrupt("return", _context.sent);
+
+          case 16:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee);
+  }));
+
+  return function createRecipePage(_x, _x2) {
+    return _ref.apply(this, arguments);
+  };
+}();
 
 /* harmony default export */ __webpack_exports__["default"] = (createRecipePage);
 
@@ -5734,140 +6170,153 @@ var showMobileMenu = function showMobileMenu() {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var regenerator_runtime_runtime_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! regenerator-runtime/runtime.js */ "./node_modules/regenerator-runtime/runtime.js");
-/* harmony import */ var regenerator_runtime_runtime_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(regenerator_runtime_runtime_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var core_js_modules_es_array_for_each_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.array.for-each.js */ "./node_modules/core-js/modules/es.array.for-each.js");
-/* harmony import */ var core_js_modules_es_array_for_each_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_for_each_js__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each.js */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
-/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var core_js_modules_es_array_map_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es.array.map.js */ "./node_modules/core-js/modules/es.array.map.js");
-/* harmony import */ var core_js_modules_es_array_map_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_map_js__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var core_js_modules_es_object_keys_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/es.object.keys.js */ "./node_modules/core-js/modules/es.object.keys.js");
-/* harmony import */ var core_js_modules_es_object_keys_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_keys_js__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/es.object.to-string.js */ "./node_modules/core-js/modules/es.object.to-string.js");
-/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var core_js_modules_es_promise_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/es.promise.js */ "./node_modules/core-js/modules/es.promise.js");
-/* harmony import */ var core_js_modules_es_promise_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_promise_js__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var core_js_modules_es_object_define_property_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core-js/modules/es.object.define-property.js */ "./node_modules/core-js/modules/es.object.define-property.js");
-/* harmony import */ var core_js_modules_es_object_define_property_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_define_property_js__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var core_js_modules_es_symbol_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core-js/modules/es.symbol.js */ "./node_modules/core-js/modules/es.symbol.js");
-/* harmony import */ var core_js_modules_es_symbol_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_symbol_js__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var core_js_modules_es_array_filter_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! core-js/modules/es.array.filter.js */ "./node_modules/core-js/modules/es.array.filter.js");
-/* harmony import */ var core_js_modules_es_array_filter_js__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_filter_js__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var core_js_modules_es_object_get_own_property_descriptor_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! core-js/modules/es.object.get-own-property-descriptor.js */ "./node_modules/core-js/modules/es.object.get-own-property-descriptor.js");
-/* harmony import */ var core_js_modules_es_object_get_own_property_descriptor_js__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_get_own_property_descriptor_js__WEBPACK_IMPORTED_MODULE_10__);
-/* harmony import */ var core_js_modules_es_object_get_own_property_descriptors_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! core-js/modules/es.object.get-own-property-descriptors.js */ "./node_modules/core-js/modules/es.object.get-own-property-descriptors.js");
-/* harmony import */ var core_js_modules_es_object_get_own_property_descriptors_js__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_get_own_property_descriptors_js__WEBPACK_IMPORTED_MODULE_11__);
-/* harmony import */ var core_js_modules_es_object_define_properties_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! core-js/modules/es.object.define-properties.js */ "./node_modules/core-js/modules/es.object.define-properties.js");
-/* harmony import */ var core_js_modules_es_object_define_properties_js__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_define_properties_js__WEBPACK_IMPORTED_MODULE_12__);
-/* harmony import */ var _createRecipePage__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./createRecipePage */ "./src/assets/js/modules/createRecipePage.js");
-/* harmony import */ var _services_getData__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../services/getData */ "./src/assets/js/services/getData.js");
-
-
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+/* harmony import */ var core_js_modules_es_array_for_each_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.for-each.js */ "./node_modules/core-js/modules/es.array.for-each.js");
+/* harmony import */ var core_js_modules_es_array_for_each_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_for_each_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each.js */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _services_deleteData__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../services/deleteData */ "./src/assets/js/services/deleteData.js");
+/* harmony import */ var _createRecipePage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./createRecipePage */ "./src/assets/js/modules/createRecipePage.js");
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-var showModal = function showModal(modalSelector, linkDb, idRecipe) {
+var showModal = function showModal(modalSelector, linkDb, idRecipe, linkToStorage) {
   var substrate = document.querySelector('.modal-substrate'),
       modal = document.querySelector(modalSelector);
-  var idModal = modal.id,
-      recipeObject;
+  var idModal = modal.id;
 
   var closeModal = function closeModal() {
     substrate.classList.add('hide');
     modal.classList.add('hide');
-    document.body.style.position = '';
-    document.body.style.bottom = '';
-    document.body.style.position = '';
+    document.body.classList.remove('active-modal');
   };
 
   if (modal.classList.contains('hide')) {
     substrate.classList.remove('hide');
     modal.classList.remove('hide');
-    document.body.style.overflow = 'hidden';
-    document.body.style.position = 'fixed';
-    document.body.style.bottom = '0';
+    document.body.classList.add('active-modal');
 
-    if (idModal === 'error-modal') {
+    if (idModal === 'modal-without-errors') {
+      var links = modal.querySelectorAll('a');
+      links.forEach(function (link) {
+        link.addEventListener('click', function (e) {
+          e.preventDefault();
+
+          if (e.target && e.target.getAttribute('id', 'to-recipe')) {
+            closeModal();
+            Object(_createRecipePage__WEBPACK_IMPORTED_MODULE_3__["default"])(linkDb, idRecipe);
+          } else {
+            window.location.pathname = 'index.html';
+          }
+        });
+      });
+    } else if (idModal === 'error-modal') {
       var btnClose = modal.querySelector('button');
       btnClose.addEventListener('click', function () {
         closeModal();
       });
-    } else {
-      var links = modal.querySelectorAll('a');
-      links.forEach(function (link) {
-        link.addEventListener('click', /*#__PURE__*/function () {
-          var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(e) {
-            return regeneratorRuntime.wrap(function _callee$(_context) {
-              while (1) {
-                switch (_context.prev = _context.next) {
-                  case 0:
-                    e.preventDefault();
+    } else if (idModal === 'modal-delete-recipe') {
+      var btnDelete = document.querySelector('#delete-recipe'),
+          _btnClose = document.querySelector('#cancel');
 
-                    if (!(e.target && e.target.getAttribute('id', 'to-recipe'))) {
-                      _context.next = 6;
-                      break;
-                    }
+      _btnClose.addEventListener('click', function () {
+        closeModal();
+      });
 
-                    closeModal();
-                    _context.next = 5;
-                    return Object(_services_getData__WEBPACK_IMPORTED_MODULE_14__["default"])(linkDb).then(function (recipes) {
-                      recipes = Object.keys(recipes).map(function (key) {
-                        return _objectSpread({
-                          id: key
-                        }, recipes[key]);
-                      });
-                      recipes.forEach(function (recipe) {
-                        if (recipe.id === idRecipe) {
-                          console.log(recipe);
-                          recipeObject = recipe;
-                        }
-                      });
-                    });
-
-                  case 5:
-                    Object(_createRecipePage__WEBPACK_IMPORTED_MODULE_13__["default"])(recipeObject);
-
-                  case 6:
-                  case "end":
-                    return _context.stop();
-                }
-              }
-            }, _callee);
-          }));
-
-          return function (_x) {
-            return _ref.apply(this, arguments);
-          };
-        }());
+      btnDelete.addEventListener('click', function () {
+        Object(_services_deleteData__WEBPACK_IMPORTED_MODULE_2__["default"])(linkDb, idRecipe, linkToStorage);
       });
     }
   }
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (showModal);
+
+/***/ }),
+
+/***/ "./src/assets/js/services/deleteData.js":
+/*!**********************************************!*\
+  !*** ./src/assets/js/services/deleteData.js ***!
+  \**********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var regenerator_runtime_runtime_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! regenerator-runtime/runtime.js */ "./node_modules/regenerator-runtime/runtime.js");
+/* harmony import */ var regenerator_runtime_runtime_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(regenerator_runtime_runtime_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.regexp.exec.js */ "./node_modules/core-js/modules/es.regexp.exec.js");
+/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.string.replace.js */ "./node_modules/core-js/modules/es.string.replace.js");
+/* harmony import */ var core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var core_js_modules_es_array_for_each_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es.array.for-each.js */ "./node_modules/core-js/modules/es.array.for-each.js");
+/* harmony import */ var core_js_modules_es_array_for_each_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_for_each_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each.js */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var core_js_modules_es_string_split_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/es.string.split.js */ "./node_modules/core-js/modules/es.string.split.js");
+/* harmony import */ var core_js_modules_es_string_split_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_split_js__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var core_js_modules_es_array_concat_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/es.array.concat.js */ "./node_modules/core-js/modules/es.array.concat.js");
+/* harmony import */ var core_js_modules_es_array_concat_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_concat_js__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core-js/modules/es.object.to-string.js */ "./node_modules/core-js/modules/es.object.to-string.js");
+/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var core_js_modules_es_promise_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core-js/modules/es.promise.js */ "./node_modules/core-js/modules/es.promise.js");
+/* harmony import */ var core_js_modules_es_promise_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_promise_js__WEBPACK_IMPORTED_MODULE_8__);
+
+
+
+
+
+
+
+
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+var deleteData = /*#__PURE__*/function () {
+  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(link, idRecipe, linksToStorage) {
+    var linkDelete;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            linkDelete = link.replace('.json', "/".concat(idRecipe, ".json")); //  Удаление изображений и storage
+
+            linksToStorage.forEach(function (linkToStorage) {
+              var link = linkToStorage.split('/')[7].split('?')[0];
+              var storageRef = firebase.storage().ref("/".concat(link.split('%2F')[0], "/").concat(link.split('%2F')[1]));
+              storageRef["delete"]().then(function () {
+                console.log("\u0418\u0437\u043E\u0431\u0440\u0430\u0436\u0435\u043D\u0438\u0435 \u0443\u0434\u0430\u043B\u0435\u043D\u043E");
+              })["catch"](function (error) {
+                console.log(error);
+              });
+            }); //  Удаление информации из базы данных
+
+            _context.next = 4;
+            return fetch(linkDelete, {
+              method: 'DELETE'
+            });
+
+          case 4:
+            window.location.pathname = 'index.html';
+
+          case 5:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee);
+  }));
+
+  return function deleteData(_x, _x2, _x3) {
+    return _ref.apply(this, arguments);
+  };
+}();
+
+/* harmony default export */ __webpack_exports__["default"] = (deleteData);
 
 /***/ }),
 
@@ -5969,37 +6418,34 @@ var loadIntoStorage = /*#__PURE__*/function () {
 
             statusMessage = document.createElement('div');
             statusMessage.classList.add('modal-substrate');
-            document.body.style.overflow = 'hidden';
-            document.body.style.position = 'fixed';
-            document.body.style.bottom = '0';
+            document.body.classList.add('active-modal');
             document.body.append(statusMessage);
             statusImg = document.createElement('img');
             statusImg.setAttribute('src', '../img/spinner.gif');
             statusImg.setAttribute('width', '40vw');
             statusMessage.append(statusImg); // Загрузка изображения в storage
 
-            _context.next = 13;
+            _context.next = 11;
             return storageRef.put(file).then(function () {
               console.log('Succsecfully uploaded');
-              console.log('type:', file.type);
             })["catch"](function (error) {
               console.log(error.message);
             });
 
-          case 13:
-            _context.next = 15;
+          case 11:
+            _context.next = 13;
             return storageRef.getDownloadURL().then(function (url) {
               srcImg = url;
             })["catch"](function (error) {
               console.log(error.message);
             });
 
-          case 15:
+          case 13:
             // Удаление спинера после загрузки изображений
             document.body.removeChild(statusMessage);
             return _context.abrupt("return", srcImg);
 
-          case 17:
+          case 15:
           case "end":
             return _context.stop();
         }

@@ -32,6 +32,9 @@ const addStep = (listSelector,  btnSelector) => {
             <option value="л">л</option>
             <option value="мл">мл</option>
             <option value="шт">шт</option>
+            <option value="ст.л.">ст.л.</option>
+            <option value="ч.л.">ч.л.</option>
+            <option value="ст">ст</option>
           </select> 
           <button class="btn__delete ingredient__delete"><ion-icon class="ingredient__delete" name="close-outline"></ion-icon></button>`; 
       }

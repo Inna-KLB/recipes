@@ -115,7 +115,7 @@ const createRecipe = (link) => {
         .then((res) => {
           idRecipe = res.name;
         });         
-        showModal('#good-modal', link, idRecipe);
+        showModal('#modal-without-errors', link, idRecipe);
       }
     };
   

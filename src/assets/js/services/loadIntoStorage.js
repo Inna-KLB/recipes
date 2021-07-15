@@ -6,9 +6,7 @@ const loadIntoStorage = async(imgSelector, id, i) => {
   // Создание и отображение спинера при загрузке изображений
   let statusMessage = document.createElement('div');
   statusMessage.classList.add('modal-substrate');
-  document.body.style.overflow = 'hidden';
-  document.body.style.position = 'fixed';
-  document.body.style.bottom = '0';
+  document.body.classList.add('active-modal');
   document.body.append(statusMessage);
 
   let statusImg = document.createElement('img');
@@ -19,10 +17,8 @@ const loadIntoStorage = async(imgSelector, id, i) => {
 
   // Загрузка изображения в storage
   await storageRef.put(file)
-    .then(function() {
-      console.log('Succsecfully uploaded');
-      console.log('type:', file.type);
-      
+    .then(() => {
+      console.log('Succsecfully uploaded');      
     })
     .catch(error => {
       console.log(error.message);    
