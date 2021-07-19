@@ -20,17 +20,11 @@ const showModal = (modalSelector, linkDb, idRecipe, linkToStorage) => {
       document.body.classList.add('active-modal');
       
       if(idModal === 'modal-without-errors') {
-        const links = modal.querySelectorAll('a');
-        links.forEach(link => {
-          link.addEventListener('click', (e) => {
-            e.preventDefault();
-            if (e.target && e.target.getAttribute('id', 'to-recipe')) {
-              closeModal();   
-              createRecipePage(linkDb, idRecipe);
-            } else {
-              window.location.pathname = 'index.html';
-            }
-          });
+        const link = modal.querySelector('#to-recipe');
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          closeModal();   
+          createRecipePage(linkDb, idRecipe, '.add-recipe');
         });
       } else if(idModal === 'error-modal'){
         const btnClose = modal.querySelector('button');

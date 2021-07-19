@@ -39,12 +39,11 @@ const addStep = (listSelector,  btnSelector) => {
           <button class="btn__delete ingredient__delete"><ion-icon class="ingredient__delete" name="close-outline"></ion-icon></button>`; 
       }
       list.append(li);
-      // console.log(list);
       checkInputs();
     });    
   }
   catch {
-    console.log('Not found nedeed page');
+    return;
   }
   
 };  

@@ -9,7 +9,7 @@ const deleteStep = (listSelector, btnSelector) => {
     });
   }
   catch {
-    console.log('Not found button');
+    return;
   } 
 };
 export default deleteStep;

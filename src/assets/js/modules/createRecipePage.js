@@ -1,8 +1,9 @@
 import getData from "../services/getData";
+import scrollToUp from "./scroolToUp";
 import showModal from "./showModal";
 
-const createRecipePage = async(link, idRecipe) => {
-  const oldContainer = document.querySelector('.add-recipe'),
+const createRecipePage = async(link, idRecipe, container) => {
+  const oldContainer = document.querySelector(container),
         header = document.querySelector('#header');
   oldContainer.style.display = 'none';
 
@@ -12,23 +13,14 @@ const createRecipePage = async(link, idRecipe) => {
 
   let statusMessage = document.createElement('div');
   statusMessage.classList.add('modal-substrate');
+  statusMessage.innerHTML = `<img src='../img/spinner.gif' width='40vw'>`;
   mainContainer.prepend(statusMessage);
-  let statusImg = document.createElement('img');
-  statusImg.setAttribute('src', '../img/spinner.gif');
-  statusImg.setAttribute('width', '40vw');
-  statusMessage.append(statusImg);
 
   // Создание массива для хранения ссылок изображений
   let linksToStorage = [];
    
-  return await getData(link)
+  await getData(link)
   .then(recipes => {
-    recipes = Object.keys(recipes).map(key => {
-      return {
-        id: key, 
-        ...recipes[key]
-      }
-    })
     recipes.forEach((recipe) => {
       if(recipe.id === idRecipe) {
 
@@ -38,7 +30,7 @@ const createRecipePage = async(link, idRecipe) => {
 
         let recipeMainImg = document.createElement('div');
         recipeMainImg.classList.add('recipe-info__img');
-        recipeMainImg.style.background = `url(${recipe.mainPhoto}) center no-repeat`;
+        recipeMainImg.style.backgroundImage = `url(${recipe.mainPhoto})`;
 
         let recipeInfoText = document.createElement('div');
         recipeInfoText.classList.add('recipe-info__text');
@@ -69,6 +61,9 @@ const createRecipePage = async(link, idRecipe) => {
         btnDelete.classList.add('btn', 'btn_red');
         btnDelete.setAttribute('id', 'delete-recipe-page');
         btnDelete.innerHTML = `<ion-icon name="trash-outline"></ion-icon> Удалить рецепт`;
+        btnDelete.addEventListener('click', () => {
+          showModal('#modal-delete-recipe',link, idRecipe, linksToStorage);
+        });
 
         recipeInfoText.append(recipeInfoBox);
         recipeInfoText.append(btnChange);
@@ -131,7 +126,7 @@ const createRecipePage = async(link, idRecipe) => {
         
         // Создание и добавление стрелки наверх
         let arrowUp = document.createElement('a');
-        arrowUp.getAttribute('href', '#header');
+        arrowUp.setAttribute('href', '#header');
         arrowUp.classList.add('arrow-up');
         arrowUp.innerHTML = `<ion-icon name="arrow-up-sharp"></ion-icon>`;
         mainContainer.append(arrowUp);
@@ -141,13 +136,9 @@ const createRecipePage = async(link, idRecipe) => {
         linksToStorage.push(recipe.mainPhoto);
       }
     })
-    mainContainer.removeChild(statusMessage);
-    
-  
-    let btnDelete = document.querySelector('#delete-recipe-page');
-    btnDelete.addEventListener('click', () => {
-      showModal('#modal-delete-recipe',link, idRecipe, linksToStorage);
-    });
-  })  
+  })
+  mainContainer.removeChild(statusMessage);
+     
+  scrollToUp(); 
 };
 export default createRecipePage;

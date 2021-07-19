@@ -124,7 +124,7 @@ const createRecipe = (link) => {
     });
   }
   catch {
-    console.log('It is not that page');
+    return;
   }
 };
 export default createRecipe;

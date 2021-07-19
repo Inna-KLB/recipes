@@ -17,12 +17,12 @@ const checkInputs = () => {
           checkbox.removeAttribute('checked', 'true'); 
         } else {
           checkbox.setAttribute('checked', 'true');
-        }
+        } 
       });
     });
   
     numbers.forEach(number => {
-      checkNum = (number.value <= 0 || number.value.match(/\D/) || number.value === null) ? 'false' : 'true';
+      checkNum = (number.value <= 0 || number.value.match(/[^0-9,./]/g) || number.value === null) ? 'false' : 'true';
       return checkNum;
     });
     
