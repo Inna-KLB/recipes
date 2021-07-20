@@ -5492,10 +5492,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_createRecipe__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/createRecipe */ "./src/assets/js/modules/createRecipe.js");
 /* harmony import */ var _modules_createRecipePage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/createRecipePage */ "./src/assets/js/modules/createRecipePage.js");
 /* harmony import */ var _modules_deleteStep__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/deleteStep */ "./src/assets/js/modules/deleteStep.js");
-/* harmony import */ var _modules_scroolToUp__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/scroolToUp */ "./src/assets/js/modules/scroolToUp.js");
-/* harmony import */ var _modules_showAllRecipes__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/showAllRecipes */ "./src/assets/js/modules/showAllRecipes.js");
-/* harmony import */ var _modules_showMobileMenu__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./modules/showMobileMenu */ "./src/assets/js/modules/showMobileMenu.js");
-/* harmony import */ var _modules_showModal__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./modules/showModal */ "./src/assets/js/modules/showModal.js");
+/* harmony import */ var _modules_pagination__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/pagination */ "./src/assets/js/modules/pagination.js");
+/* harmony import */ var _modules_scroolToUp__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/scroolToUp */ "./src/assets/js/modules/scroolToUp.js");
+/* harmony import */ var _modules_showAllRecipes__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./modules/showAllRecipes */ "./src/assets/js/modules/showAllRecipes.js");
+/* harmony import */ var _modules_showMobileMenu__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./modules/showMobileMenu */ "./src/assets/js/modules/showMobileMenu.js");
+/* harmony import */ var _modules_showModal__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./modules/showModal */ "./src/assets/js/modules/showModal.js");
+/* harmony import */ var _services_getData__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./services/getData */ "./src/assets/js/services/getData.js");
 
 
 
@@ -5505,9 +5507,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-'use strict';
 
-var linkDb = 'https://recipe-55b0e-default-rtdb.firebaseio.com/data.json'; // Firebase настройка
+ // Firebase настройка
 
 var firebaseConfig = {
   apiKey: "AIzaSyBQAXBtG-KChFIMvyNQZ7DVXLxlJY0SpyU",
@@ -5520,15 +5521,27 @@ var firebaseConfig = {
 }; // Инициализация Firebase
 
 firebase.initializeApp(firebaseConfig);
-Object(_modules_showAllRecipes__WEBPACK_IMPORTED_MODULE_6__["default"])(linkDb);
-Object(_modules_addStep__WEBPACK_IMPORTED_MODULE_0__["default"])('.recipe-ingredients__list', '#add-ingredient');
-Object(_modules_addStep__WEBPACK_IMPORTED_MODULE_0__["default"])('.recipe-instruction__list', '#add-step');
-Object(_modules_deleteStep__WEBPACK_IMPORTED_MODULE_4__["default"])('.recipe-ingredients__list', '.ingredient__delete');
-Object(_modules_deleteStep__WEBPACK_IMPORTED_MODULE_4__["default"])('.recipe-instruction__list', '.instruction__delete');
-Object(_modules_scroolToUp__WEBPACK_IMPORTED_MODULE_5__["default"])();
-Object(_modules_showMobileMenu__WEBPACK_IMPORTED_MODULE_7__["default"])();
-Object(_modules_createRecipe__WEBPACK_IMPORTED_MODULE_2__["default"])(linkDb);
-Object(_modules_checkInputs__WEBPACK_IMPORTED_MODULE_1__["default"])();
+var linkDb = 'https://recipe-55b0e-default-rtdb.firebaseio.com/data.json';
+var paginationItemsCount;
+Object(_services_getData__WEBPACK_IMPORTED_MODULE_10__["default"])(linkDb).then(function (recipes) {
+  paginationItemsCount = recipes.length / 8;
+  return paginationItemsCount;
+});
+console.log(paginationItemsCount);
+window.addEventListener('DOMContentLoaded', function () {
+  'use strict';
+
+  Object(_modules_showAllRecipes__WEBPACK_IMPORTED_MODULE_7__["default"])(linkDb, 0, 8);
+  Object(_modules_pagination__WEBPACK_IMPORTED_MODULE_5__["default"])(linkDb, paginationItemsCount);
+  Object(_modules_addStep__WEBPACK_IMPORTED_MODULE_0__["default"])('.recipe-ingredients__list', '#add-ingredient');
+  Object(_modules_addStep__WEBPACK_IMPORTED_MODULE_0__["default"])('.recipe-instruction__list', '#add-step');
+  Object(_modules_deleteStep__WEBPACK_IMPORTED_MODULE_4__["default"])('.recipe-ingredients__list', '.ingredient__delete');
+  Object(_modules_deleteStep__WEBPACK_IMPORTED_MODULE_4__["default"])('.recipe-instruction__list', '.instruction__delete');
+  Object(_modules_scroolToUp__WEBPACK_IMPORTED_MODULE_6__["default"])();
+  Object(_modules_showMobileMenu__WEBPACK_IMPORTED_MODULE_8__["default"])();
+  Object(_modules_createRecipe__WEBPACK_IMPORTED_MODULE_2__["default"])(linkDb);
+  Object(_modules_checkInputs__WEBPACK_IMPORTED_MODULE_1__["default"])();
+});
 
 /***/ }),
 
@@ -6076,6 +6089,55 @@ var deleteStep = function deleteStep(listSelector, btnSelector) {
 
 /***/ }),
 
+/***/ "./src/assets/js/modules/pagination.js":
+/*!*********************************************!*\
+  !*** ./src/assets/js/modules/pagination.js ***!
+  \*********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _showAllRecipes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./showAllRecipes */ "./src/assets/js/modules/showAllRecipes.js");
+
+
+var pagination = function pagination(link, paginationItemsCount) {
+  var pagination = document.querySelector('.pagination');
+
+  for (var i = 0; i < paginationItemsCount; i++) {
+    var paginationItem = document.createElement('li');
+    paginationItem.classList.add('pagination__item');
+    paginationItem.textContent = "".concat(i + 1);
+
+    if (paginationItem.textContent == '1') {
+      paginationItem.classList.add('pagination__item_active');
+    }
+
+    pagination.append(paginationItem);
+  }
+
+  var recipesOnPages = 8;
+  pagination.addEventListener('click', function (e) {
+    var active = pagination.querySelector('.pagination__item_active');
+
+    if (active) {
+      active.classList.remove('pagination__item_active');
+    }
+
+    if (e.target && e.target.matches('li.pagination__item')) {
+      e.target.classList.add('pagination__item_active');
+      var pageNumber = +e.target.innerHTML,
+          startSlice = (pageNumber - 1) * recipesOnPages,
+          endSlice = startSlice + recipesOnPages;
+      Object(_showAllRecipes__WEBPACK_IMPORTED_MODULE_0__["default"])(link, startSlice, endSlice);
+    }
+  });
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (pagination);
+
+/***/ }),
+
 /***/ "./src/assets/js/modules/scroolToUp.js":
 /*!*********************************************!*\
   !*** ./src/assets/js/modules/scroolToUp.js ***!
@@ -6125,6 +6187,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_es_promise_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_promise_js__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var _services_getData__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../services/getData */ "./src/assets/js/services/getData.js");
 /* harmony import */ var _createRecipePage__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./createRecipePage */ "./src/assets/js/modules/createRecipePage.js");
+/* harmony import */ var _pagination__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./pagination */ "./src/assets/js/modules/pagination.js");
 
 
 
@@ -6138,10 +6201,11 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 
- // import scrollToUp from "./scroolToUp";
+
+
 
 var showAllRecipes = /*#__PURE__*/function () {
-  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(link) {
+  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(link, startSlice, endSlice) {
     var cardsContainer, statusMessage;
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
@@ -6149,11 +6213,12 @@ var showAllRecipes = /*#__PURE__*/function () {
           case 0:
             _context.prev = 0;
             cardsContainer = document.querySelector('.cards');
+            cardsContainer.innerHTML = '';
             statusMessage = document.createElement('div');
             statusMessage.classList.add('modal-substrate');
             statusMessage.innerHTML = "<img src='../img/spinner.gif' width='40vw'>";
             cardsContainer.prepend(statusMessage);
-            _context.next = 8;
+            _context.next = 9;
             return Object(_services_getData__WEBPACK_IMPORTED_MODULE_7__["default"])(link).then(function (recipes) {
               var _loop = function _loop(i) {
                 var card = document.createElement('div');
@@ -6188,30 +6253,32 @@ var showAllRecipes = /*#__PURE__*/function () {
                 cardsContainer.append(card);
               };
 
-              for (var i = 0; i < recipes.length; i++) {
+              // let paginationItemsCount = recipes.length / 12;
+              // pagination(link, paginationItemsCount);        
+              for (var i = startSlice; i < endSlice; i++) {
                 _loop(i);
               }
             });
 
-          case 8:
+          case 9:
             cardsContainer.removeChild(statusMessage);
-            _context.next = 14;
+            _context.next = 15;
             break;
 
-          case 11:
-            _context.prev = 11;
+          case 12:
+            _context.prev = 12;
             _context.t0 = _context["catch"](0);
             return _context.abrupt("return");
 
-          case 14:
+          case 15:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[0, 11]]);
+    }, _callee, null, [[0, 12]]);
   }));
 
-  return function showAllRecipes(_x) {
+  return function showAllRecipes(_x, _x2, _x3) {
     return _ref.apply(this, arguments);
   };
 }();

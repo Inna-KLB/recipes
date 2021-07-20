@@ -1,11 +1,12 @@
 import getData from "../services/getData";
 import createRecipePage from "./createRecipePage";
+import pagination from "./pagination";
 
-// import scrollToUp from "./scroolToUp";
 
-const showAllRecipes = async(link) => {
+const showAllRecipes = async(link, startSlice, endSlice) => {
   try {
     const cardsContainer = document.querySelector('.cards');
+    cardsContainer.innerHTML = '';
 
     let statusMessage = document.createElement('div');
     statusMessage.classList.add('modal-substrate');
@@ -14,7 +15,9 @@ const showAllRecipes = async(link) => {
   
     await getData(link)
       .then(recipes => {
-        for(let i = 0; i < recipes.length; i++) {    
+        // let paginationItemsCount = recipes.length / 12;
+        // pagination(link, paginationItemsCount);        
+        for(let i = startSlice; i < endSlice; i++) {    
           let card = document.createElement('div');
           card.classList.add('card');
           card.style.backgroundImage = `url(${recipes[i].mainPhoto})`;
@@ -52,7 +55,7 @@ const showAllRecipes = async(link) => {
   
           card.append(cardSubstrate);
           cardsContainer.append(card);
-        }    
+        }
     })
     cardsContainer.removeChild(statusMessage);
   }
