@@ -5487,17 +5487,31 @@ module.exports = g;
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _modules_addStep__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/addStep */ "./src/assets/js/modules/addStep.js");
-/* harmony import */ var _modules_checkInputs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/checkInputs */ "./src/assets/js/modules/checkInputs.js");
-/* harmony import */ var _modules_createRecipe__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/createRecipe */ "./src/assets/js/modules/createRecipe.js");
-/* harmony import */ var _modules_createRecipePage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/createRecipePage */ "./src/assets/js/modules/createRecipePage.js");
-/* harmony import */ var _modules_deleteStep__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/deleteStep */ "./src/assets/js/modules/deleteStep.js");
-/* harmony import */ var _modules_pagination__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/pagination */ "./src/assets/js/modules/pagination.js");
-/* harmony import */ var _modules_scroolToUp__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/scroolToUp */ "./src/assets/js/modules/scroolToUp.js");
-/* harmony import */ var _modules_showAllRecipes__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./modules/showAllRecipes */ "./src/assets/js/modules/showAllRecipes.js");
-/* harmony import */ var _modules_showMobileMenu__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./modules/showMobileMenu */ "./src/assets/js/modules/showMobileMenu.js");
-/* harmony import */ var _modules_showModal__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./modules/showModal */ "./src/assets/js/modules/showModal.js");
-/* harmony import */ var _services_getData__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./services/getData */ "./src/assets/js/services/getData.js");
+/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.object.to-string.js */ "./node_modules/core-js/modules/es.object.to-string.js");
+/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_es_promise_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.promise.js */ "./node_modules/core-js/modules/es.promise.js");
+/* harmony import */ var core_js_modules_es_promise_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_promise_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var regenerator_runtime_runtime_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! regenerator-runtime/runtime.js */ "./node_modules/regenerator-runtime/runtime.js");
+/* harmony import */ var regenerator_runtime_runtime_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(regenerator_runtime_runtime_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _modules_addStep__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/addStep */ "./src/assets/js/modules/addStep.js");
+/* harmony import */ var _modules_checkInputs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/checkInputs */ "./src/assets/js/modules/checkInputs.js");
+/* harmony import */ var _modules_createRecipe__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/createRecipe */ "./src/assets/js/modules/createRecipe.js");
+/* harmony import */ var _modules_createRecipePage__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/createRecipePage */ "./src/assets/js/modules/createRecipePage.js");
+/* harmony import */ var _modules_deleteStep__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./modules/deleteStep */ "./src/assets/js/modules/deleteStep.js");
+/* harmony import */ var _modules_pagination__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./modules/pagination */ "./src/assets/js/modules/pagination.js");
+/* harmony import */ var _modules_scroolToUp__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./modules/scroolToUp */ "./src/assets/js/modules/scroolToUp.js");
+/* harmony import */ var _modules_showAllRecipes__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./modules/showAllRecipes */ "./src/assets/js/modules/showAllRecipes.js");
+/* harmony import */ var _modules_showMobileMenu__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./modules/showMobileMenu */ "./src/assets/js/modules/showMobileMenu.js");
+/* harmony import */ var _modules_showModal__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./modules/showModal */ "./src/assets/js/modules/showModal.js");
+/* harmony import */ var _services_getData__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./services/getData */ "./src/assets/js/services/getData.js");
+
+
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 
 
 
@@ -5522,26 +5536,39 @@ var firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 var linkDb = 'https://recipe-55b0e-default-rtdb.firebaseio.com/data.json';
-var paginationItemsCount;
-Object(_services_getData__WEBPACK_IMPORTED_MODULE_10__["default"])(linkDb).then(function (recipes) {
-  paginationItemsCount = recipes.length / 8;
-  return paginationItemsCount;
-});
-console.log(paginationItemsCount);
-window.addEventListener('DOMContentLoaded', function () {
+var paginationItemsCount,
+    recipesOnPages = 7;
+window.addEventListener('DOMContentLoaded', /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
   'use strict';
 
-  Object(_modules_showAllRecipes__WEBPACK_IMPORTED_MODULE_7__["default"])(linkDb, 0, 8);
-  Object(_modules_pagination__WEBPACK_IMPORTED_MODULE_5__["default"])(linkDb, paginationItemsCount);
-  Object(_modules_addStep__WEBPACK_IMPORTED_MODULE_0__["default"])('.recipe-ingredients__list', '#add-ingredient');
-  Object(_modules_addStep__WEBPACK_IMPORTED_MODULE_0__["default"])('.recipe-instruction__list', '#add-step');
-  Object(_modules_deleteStep__WEBPACK_IMPORTED_MODULE_4__["default"])('.recipe-ingredients__list', '.ingredient__delete');
-  Object(_modules_deleteStep__WEBPACK_IMPORTED_MODULE_4__["default"])('.recipe-instruction__list', '.instruction__delete');
-  Object(_modules_scroolToUp__WEBPACK_IMPORTED_MODULE_6__["default"])();
-  Object(_modules_showMobileMenu__WEBPACK_IMPORTED_MODULE_8__["default"])();
-  Object(_modules_createRecipe__WEBPACK_IMPORTED_MODULE_2__["default"])(linkDb);
-  Object(_modules_checkInputs__WEBPACK_IMPORTED_MODULE_1__["default"])();
-});
+  return regeneratorRuntime.wrap(function _callee$(_context) {
+    while (1) {
+      switch (_context.prev = _context.next) {
+        case 0:
+          _context.next = 2;
+          return Object(_services_getData__WEBPACK_IMPORTED_MODULE_13__["default"])(linkDb).then(function (recipes) {
+            paginationItemsCount = Math.ceil(recipes.length / recipesOnPages);
+          });
+
+        case 2:
+          Object(_modules_showAllRecipes__WEBPACK_IMPORTED_MODULE_10__["default"])(linkDb, 0, recipesOnPages);
+          Object(_modules_pagination__WEBPACK_IMPORTED_MODULE_8__["default"])(linkDb, paginationItemsCount, recipesOnPages);
+          Object(_modules_addStep__WEBPACK_IMPORTED_MODULE_3__["default"])('.recipe-ingredients__list', '#add-ingredient');
+          Object(_modules_addStep__WEBPACK_IMPORTED_MODULE_3__["default"])('.recipe-instruction__list', '#add-step');
+          Object(_modules_deleteStep__WEBPACK_IMPORTED_MODULE_7__["default"])('.recipe-ingredients__list', '.ingredient__delete');
+          Object(_modules_deleteStep__WEBPACK_IMPORTED_MODULE_7__["default"])('.recipe-instruction__list', '.instruction__delete');
+          Object(_modules_scroolToUp__WEBPACK_IMPORTED_MODULE_9__["default"])();
+          Object(_modules_showMobileMenu__WEBPACK_IMPORTED_MODULE_11__["default"])();
+          Object(_modules_createRecipe__WEBPACK_IMPORTED_MODULE_5__["default"])(linkDb);
+          Object(_modules_checkInputs__WEBPACK_IMPORTED_MODULE_4__["default"])();
+
+        case 12:
+        case "end":
+          return _context.stop();
+      }
+    }
+  }, _callee);
+})));
 
 /***/ }),
 
@@ -5581,6 +5608,41 @@ var addStep = function addStep(listSelector, btnSelector) {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (addStep);
+
+/***/ }),
+
+/***/ "./src/assets/js/modules/addToFavorites.js":
+/*!*************************************************!*\
+  !*** ./src/assets/js/modules/addToFavorites.js ***!
+  \*************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var core_js_modules_es_array_for_each_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.for-each.js */ "./node_modules/core-js/modules/es.array.for-each.js");
+/* harmony import */ var core_js_modules_es_array_for_each_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_for_each_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each.js */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_1__);
+
+
+
+var addToFavorites = function addToFavorites(isFavorite) {
+  var btnsToggleFavorite = document.querySelectorAll('.add-fav');
+  btnsToggleFavorite.forEach(function (btnToggleFavorite) {
+    btnToggleFavorite.addEventListener('click', function (e) {
+      if (isFavorite === 'false') {
+        isFavorite = 'true';
+      } else {
+        isFavorite = 'false';
+      }
+
+      console.log(isFavorite); // return isFavorite;
+    });
+  });
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (addToFavorites);
 
 /***/ }),
 
@@ -5821,7 +5883,8 @@ var createRecipe = function createRecipe(link) {
                   description: description.value.trim().toLowerCase(),
                   mainPhoto: mainImgUrl,
                   ingredients: arrIngredient,
-                  instructions: arrInstruction
+                  instructions: arrInstruction,
+                  favorite: 'false'
                 }; // Валидация массива с категориями
 
                 checkCategory = recipeBody.category.length === 0 ? 'false' : 'true';
@@ -6101,13 +6164,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _showAllRecipes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./showAllRecipes */ "./src/assets/js/modules/showAllRecipes.js");
 
 
-var pagination = function pagination(link, paginationItemsCount) {
+var pagination = function pagination(link, paginationItemsCount, recipesOnPages) {
   var pagination = document.querySelector('.pagination');
 
-  for (var i = 0; i < paginationItemsCount; i++) {
+  for (var i = 0; i < paginationItemsCount + 2; i++) {
     var paginationItem = document.createElement('li');
     paginationItem.classList.add('pagination__item');
-    paginationItem.textContent = "".concat(i + 1);
+
+    if (i === 0) {
+      paginationItem.setAttribute('id', 'prev');
+      paginationItem.innerHTML = '<ion-icon name="caret-back-outline"></ion-icon>';
+    } else if (i === paginationItemsCount + 1) {
+      paginationItem.setAttribute('id', 'next');
+      paginationItem.innerHTML = '<ion-icon name="caret-forward-outline"></ion-icon>';
+    } else {
+      paginationItem.textContent = "".concat(i);
+    }
 
     if (paginationItem.textContent == '1') {
       paginationItem.classList.add('pagination__item_active');
@@ -6116,20 +6188,33 @@ var pagination = function pagination(link, paginationItemsCount) {
     pagination.append(paginationItem);
   }
 
-  var recipesOnPages = 8;
+  var switchPage = function switchPage(activePaginationItem, nextActivePaginationItem) {
+    activePaginationItem.classList.remove('pagination__item_active');
+    nextActivePaginationItem.classList.add('pagination__item_active');
+    var pageNumber = +nextActivePaginationItem.innerHTML,
+        startSlice = (pageNumber - 1) * recipesOnPages,
+        endSlice = startSlice + recipesOnPages; // console.log(startSlice, endSlice);
+
+    Object(_showAllRecipes__WEBPACK_IMPORTED_MODULE_0__["default"])(link, startSlice, endSlice);
+  };
+
   pagination.addEventListener('click', function (e) {
     var active = pagination.querySelector('.pagination__item_active');
 
-    if (active) {
-      active.classList.remove('pagination__item_active');
-    }
-
-    if (e.target && e.target.matches('li.pagination__item')) {
-      e.target.classList.add('pagination__item_active');
-      var pageNumber = +e.target.innerHTML,
-          startSlice = (pageNumber - 1) * recipesOnPages,
-          endSlice = startSlice + recipesOnPages;
-      Object(_showAllRecipes__WEBPACK_IMPORTED_MODULE_0__["default"])(link, startSlice, endSlice);
+    if (e.target && e.target.matches('li#prev') || e.target.parentElement.matches('li#prev')) {
+      if (active.textContent === '1') {
+        return;
+      } else {
+        switchPage(active, active.previousElementSibling);
+      }
+    } else if (e.target && e.target.matches('li#next') || e.target.parentElement.matches('li#next')) {
+      if (active.textContent === "".concat(paginationItemsCount)) {
+        return;
+      } else {
+        switchPage(active, active.nextElementSibling);
+      }
+    } else {
+      switchPage(active, e.target);
     }
   });
 };
@@ -6186,8 +6271,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_es_promise_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/es.promise.js */ "./node_modules/core-js/modules/es.promise.js");
 /* harmony import */ var core_js_modules_es_promise_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_promise_js__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var _services_getData__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../services/getData */ "./src/assets/js/services/getData.js");
-/* harmony import */ var _createRecipePage__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./createRecipePage */ "./src/assets/js/modules/createRecipePage.js");
-/* harmony import */ var _pagination__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./pagination */ "./src/assets/js/modules/pagination.js");
+/* harmony import */ var _addToFavorites__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./addToFavorites */ "./src/assets/js/modules/addToFavorites.js");
+/* harmony import */ var _createRecipePage__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./createRecipePage */ "./src/assets/js/modules/createRecipePage.js");
+/* harmony import */ var _pagination__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./pagination */ "./src/assets/js/modules/pagination.js");
 
 
 
@@ -6199,6 +6285,7 @@ __webpack_require__.r(__webpack_exports__);
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 
 
 
@@ -6221,40 +6308,40 @@ var showAllRecipes = /*#__PURE__*/function () {
             _context.next = 9;
             return Object(_services_getData__WEBPACK_IMPORTED_MODULE_7__["default"])(link).then(function (recipes) {
               var _loop = function _loop(i) {
-                var card = document.createElement('div');
-                card.classList.add('card');
-                card.style.backgroundImage = "url(".concat(recipes[i].mainPhoto, ")");
-                var cardSubstrate = document.createElement('div');
-                cardSubstrate.classList.add('card__substrate');
-                cardSubstrate.innerHTML = "\n            <h3 class=\"card__header\">".concat(recipes[i].name, "</h3>\n            <p class=\"card__description\">").concat(recipes[i].description, "</p>\n          ");
-                var btnOpen = document.createElement('a');
-                btnOpen.classList.add('btn', 'btn_red');
-                btnOpen.setAttribute('href', 'recipe.html');
-                btnOpen.textContent = 'Открыть';
-                btnOpen.addEventListener('click', function (e) {
-                  e.preventDefault();
-                  Object(_createRecipePage__WEBPACK_IMPORTED_MODULE_8__["default"])(link, recipes[i].id, '.main-page');
-                });
-                var btnAddFavorite = document.createElement('button');
-                btnAddFavorite.classList.add('add-fav'); // btnAddFavorite.innerHTML = `
-                //   <ion-icon name="heart-outline"></ion-icon>
-                // `;
+                if (recipes[i]) {
+                  var card = document.createElement('div');
+                  card.classList.add('card');
+                  card.style.backgroundImage = "url(".concat(recipes[i].mainPhoto, ")");
+                  var cardSubstrate = document.createElement('div');
+                  cardSubstrate.classList.add('card__substrate');
+                  cardSubstrate.innerHTML = "\n              <h3 class=\"card__header\">".concat(recipes[i].name, "</h3>\n              <p class=\"card__description\">").concat(recipes[i].description, "</p>\n            ");
+                  var btnOpen = document.createElement('a');
+                  btnOpen.classList.add('btn', 'btn_red');
+                  btnOpen.setAttribute('href', 'recipe.html');
+                  btnOpen.textContent = 'Открыть';
+                  btnOpen.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    Object(_createRecipePage__WEBPACK_IMPORTED_MODULE_9__["default"])(link, recipes[i].id, '.main-page');
+                  });
+                  var btnAddFavorite = document.createElement('button');
+                  btnAddFavorite.classList.add('add-fav');
 
-                // btnAddFavorite.innerHTML = `
-                //   <ion-icon name="heart-outline"></ion-icon>
-                // `;
-                btnAddFavorite.innerHTML = "\n            <ion-icon name=\"heart\"></ion-icon>\n          ";
-                btnAddFavorite.addEventListener('click', function () {
-                  console.log('Add to favorite recipes');
-                });
-                cardSubstrate.append(btnOpen);
-                cardSubstrate.append(btnAddFavorite);
-                card.append(cardSubstrate);
-                cardsContainer.append(card);
+                  if (recipes[i].favorite === 'false') {
+                    btnAddFavorite.innerHTML = "\n                <ion-icon name=\"heart-outline\"></ion-icon>\n              ";
+                  } else {
+                    btnAddFavorite.innerHTML = "\n                <ion-icon name=\"heart\"></ion-icon>\n              ";
+                  }
+
+                  btnAddFavorite.addEventListener('click', function () {
+                    Object(_addToFavorites__WEBPACK_IMPORTED_MODULE_8__["default"])(recipes[i].favorite);
+                  });
+                  cardSubstrate.append(btnOpen);
+                  cardSubstrate.append(btnAddFavorite);
+                  card.append(cardSubstrate);
+                  cardsContainer.append(card);
+                }
               };
 
-              // let paginationItemsCount = recipes.length / 12;
-              // pagination(link, paginationItemsCount);        
               for (var i = startSlice; i < endSlice; i++) {
                 _loop(i);
               }
@@ -6438,6 +6525,7 @@ var deleteData = /*#__PURE__*/function () {
               } else {
                 var _link = linkToStorage.split('/')[7].split('?')[0];
                 var storageRef = firebase.storage().ref("/".concat(_link.split('%2F')[0], "/").concat(_link.split('%2F')[1]));
+                console.log(storageRef);
                 storageRef["delete"]().then(function () {
                   console.log("\u0418\u0437\u043E\u0431\u0440\u0430\u0436\u0435\u043D\u0438\u0435 \u0443\u0434\u0430\u043B\u0435\u043D\u043E");
                 })["catch"](function (error) {

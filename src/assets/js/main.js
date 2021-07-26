@@ -25,21 +25,18 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 const linkDb = 'https://recipe-55b0e-default-rtdb.firebaseio.com/data.json';
-let paginationItemsCount;
-
-
-getData(linkDb)
-  .then(recipes => {
-    paginationItemsCount = recipes.length / 8;
-    return paginationItemsCount;
-  });
-  console.log(paginationItemsCount);
-
-window.addEventListener('DOMContentLoaded', () => {
+let paginationItemsCount,
+    recipesOnPages = 7;
+  
+window.addEventListener('DOMContentLoaded', async() => {
   'use strict';
+  await getData(linkDb)
+  .then(recipes => {
+    paginationItemsCount = Math.ceil(recipes.length / recipesOnPages);
+  });
 
-  showAllRecipes(linkDb, 0, 8);
-  pagination(linkDb, paginationItemsCount);
+  showAllRecipes(linkDb, 0, recipesOnPages);
+  pagination(linkDb, paginationItemsCount, recipesOnPages);
   addStep('.recipe-ingredients__list', '#add-ingredient');
   addStep('.recipe-instruction__list', '#add-step');
   deleteStep('.recipe-ingredients__list', '.ingredient__delete');

@@ -98,7 +98,8 @@ const createRecipe = (link) => {
         description: description.value.trim().toLowerCase(), 
         mainPhoto: mainImgUrl, 
         ingredients: arrIngredient, 
-        instructions: arrInstruction 
+        instructions: arrInstruction,
+        favorite: 'false' 
       };
 
        // Валидация массива с категориями
