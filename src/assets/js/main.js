@@ -6,6 +6,7 @@ import deleteStep from "./modules/deleteStep";
 import pagination from "./modules/pagination";
 import scrollToUp from "./modules/scroolToUp";
 import showAllRecipes from "./modules/showAllRecipes";
+import showCategory from "./modules/showCategory";
 import showMobileMenu from "./modules/showMobileMenu";
 import showModal from "./modules/showModal";
 import getData from "./services/getData";
@@ -26,17 +27,19 @@ firebase.initializeApp(firebaseConfig);
 
 const linkDb = 'https://recipe-55b0e-default-rtdb.firebaseio.com/data.json';
 let paginationItemsCount,
-    recipesOnPages = 7;
+    recipesOnPages = 12,
+    recipesArray;
   
 window.addEventListener('DOMContentLoaded', async() => {
   'use strict';
   await getData(linkDb)
   .then(recipes => {
+    recipesArray = recipes;
     paginationItemsCount = Math.ceil(recipes.length / recipesOnPages);
   });
 
-  showAllRecipes(linkDb, 0, recipesOnPages);
-  pagination(linkDb, paginationItemsCount, recipesOnPages);
+  showAllRecipes(recipesArray, 0, recipesOnPages, linkDb);
+  pagination(recipesArray, paginationItemsCount, recipesOnPages, linkDb);
   addStep('.recipe-ingredients__list', '#add-ingredient');
   addStep('.recipe-instruction__list', '#add-step');
   deleteStep('.recipe-ingredients__list', '.ingredient__delete');
@@ -45,4 +48,5 @@ window.addEventListener('DOMContentLoaded', async() => {
   showMobileMenu();
   createRecipe(linkDb);
   checkInputs();
+  showCategory(recipesArray, recipesOnPages, paginationItemsCount, linkDb);
 });
