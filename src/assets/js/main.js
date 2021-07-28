@@ -5,6 +5,7 @@ import createRecipePage from "./modules/createRecipePage";
 import deleteStep from "./modules/deleteStep";
 import pagination from "./modules/pagination";
 import scrollToUp from "./modules/scroolToUp";
+import search from "./modules/search";
 import showAllRecipes from "./modules/showAllRecipes";
 import showCategory from "./modules/showCategory";
 import showMobileMenu from "./modules/showMobileMenu";
@@ -49,4 +50,5 @@ window.addEventListener('DOMContentLoaded', async() => {
   createRecipe(linkDb);
   checkInputs();
   showCategory(recipesArray, recipesOnPages, paginationItemsCount, linkDb);
+  search();
 });

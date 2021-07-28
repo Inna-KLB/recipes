@@ -1,27 +1,104 @@
 .search
   text-align: center
-  height: clamp(55px, 10vh, 80px)
-  width: 100%
-  margin-bottom: 2%
+  height: clamp(80px, 10vh, 90px)
+  width: 70%
+  margin: 2% auto
   display: flex
+  flex-direction: column
   justify-content: center
   align-items: center
+  color: $grey
+  &-standart
+    width: 100%
+    margin-bottom: 1%
+    & .search__input
+      border-radius: 10px 0 0 10px
+      border-right-width: 0
+      width: 84%
+    & .btn
+      width: 15%
+      margin: -1%
+      height: clamp(35px, 53%, 45px)
+      padding: 0.4% 1.5%
+      border-top-left-radius: 0
+      border-bottom-left-radius: 0
+  &-advanced
+    width: 100%
+    display: flex
+    justify-content: flex-end
+    column-gap: 1%
+    // margin-top: 1%
+
+    & .search__input
+       flex-basis: 49%
+
   &__input
     color: $grey 
     font-size: 1rem
     height: clamp(35px, 53%, 45px)
-    flex-basis: 50%
     padding: 1%
-    border-radius: 10px 0 0 10px
     border: 1px solid $grey
-    border-right-width: 0
+    border-radius: 10px
     &:active, &:focus
       border-color: $blue
       outline: none
-  & .btn
-    flex-basis: 10%
-    margin: -1%
-    height: clamp(35px, 53%, 45px)
-    padding: 0.4% 1.5%
-    border-top-left-radius: 0
-    border-bottom-left-radius: 0
+  
+.show-search
+  animation-name: show-search 
+  animation-duration: 0.5s
+  animation-fill-mode: forwards
+
+@keyframes show-search 
+  0%
+    height: 0
+    opacity: 0
+    position: absolute
+    top: -100%
+  50% 
+    opacity: 0.5
+    height: 50%
+  100%
+    height: 100%
+    opacity: 1
+    position: static
+
+.hide-search
+  animation-name: hide-search 
+  animation-duration: 0.5s
+  animation-fill-mode: forwards
+
+@keyframes hide-search 
+  0%
+    height: 100%
+    opacity: 1
+    position: static
+  50% 
+    opacity: 0.5
+    height: 50%
+  100%
+    height: 0
+    opacity: 0
+    position: absolute
+    top: -100%
+
+.rotate-up-icon
+  animation-name: rotate-up-icon
+  animation-duration: 0.4s
+  animation-fill-mode: forwards
+
+@keyframes rotate-up-icon 
+  0%
+    transform: rotate(0)
+  100%
+    transform: rotate(180deg)
+
+.rotate-down-icon
+  animation-name: rotate-down-icon
+  animation-duration: 0.4s
+  animation-fill-mode: forwards
+
+@keyframes rotate-down-icon 
+  0%
+    transform: rotate(180deg)
+  100%
+    transform: rotate(360deg)

@@ -48,20 +48,10 @@ const showAllRecipes = (recipes, startSlice, endSlice, link) => {
         btnAddFavorite.addEventListener('click', (e) => {
           let isFavorite = recipes[i].favorite;
           isFavorite = (recipes[i].favorite === 'false') ? 'true' : 'false';
-          // addToFavorites(e.target, link, isFavorite, recipes[i].id);
-          
-          patchData(link, recipes[i].id, {favorite: isFavorite})
-          .then(res => {
-            recipes[i].favorite = res.favorite;
-            console.log(res.favorite);
+          return addToFavorites(e.target, link, isFavorite, recipes[i].id)
+          .then(status => {
+            recipes[i].favorite = status;
           });
-          if(e.target && e.target.matches('ion-icon')) {                
-            if(recipes[i].favorite === 'true') {
-              e.target.parentElement.innerHTML = '<ion-icon name="heart-outline"></ion-icon>';
-            } else {
-              e.target.parentElement.innerHTML = '<ion-icon name="heart"></ion-icon>';
-            }
-          }
         });
 
         cardSubstrate.append(btnOpen);
