@@ -1,34 +1,29 @@
-import showAllRecipes from "./showAllRecipes";
+import generateRecipes from "./generateRecipes";
 import pagination from "./pagination";
+import createRecipesCards from "./createRecipesCards";
 
 
-const showCategory = (recipes, recipesOnPages, paginationItemsCount, link) => {
+const showCategory = (recipes, recipesOnPages, link) => {
   const categories = document.querySelectorAll('.navbar-menu__item'),
-        showFavorite = document.querySelector('#show-favorites'),
-        recipePage = document.querySelector('.recipe-page'),
-        addRecipePage = document.querySelector('.add-recipe');
-        
-
-  if(recipePage || addRecipePage){
-    recipePage.style.display = 'none';
-  }
-
+        showFavorite = document.querySelector('#show-favorites');
+  
   showFavorite.addEventListener('click', () => {
     let sortRecipes = [];
+    let container = document.querySelector('.recipe-page');
     for(let i = 0; i < recipes.length; i++) {
       if(recipes[i].favorite === 'true') {
         sortRecipes.push(recipes[i]);     
       }
     }
-    console.log(sortRecipes);
-
-    showAllRecipes(sortRecipes, 0, recipesOnPages, link);  
-    pagination(sortRecipes, recipesOnPages);
+    let paginationItemsCount = Math.ceil(sortRecipes.length / recipesOnPages);    
+    generateRecipes(sortRecipes, 0, recipesOnPages, link, container);    
+    pagination(sortRecipes, paginationItemsCount, recipesOnPages, link);
   });
 
   categories.forEach(category => {
     category.addEventListener('click', (e) => {
       let sortRecipes = [];
+      let container = document.querySelector('.recipe-page');
       const valueCategory = e.target.textContent;
       for(let i = 0; i < recipes.length; i++) {
         for(let k = 0; k < recipes[i].category.length; k++) {
@@ -37,10 +32,10 @@ const showCategory = (recipes, recipesOnPages, paginationItemsCount, link) => {
           }
         }
       }
-      console.log(sortRecipes);
+      let paginationItemsCount = Math.ceil(sortRecipes.length / recipesOnPages);   
       
-      showAllRecipes(sortRecipes, 0, recipesOnPages, link);  
-      pagination(sortRecipes, paginationItemsCount, recipesOnPages); 
+      generateRecipes(sortRecipes, 0, recipesOnPages, link, container);  
+      pagination(sortRecipes, paginationItemsCount, recipesOnPages, link);
     });
   });
 };

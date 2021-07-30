@@ -1,6 +1,7 @@
 import loadIntoStorage from "../services/loadIntoStorage";
 import postData from "../services/postData";
 import checkInputs from "./checkInputs";
+import scrollToUp from "./scroolToUp";
 import showModal from "./showModal";
 
 const createRecipe = (link) => {
@@ -18,6 +19,7 @@ const createRecipe = (link) => {
     // Создание id для названия папки для изображений
     let idImgFolder = new Date().getDate() + new Date().getTime() + Math.random();
    
+    scrollToUp('.add-recipe');
 
     const createRecipeBody = async() => {
       const ingredients = document.querySelectorAll('.recipe-ingredients__list-item'),
@@ -123,6 +125,7 @@ const createRecipe = (link) => {
     btnSave.addEventListener('click', () => { 
       createRecipeBody();
     });
+
   }
   catch {
     return;

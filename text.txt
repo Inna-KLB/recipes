@@ -1,21 +1,10 @@
-import getData from "../services/getData";
-import patchData from "../services/patchData";
-import addToFavorites from "./addToFavorites";
-import createRecipePage from "./createRecipePage";
-
-
-const showAllRecipes = (recipes, startSlice, endSlice, link) => {
-
-  try {
-    const cardsContainer = document.querySelector('.cards');
-    cardsContainer.innerHTML = '';
-
-    let statusMessage = document.createElement('div');
+ let statusMessage = document.createElement('div');
     statusMessage.classList.add('modal-substrate');
     statusMessage.innerHTML = `<img src='../img/spinner.gif' width='40vw'>`;
     cardsContainer.prepend(statusMessage);
+    
   
-    for(let i = startSlice; i < endSlice; i++) {            
+    for(let i = startSlice; i < endSlice; i++){            
       if(recipes[i]) {
         let card = document.createElement('div');
         card.classList.add('card');
@@ -62,10 +51,3 @@ const showAllRecipes = (recipes, startSlice, endSlice, link) => {
       }
     }
     cardsContainer.removeChild(statusMessage);
-  }
-  catch {
-    return;
-  }
-
-};
-export default showAllRecipes;

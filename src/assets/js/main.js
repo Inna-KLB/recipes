@@ -4,11 +4,11 @@ import createRecipe from "./modules/createRecipe";
 import createRecipePage from "./modules/createRecipePage";
 import deleteStep from "./modules/deleteStep";
 import pagination from "./modules/pagination";
-import scrollToUp from "./modules/scroolToUp";
+// import scrollToUp from "./modules/scroolToUp";
 import search from "./modules/search";
-import showAllRecipes from "./modules/showAllRecipes";
+import generateRecipes from "./modules/generateRecipes";
 import showCategory from "./modules/showCategory";
-import showMobileMenu from "./modules/showMobileMenu";
+import toggleContent from "./modules/toggleContent";
 import showModal from "./modules/showModal";
 import getData from "./services/getData";
 
@@ -38,17 +38,19 @@ window.addEventListener('DOMContentLoaded', async() => {
     recipesArray = recipes;
     paginationItemsCount = Math.ceil(recipes.length / recipesOnPages);
   });
-
-  showAllRecipes(recipesArray, 0, recipesOnPages, linkDb);
+  const logoLink = document.querySelector('.logo');
+  logoLink.addEventListener('click', () => { 
+    generateRecipes(recipesArray, 0, recipesOnPages, linkDb)
+  });
+  generateRecipes(recipesArray, 0, recipesOnPages, linkDb);
   pagination(recipesArray, paginationItemsCount, recipesOnPages, linkDb);
   addStep('.recipe-ingredients__list', '#add-ingredient');
   addStep('.recipe-instruction__list', '#add-step');
   deleteStep('.recipe-ingredients__list', '.ingredient__delete');
   deleteStep('.recipe-instruction__list', '.instruction__delete');
-  scrollToUp();
-  showMobileMenu();
+  toggleContent('#show-navbar', '#header-navbar');
   createRecipe(linkDb);
   checkInputs();
-  showCategory(recipesArray, recipesOnPages, paginationItemsCount, linkDb);
+  showCategory(recipesArray, recipesOnPages, linkDb);
   search();
 });
