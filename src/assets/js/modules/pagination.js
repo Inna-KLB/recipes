@@ -1,5 +1,5 @@
 import createRecipesCards from "./createRecipesCards";
-import generateRecipes from "./generateRecipes";
+import createMainPage from "./createMainPage";
 
 const pagination = (recipes, paginationItemsCount, recipesOnPages, link) => {
   try {

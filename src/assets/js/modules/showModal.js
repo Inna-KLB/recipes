@@ -1,4 +1,5 @@
 import deleteData from "../services/deleteData";
+import getData from "../services/getData";
 import createRecipePage from "./createRecipePage";
 
 const showModal = (modalSelector, linkDb, idRecipe, linkToStorage) => {
@@ -21,10 +22,19 @@ const showModal = (modalSelector, linkDb, idRecipe, linkToStorage) => {
       
       if(idModal === 'modal-without-errors') {
         const link = modal.querySelector('#to-recipe');
-        link.addEventListener('click', (e) => {
+        let recipe = {};
+        link.addEventListener('click', async(e) => {
           e.preventDefault();
+          await getData(linkDb)
+          .then(recipes => {
+            for (let i = 0; i < recipes.length; i++) {
+              if(idRecipe === recipes[i].id) {
+                recipe = recipes[i];
+              }
+            }
+          });
           closeModal();   
-          createRecipePage(linkDb, idRecipe, '.add-recipe');
+          createRecipePage(linkDb, recipe, '.add-recipe');
         });
       } else if(idModal === 'error-modal'){
         const btnClose = modal.querySelector('button');

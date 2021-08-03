@@ -1,17 +1,22 @@
 .add-recipe
+  & h3
+    margin-top: 2%
   & input, & textarea, & select
-    border: none     
+    border: none 
+    font-size: 0.9rem
     &:focus
       outline: none
     &::placeholder
       opacity: 0.5
+      font-size: 0.9rem
 
   & input:not(input[type="file"])
     border-bottom: 1px solid $blue
 
   & .input-group__header
-    font-weight: 500
+    font-weight: 600
     color: $grey
+    margin-bottom: 2%
   
   & .warning
     font-size: 0.7rem
@@ -52,9 +57,11 @@
         flex-basis: 100%
         & .header__input
           font-size: 1.7rem
-          font-weight: 500
+          // font-weight: 500
           margin-bottom: 3%
           width: 95%
+          &::placeholder
+            font-size: 1.5rem
         & ion-icon
           font-size: 1.5rem
           color: $grey        
@@ -90,14 +97,18 @@
       &__time
         & input 
           width: 30%
+          text-align: center
       &__portions
         margin-left: 5%
         & input
-          width: 30%    
+          width: 30%  
+          text-align: center  
          
     &-description
-      & input
-        width: 100%
+      &__text
+        margin-top: 1%
+        & input
+          width: 100%
 
     &-ingredients
       &__list
@@ -113,6 +124,7 @@
               width: 100%
             &__value
               flex-basis: 5%
+              appearance: none
               display: block
               cursor: pointer
               background-image: url('../img/caret-down-outline.svg') 
@@ -120,6 +132,7 @@
               background-repeat: no-repeat
               background-size: 30%
               font-size: 0.9rem
+              background-color: transparent
           & .btn__delete
             margin-left: 1%
             flex-basis: 2%

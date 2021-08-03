@@ -53,9 +53,10 @@ const createRecipesCards = (recipes, startSlice, endSlice, link) => {
       cardSubstrate.append(btnAddFavorite);
 
       card.append(cardSubstrate);
-      cardsContainer.append(card);
+      cardsContainer.prepend(card);
     }
   }
+
   // cardsContainer.removeChild(statusMessage);
   
    

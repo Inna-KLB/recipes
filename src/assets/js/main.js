@@ -6,11 +6,12 @@ import deleteStep from "./modules/deleteStep";
 import pagination from "./modules/pagination";
 // import scrollToUp from "./modules/scroolToUp";
 import search from "./modules/search";
-import generateRecipes from "./modules/generateRecipes";
+import createMainPage from "./modules/createMainPage";
 import showCategory from "./modules/showCategory";
 import toggleContent from "./modules/toggleContent";
 import showModal from "./modules/showModal";
 import getData from "./services/getData";
+import createAddrecipePage from "./modules/createAddrecipePage";
 
 
 // Firebase настройка
@@ -37,20 +38,30 @@ window.addEventListener('DOMContentLoaded', async() => {
   .then(recipes => {
     recipesArray = recipes;
     paginationItemsCount = Math.ceil(recipes.length / recipesOnPages);
+    createMainPage(recipesArray, 0, recipesOnPages, linkDb);
   });
   const logoLink = document.querySelector('.logo');
   logoLink.addEventListener('click', () => { 
-    generateRecipes(recipesArray, 0, recipesOnPages, linkDb)
+    const container = document.querySelector('main');
+    console.log(container);
+    createMainPage(recipesArray, 0, recipesOnPages, linkDb, container);
+    pagination(recipesArray, paginationItemsCount, recipesOnPages, linkDb);
   });
-  generateRecipes(recipesArray, 0, recipesOnPages, linkDb);
+
+  const linkToAddRecipe = document.querySelector('#go-to-add-recipe');
+  linkToAddRecipe.addEventListener('click', () => { 
+    const container = document.querySelector('main');
+    createAddrecipePage(container, linkDb);
+  });
+
   pagination(recipesArray, paginationItemsCount, recipesOnPages, linkDb);
-  addStep('.recipe-ingredients__list', '#add-ingredient');
-  addStep('.recipe-instruction__list', '#add-step');
-  deleteStep('.recipe-ingredients__list', '.ingredient__delete');
-  deleteStep('.recipe-instruction__list', '.instruction__delete');
+  // addStep('.recipe-ingredients__list', '#add-ingredient');
+  // addStep('.recipe-instruction__list', '#add-step');
+  // deleteStep('.recipe-ingredients__list', '.ingredient__delete');
+  // deleteStep('.recipe-instruction__list', '.instruction__delete');
   toggleContent('#show-navbar', '#header-navbar');
-  createRecipe(linkDb);
+  // createRecipe(linkDb);
   checkInputs();
   showCategory(recipesArray, recipesOnPages, linkDb);
-  search();
+  search(recipesArray, recipesOnPages, linkDb);
 });

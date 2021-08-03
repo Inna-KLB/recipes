@@ -5500,11 +5500,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_deleteStep__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./modules/deleteStep */ "./src/assets/js/modules/deleteStep.js");
 /* harmony import */ var _modules_pagination__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./modules/pagination */ "./src/assets/js/modules/pagination.js");
 /* harmony import */ var _modules_search__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./modules/search */ "./src/assets/js/modules/search.js");
-/* harmony import */ var _modules_generateRecipes__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./modules/generateRecipes */ "./src/assets/js/modules/generateRecipes.js");
+/* harmony import */ var _modules_createMainPage__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./modules/createMainPage */ "./src/assets/js/modules/createMainPage.js");
 /* harmony import */ var _modules_showCategory__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./modules/showCategory */ "./src/assets/js/modules/showCategory.js");
 /* harmony import */ var _modules_toggleContent__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./modules/toggleContent */ "./src/assets/js/modules/toggleContent.js");
 /* harmony import */ var _modules_showModal__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./modules/showModal */ "./src/assets/js/modules/showModal.js");
 /* harmony import */ var _services_getData__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./services/getData */ "./src/assets/js/services/getData.js");
+/* harmony import */ var _modules_createAddrecipePage__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./modules/createAddrecipePage */ "./src/assets/js/modules/createAddrecipePage.js");
 
 
 
@@ -5519,6 +5520,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
  // import scrollToUp from "./modules/scroolToUp";
+
 
 
 
@@ -5545,7 +5547,7 @@ var paginationItemsCount,
 window.addEventListener('DOMContentLoaded', /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
   'use strict';
 
-  var logoLink;
+  var logoLink, linkToAddRecipe;
   return regeneratorRuntime.wrap(function _callee$(_context) {
     while (1) {
       switch (_context.prev = _context.next) {
@@ -5554,26 +5556,34 @@ window.addEventListener('DOMContentLoaded', /*#__PURE__*/_asyncToGenerator( /*#_
           return Object(_services_getData__WEBPACK_IMPORTED_MODULE_14__["default"])(linkDb).then(function (recipes) {
             recipesArray = recipes;
             paginationItemsCount = Math.ceil(recipes.length / recipesOnPages);
+            Object(_modules_createMainPage__WEBPACK_IMPORTED_MODULE_10__["default"])(recipesArray, 0, recipesOnPages, linkDb);
           });
 
         case 2:
           logoLink = document.querySelector('.logo');
           logoLink.addEventListener('click', function () {
-            Object(_modules_generateRecipes__WEBPACK_IMPORTED_MODULE_10__["default"])(recipesArray, 0, recipesOnPages, linkDb);
+            var container = document.querySelector('main');
+            console.log(container);
+            Object(_modules_createMainPage__WEBPACK_IMPORTED_MODULE_10__["default"])(recipesArray, 0, recipesOnPages, linkDb, container);
+            Object(_modules_pagination__WEBPACK_IMPORTED_MODULE_8__["default"])(recipesArray, paginationItemsCount, recipesOnPages, linkDb);
           });
-          Object(_modules_generateRecipes__WEBPACK_IMPORTED_MODULE_10__["default"])(recipesArray, 0, recipesOnPages, linkDb);
-          Object(_modules_pagination__WEBPACK_IMPORTED_MODULE_8__["default"])(recipesArray, paginationItemsCount, recipesOnPages, linkDb);
-          Object(_modules_addStep__WEBPACK_IMPORTED_MODULE_3__["default"])('.recipe-ingredients__list', '#add-ingredient');
-          Object(_modules_addStep__WEBPACK_IMPORTED_MODULE_3__["default"])('.recipe-instruction__list', '#add-step');
-          Object(_modules_deleteStep__WEBPACK_IMPORTED_MODULE_7__["default"])('.recipe-ingredients__list', '.ingredient__delete');
-          Object(_modules_deleteStep__WEBPACK_IMPORTED_MODULE_7__["default"])('.recipe-instruction__list', '.instruction__delete');
-          Object(_modules_toggleContent__WEBPACK_IMPORTED_MODULE_12__["default"])('#show-navbar', '#header-navbar');
-          Object(_modules_createRecipe__WEBPACK_IMPORTED_MODULE_5__["default"])(linkDb);
+          linkToAddRecipe = document.querySelector('#go-to-add-recipe');
+          linkToAddRecipe.addEventListener('click', function () {
+            var container = document.querySelector('main');
+            Object(_modules_createAddrecipePage__WEBPACK_IMPORTED_MODULE_15__["default"])(container, linkDb);
+          });
+          Object(_modules_pagination__WEBPACK_IMPORTED_MODULE_8__["default"])(recipesArray, paginationItemsCount, recipesOnPages, linkDb); // addStep('.recipe-ingredients__list', '#add-ingredient');
+          // addStep('.recipe-instruction__list', '#add-step');
+          // deleteStep('.recipe-ingredients__list', '.ingredient__delete');
+          // deleteStep('.recipe-instruction__list', '.instruction__delete');
+
+          Object(_modules_toggleContent__WEBPACK_IMPORTED_MODULE_12__["default"])('#show-navbar', '#header-navbar'); // createRecipe(linkDb);
+
           Object(_modules_checkInputs__WEBPACK_IMPORTED_MODULE_4__["default"])();
           Object(_modules_showCategory__WEBPACK_IMPORTED_MODULE_11__["default"])(recipesArray, recipesOnPages, linkDb);
-          Object(_modules_search__WEBPACK_IMPORTED_MODULE_9__["default"])();
+          Object(_modules_search__WEBPACK_IMPORTED_MODULE_9__["default"])(recipesArray, recipesOnPages, linkDb);
 
-        case 15:
+        case 11:
         case "end":
           return _context.stop();
       }
@@ -5757,6 +5767,109 @@ var checkInputs = function checkInputs() {
 
 /***/ }),
 
+/***/ "./src/assets/js/modules/createAddrecipePage.js":
+/*!******************************************************!*\
+  !*** ./src/assets/js/modules/createAddrecipePage.js ***!
+  \******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _createRecipe__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./createRecipe */ "./src/assets/js/modules/createRecipe.js");
+/* harmony import */ var _scroolToUp__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./scroolToUp */ "./src/assets/js/modules/scroolToUp.js");
+/* harmony import */ var _addStep__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./addStep */ "./src/assets/js/modules/addStep.js");
+/* harmony import */ var _deleteStep__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./deleteStep */ "./src/assets/js/modules/deleteStep.js");
+
+
+
+
+
+var createAddrecipePage = function createAddrecipePage(oldContainer, link) {
+  try {
+    if (oldContainer) {
+      oldContainer.remove();
+    }
+
+    var mainContainer = document.createElement('main');
+    mainContainer.classList.add('add-recipe');
+    var header = document.querySelector('.header');
+    header.after(mainContainer);
+    mainContainer.innerHTML = "\n      <section class=\"recipe-info flex\">\n        <div class=\"recipe-info__header\">\n          <ion-icon name=\"pencil-outline\"></ion-icon>\n          <input class=\"header__input\" type=\"text\" placeholder=\"\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 \u0431\u043B\u044E\u0434\u0430\">  \n        </div>\n        <div class=\"recipe-info__category\">\n          <p class=\"input-group__header\">\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u043A\u0430\u0442\u0435\u0433\u043E\u0440\u0438\u044E</p>\n          <label> \n            <input type=\"checkbox\" id=\"firstCourse\" value=\"\u041F\u0435\u0440\u0432\u043E\u0435 \u0431\u043B\u044E\u0434\u043E\">\n            <span>\u041F\u0435\u0440\u0432\u043E\u0435 \u0431\u043B\u044E\u0434\u043E</span>\n          </label>\n          <label> \n            <input type=\"checkbox\" value=\"\u0412\u0442\u043E\u0440\u043E\u0435 \u0431\u043B\u044E\u0434\u043E\" id=\"secondCourse\">\n            <span>\u0412\u0442\u043E\u0440\u043E\u0435 \u0431\u043B\u044E\u0434\u043E</span>\n          </label>\n          <label> \n            <input type=\"checkbox\" value=\"\u0417\u0430\u0432\u0442\u0440\u0430\u043A\" id=\"breakfast\">\n            <span>\u0417\u0430\u0432\u0442\u0440\u0430\u043A</span>\n          </label>\n          <label> \n            <input type=\"checkbox\" value=\"\u041C\u044F\u0441\u043E\" id=\"meat\">\n            <span>\u041C\u044F\u0441\u043E</span>\n          </label>\n          <label> \n            <input type=\"checkbox\" value=\"\u0420\u044B\u0431\u0430\" id=\"fish\">\n            <span>\u0420\u044B\u0431\u0430</span>\n          </label>\n          <label> \n            <input type=\"checkbox\" value=\"\u0421\u0430\u043B\u0430\u0442\u044B\" id=\"salads\">\n            <span>\u0421\u0430\u043B\u0430\u0442\u044B</span>\n          </label>\n          <label> \n            <input type=\"checkbox\" value=\"\u0414\u0435\u0441\u0435\u0440\u0442\" id=\"dessert\">\n            <span>\u0414\u0435\u0441\u0435\u0440\u0442</span>\n          </label>\n          <label> \n            <input type=\"checkbox\" value=\"\u0412\u044B\u043F\u0435\u0447\u043A\u0430\" id=\"bakeryProd\">\n            <span>\u0412\u044B\u043F\u0435\u0447\u043A\u0430</span>\n          </label>\n        </div>   \n        <div class=\"flex-wrapper\">\n          <div class=\"recipe-info__time\">\n            <p class=\"input-group__header\">\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u0432\u0440\u0435\u043C\u044F \u043F\u0440\u0438\u0433\u043E\u0442\u043E\u0432\u043B\u0435\u043D\u0438\u044F</p>\n              <input type=\"number\" id=\"time_hours\" value=\"\" min=\"0\">\n              <span>\u0447</span>\n              <input type=\"number\" id=\"time_minutes\" value=\"\" min=\"0\" max=\"60\">\n              <span>\u043C\u0438\u043D</span>\n          </div>\n          <div class=\"recipe-info__portions\">\n            <p class=\"input-group__header\">\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u043A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E \u043F\u043E\u0440\u0446\u0438\u0439</p>\n            <label>\n              <input type=\"number\" id=\"portions\" min=\"1\" value=\"\">\n              <span>\u043F\u043E\u0440\u0446\u0438\u0439</span>\n            </label>\n          </div>\n          <div class=\"recipe-info__image\">\n            <p class=\"input-group__header\">\u0417\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u044C \u0433\u043B\u0430\u0432\u043D\u043E\u0435 \u0444\u043E\u0442\u043E</p>\n            <label class=\"img-load__label\"> \n              <input class=\"img-load__input\" type=\"file\" id=\"main-img\" accept=\"image/*\">\n            </label>\n            <p class=\"warning\">\u0415\u0441\u043B\u0438 \u043D\u0435\u0442 \u043F\u043E\u0434\u0445\u043E\u0434\u044F\u0449\u0435\u0433\u043E \u0444\u043E\u0442\u043E,  \u0441\u0430\u0439\u0442 \u0430\u0432\u0442\u043E\u043C\u0430\u0442\u0438\u0447\u0435\u0441\u043A\u0438 \u0432\u0441\u0442\u0430\u0432\u0438\u0442 \u043A\u0430\u0440\u0442\u0438\u043D\u043A\u0443 \u043F\u043E \u0443\u043C\u043E\u043B\u0447\u0430\u043D\u0438\u044E.</p>\n          </div>\n        </div>\n      </section>\n\n      <section class=\"recipe-description\">\n        <h3 class=\"recipe-description__header\">\u041E\u043F\u0438\u0441\u0430\u043D\u0438\u0435 \u0431\u043B\u044E\u0434\u0430</h3>\n        <div class=\"recipe-description__text\">\n          <input type=\"text\" placeholder=\"1-2 \u043D\u0435\u0431\u043E\u043B\u044C\u0448\u0438\u0445 \u043F\u0440\u0435\u0434\u043B\u043E\u0436\u0435\u043D\u0438\u044F\" maxlength=\"150\" id=\"description\" value=\"\">\n        </div>\n      </section>\n\n      <section class=\"recipe-ingredients\">\n        <h3>\u0418\u043D\u0433\u0440\u0435\u0434\u0438\u0435\u043D\u0442\u044B</h3>\n        <ul class=\"recipe-ingredients__list\">\n          <li class=\"flex recipe-ingredients__list-item\">\n            <input class=\"ingredient__name\" type=\"text\" placeholder=\"\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 \u0438\u043D\u0433\u0440\u0435\u0434\u0438\u0435\u043D\u0442\u0430\" maxlength=\"100\">\n            <input class=\"ingredient__number\" type=\"number\" placeholder=\"\u041A\u043E\u043B-\u0432\u043E\" min=\"1\" step=\"0.5\">\n            <select class=\"ingredient__value\">\n              <option value=\"\u0433\u0440\">\u0433\u0440</option>\n              <option value=\"\u043A\u0433\">\u043A\u0433</option>\n              <option value=\"\u043B\">\u043B</option>\n              <option value=\"\u043C\u043B\">\u043C\u043B</option>\n              <option value=\"\u0448\u0442\">\u0448\u0442</option>\n              <option value=\"\u0441\u0442.\u043B.\">\u0441\u0442.\u043B.</option>\n              <option value=\"\u0447.\u043B.\">\u0447.\u043B.</option>\n              <option value=\"\u0441\u0442\">\u0441\u0442</option>\n            </select>\n          </li>\n          <li class=\"flex recipe-ingredients__list-item\">\n            <input class=\"ingredient__name\" type=\"text\" placeholder=\"\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 \u0438\u043D\u0433\u0440\u0435\u0434\u0438\u0435\u043D\u0442\u0430\" maxlength=\"100\">\n            <input class=\"ingredient__number\" type=\"number\" placeholder=\"\u041A\u043E\u043B-\u0432\u043E\" min=\"1\" step=\"0.5\">\n            <select class=\"ingredient__value\">\n              <option value=\"\u0433\u0440\">\u0433\u0440</option>\n              <option value=\"\u043A\u0433\">\u043A\u0433</option>\n              <option value=\"\u043B\">\u043B</option>\n              <option value=\"\u043C\u043B\">\u043C\u043B</option>\n              <option value=\"\u0448\u0442\">\u0448\u0442</option>\n              <option value=\"\u0441\u0442.\u043B.\">\u0441\u0442.\u043B.</option>\n              <option value=\"\u0447.\u043B.\">\u0447.\u043B.</option>\n              <option value=\"\u0441\u0442\">\u0441\u0442</option>\n            </select>\n            <button class=\"btn__delete ingredient__delete\"><ion-icon class=\"ingredient__delete\" name=\"close-outline\"></ion-icon></button>\n          </li>\n          <li class=\"flex recipe-ingredients__list-item\">\n            <input class=\"ingredient__name\" type=\"text\" placeholder=\"\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 \u0438\u043D\u0433\u0440\u0435\u0434\u0438\u0435\u043D\u0442\u0430\" maxlength=\"100\">\n            <input class=\"ingredient__number\" type=\"number\" placeholder=\"\u041A\u043E\u043B-\u0432\u043E\" min=\"1\" step=\"0.5\">\n            <select class=\"ingredient__value\">\n              <option value=\"\u0433\u0440\">\u0433\u0440</option>\n              <option value=\"\u043A\u0433\">\u043A\u0433</option>\n              <option value=\"\u043B\">\u043B</option>\n              <option value=\"\u043C\u043B\">\u043C\u043B</option>\n              <option value=\"\u0448\u0442\">\u0448\u0442</option>\n              <option value=\"\u0441\u0442.\u043B.\">\u0441\u0442.\u043B.</option>\n              <option value=\"\u0447.\u043B.\">\u0447.\u043B.</option>\n              <option value=\"\u0441\u0442\">\u0441\u0442</option>\n            </select>\n            <button class=\"btn__delete\"><ion-icon class=\"ingredient__delete\" name=\"close-outline\"></ion-icon></button>\n          </li>\n        </ul>\n        <button id=\"add-ingredient\" class=\"btn btn_blue btn_transparent\">&plus; <span>\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u0438\u043D\u0433\u0440\u0435\u0434\u0438\u0435\u043D\u0442</span></button>\n      </section>\n\n      <section class=\"recipe-instruction\">\n        <h3>\u041F\u043E\u0448\u0430\u0433\u043E\u0432\u044B\u0439 \u0440\u0435\u0446\u0435\u043F\u0442</h3>\n        <ul class=\"recipe-instruction__list\">\n          <li class=\"recipe-instruction__step flex\">\n            <p class=\"input-group__header\">\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u043E\u043F\u0438\u0441\u0430\u043D\u0438\u0435 \u0440\u0435\u0446\u0435\u043F\u0442\u0430</p> \n            <div class=\"recipe-instruction__img\">\n              <label class=\"img-load__label\"> \n                <p class=\"input-group__header\">\u0417\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u044C \u0444\u043E\u0442\u043E</p>\n                <input class=\"img-load__input\" type=\"file\" >\n              </label>\n              <p class=\"warning\">\u0415\u0441\u043B\u0438 \u043D\u0435\u0442 \u043F\u043E\u0434\u0445\u043E\u0434\u044F\u0449\u0435\u0433\u043E \u0444\u043E\u0442\u043E,  \u0441\u0430\u0439\u0442 \u0430\u0432\u0442\u043E\u043C\u0430\u0442\u0438\u0447\u0435\u0441\u043A\u0438 \u0432\u0441\u0442\u0430\u0432\u0438\u0442 \u043A\u0430\u0440\u0442\u0438\u043D\u043A\u0443 \u043F\u043E \u0443\u043C\u043E\u043B\u0447\u0430\u043D\u0438\u044E.</p>\n            </div>\n            <textarea class=\"recipe-instruction__text\" placeholder=\"\u041F\u043E\u0434\u0440\u043E\u0431\u043D\u043E\u0435 \u043E\u043F\u0438\u0441\u0430\u043D\u0438\u0435 \u0448\u0430\u0433\u0430 \u0440\u0435\u0446\u0435\u043F\u0442\u0430...\" maxlength=\"700\" ></textarea>\n          </li>\n          <li class=\"recipe-instruction__step flex\">\n            <p class=\"input-group__header\">\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u043E\u043F\u0438\u0441\u0430\u043D\u0438\u0435 \u0440\u0435\u0446\u0435\u043F\u0442\u0430</p>\n            <button class=\"btn__delete\"><ion-icon class=\"instruction__delete\" name=\"close-outline\"></ion-icon></button>\n            <div class=\"recipe-instruction__img\">\n              <label class=\"img-load__label\"> \n                <p class=\"input-group__header\">\u0417\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u044C \u0444\u043E\u0442\u043E</p>\n                <input class=\"img-load__input\" type=\"file\">\n              </label>\n              <p class=\"warning\">\u0415\u0441\u043B\u0438 \u043D\u0435\u0442 \u043F\u043E\u0434\u0445\u043E\u0434\u044F\u0449\u0435\u0433\u043E \u0444\u043E\u0442\u043E,  \u0441\u0430\u0439\u0442 \u0430\u0432\u0442\u043E\u043C\u0430\u0442\u0438\u0447\u0435\u0441\u043A\u0438 \u0432\u0441\u0442\u0430\u0432\u0438\u0442 \u043A\u0430\u0440\u0442\u0438\u043D\u043A\u0443 \u043F\u043E \u0443\u043C\u043E\u043B\u0447\u0430\u043D\u0438\u044E.</p>\n            </div>\n            <textarea class=\"recipe-instruction__text\" placeholder=\"\u041F\u043E\u0434\u0440\u043E\u0431\u043D\u043E\u0435 \u043E\u043F\u0438\u0441\u0430\u043D\u0438\u0435 \u0448\u0430\u0433\u0430 \u0440\u0435\u0446\u0435\u043F\u0442\u0430...\" maxlength=\"700\"></textarea>\n          </li>\n          <li class=\"recipe-instruction__step flex\">\n            <p class=\"input-group__header\">\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u043E\u043F\u0438\u0441\u0430\u043D\u0438\u0435 \u0440\u0435\u0446\u0435\u043F\u0442\u0430</p>\n            <button class=\"btn__delete\"><ion-icon class=\"instruction__delete\" name=\"close-outline\"></ion-icon></button>\n            <div class=\"recipe-instruction__img\">\n              <label class=\"img-load__label\"> \n                <p class=\"input-group__header\">\u0417\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u044C \u0444\u043E\u0442\u043E</p>\n                <input class=\"img-load__input\" type=\"file\" >\n              </label>\n              <p class=\"warning\">\u0415\u0441\u043B\u0438 \u043D\u0435\u0442 \u043F\u043E\u0434\u0445\u043E\u0434\u044F\u0449\u0435\u0433\u043E \u0444\u043E\u0442\u043E,  \u0441\u0430\u0439\u0442 \u0430\u0432\u0442\u043E\u043C\u0430\u0442\u0438\u0447\u0435\u0441\u043A\u0438 \u0432\u0441\u0442\u0430\u0432\u0438\u0442 \u043A\u0430\u0440\u0442\u0438\u043D\u043A\u0443 \u043F\u043E \u0443\u043C\u043E\u043B\u0447\u0430\u043D\u0438\u044E.</p>\n            </div>\n            <textarea class=\"recipe-instruction__text\" placeholder=\"\u041F\u043E\u0434\u0440\u043E\u0431\u043D\u043E\u0435 \u043E\u043F\u0438\u0441\u0430\u043D\u0438\u0435 \u0448\u0430\u0433\u0430 \u0440\u0435\u0446\u0435\u043F\u0442\u0430...\" maxlength=\"700\"></textarea>\n          </li>\n        </ul>\n        <button id=\"add-step\" class=\"btn btn_blue btn_transparent\">&plus; <span>\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u0448\u0430\u0433</span></button>\n      </section>\n      <section class=\"right-context\">\n        <button class=\"btn btn_red\" id=\"save-recipe\"><ion-icon name=\"save-sharp\"></ion-icon> \u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C</button>\n      </section>\n    ";
+    Object(_scroolToUp__WEBPACK_IMPORTED_MODULE_1__["default"])('.add-recipe');
+    Object(_createRecipe__WEBPACK_IMPORTED_MODULE_0__["default"])(link);
+    Object(_addStep__WEBPACK_IMPORTED_MODULE_2__["default"])('.recipe-ingredients__list', '#add-ingredient');
+    Object(_addStep__WEBPACK_IMPORTED_MODULE_2__["default"])('.recipe-instruction__list', '#add-step');
+    Object(_deleteStep__WEBPACK_IMPORTED_MODULE_3__["default"])('.recipe-ingredients__list', '.ingredient__delete');
+    Object(_deleteStep__WEBPACK_IMPORTED_MODULE_3__["default"])('.recipe-instruction__list', '.instruction__delete');
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (createAddrecipePage);
+
+/***/ }),
+
+/***/ "./src/assets/js/modules/createMainPage.js":
+/*!*************************************************!*\
+  !*** ./src/assets/js/modules/createMainPage.js ***!
+  \*************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _services_getData__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../services/getData */ "./src/assets/js/services/getData.js");
+/* harmony import */ var _services_patchData__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../services/patchData */ "./src/assets/js/services/patchData.js");
+/* harmony import */ var _addToFavorites__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./addToFavorites */ "./src/assets/js/modules/addToFavorites.js");
+/* harmony import */ var _createRecipePage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./createRecipePage */ "./src/assets/js/modules/createRecipePage.js");
+/* harmony import */ var _scroolToUp__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./scroolToUp */ "./src/assets/js/modules/scroolToUp.js");
+/* harmony import */ var _toggleContent__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./toggleContent */ "./src/assets/js/modules/toggleContent.js");
+/* harmony import */ var _createRecipesCards__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./createRecipesCards */ "./src/assets/js/modules/createRecipesCards.js");
+/* harmony import */ var _search__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./search */ "./src/assets/js/modules/search.js");
+
+
+
+
+
+
+
+
+
+var createMainPage = function createMainPage(recipes, startSlice, endSlice, link, oldContainer) {
+  try {
+    var mainContainer;
+
+    if (oldContainer) {
+      oldContainer.remove();
+    }
+
+    try {
+      mainContainer = document.querySelector('.main-page');
+
+      if (!mainContainer) {
+        mainContainer = document.createElement('main');
+        mainContainer.classList.add('main-page');
+        var header = document.querySelector('.header');
+        header.after(mainContainer);
+      }
+    } finally {
+      mainContainer.innerHTML = "\n        <section class=\"search\">\n          <div class=\"search-standart\">\n            <input type=\"text\" id=\"name\" class=\"search__input\" placeholder=\"\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 \u0431\u043B\u044E\u0434\u0430\">\n            <button id=\"search\" class=\"btn btn_blue\">\u041F\u043E\u0438\u0441\u043A</button>\n          </div>\n          <button class=\"btn btn__advanced-search\">\u0420\u0430\u0441\u0448\u0438\u0440\u0435\u043D\u043D\u044B\u0439 \u043F\u043E\u0438\u0441\u043A <ion-icon name=\"chevron-down-outline\"></ion-icon></button>\n          <div class=\"search-advanced\">\n            <input type=\"text\" id=\"desired-ingredients\" class=\"search__input\" placeholder=\"\u0416\u0435\u043B\u0430\u0435\u043C\u044B\u0435 \u0438\u043D\u0433\u0440\u0435\u0434\u0438\u0435\u043D\u0442\u044B\">\n          </div>\n        </section>    \n        <div class=\"cards flex\"> </div>\n        <ul class=\"pagination\"> </ul>";
+      Object(_createRecipesCards__WEBPACK_IMPORTED_MODULE_6__["default"])(recipes, startSlice, endSlice, link);
+      Object(_scroolToUp__WEBPACK_IMPORTED_MODULE_4__["default"])('.main-page');
+      Object(_toggleContent__WEBPACK_IMPORTED_MODULE_5__["default"])('.btn__advanced-search', '.search-advanced', '.btn__advanced-search ion-icon');
+      Object(_search__WEBPACK_IMPORTED_MODULE_7__["default"])(recipes, endSlice, link);
+    }
+  } catch (_unused) {
+    console.log('It is not that page');
+  }
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (createMainPage);
+
+/***/ }),
+
 /***/ "./src/assets/js/modules/createRecipe.js":
 /*!***********************************************!*\
   !*** ./src/assets/js/modules/createRecipe.js ***!
@@ -5817,8 +5930,7 @@ var createRecipe = function createRecipe(link) {
         description = document.querySelector('#description'),
         btnSave = document.querySelector('#save-recipe'); // Создание id для названия папки для изображений
 
-    var idImgFolder = new Date().getDate() + new Date().getTime() + Math.random();
-    Object(_scroolToUp__WEBPACK_IMPORTED_MODULE_11__["default"])('.add-recipe');
+    var idImgFolder = new Date().getDate() + new Date().getTime() + Math.random(); // scrollToUp('.add-recipe');
 
     var createRecipeBody = /*#__PURE__*/function () {
       var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
@@ -6109,7 +6221,7 @@ var createRecipePage = function createRecipePage(link, recipe, container) {
 
   mainContainer.append(recipeInstruction);
   Object(_scroolToUp__WEBPACK_IMPORTED_MODULE_5__["default"])('.recipe-page');
-  window.location.hash = recipe.id;
+  window.location.hash = recipe.name;
   linksToStorage.push(recipe.mainPhoto);
   mainContainer.removeChild(statusMessage);
 };
@@ -6187,7 +6299,7 @@ var createRecipesCards = function createRecipesCards(recipes, startSlice, endSli
       cardSubstrate.append(btnOpen);
       cardSubstrate.append(btnAddFavorite);
       card.append(cardSubstrate);
-      cardsContainer.append(card);
+      cardsContainer.prepend(card);
     }
   };
 
@@ -6228,64 +6340,6 @@ var deleteStep = function deleteStep(listSelector, btnSelector) {
 
 /***/ }),
 
-/***/ "./src/assets/js/modules/generateRecipes.js":
-/*!**************************************************!*\
-  !*** ./src/assets/js/modules/generateRecipes.js ***!
-  \**************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _services_getData__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../services/getData */ "./src/assets/js/services/getData.js");
-/* harmony import */ var _services_patchData__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../services/patchData */ "./src/assets/js/services/patchData.js");
-/* harmony import */ var _addToFavorites__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./addToFavorites */ "./src/assets/js/modules/addToFavorites.js");
-/* harmony import */ var _createRecipePage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./createRecipePage */ "./src/assets/js/modules/createRecipePage.js");
-/* harmony import */ var _scroolToUp__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./scroolToUp */ "./src/assets/js/modules/scroolToUp.js");
-/* harmony import */ var _toggleContent__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./toggleContent */ "./src/assets/js/modules/toggleContent.js");
-/* harmony import */ var _createRecipesCards__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./createRecipesCards */ "./src/assets/js/modules/createRecipesCards.js");
-
-
-
-
-
-
-
-
-var generateRecipes = function generateRecipes(recipes, startSlice, endSlice, link, oldContainer) {
-  try {
-    var mainContainer;
-
-    if (oldContainer) {
-      oldContainer.remove();
-    }
-
-    try {
-      mainContainer = document.querySelector('.main-page');
-
-      if (!mainContainer) {
-        mainContainer = document.createElement('main');
-        mainContainer.classList.add('main-page');
-        var header = document.querySelector('.header');
-        header.after(mainContainer);
-      }
-    } finally {
-      mainContainer.innerHTML = "\n        <section class=\"search\">\n          <div class=\"search-standart\">\n            <input type=\"text\" class=\"search__input\" placeholder=\"\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 \u0431\u043B\u044E\u0434\u0430\">\n            <button class=\"btn btn_blue\">\u041F\u043E\u0438\u0441\u043A</button>\n          </div>\n          <button class=\"btn btn__advanced-search\">\u0420\u0430\u0441\u0448\u0438\u0440\u0435\u043D\u043D\u044B\u0439 \u043F\u043E\u0438\u0441\u043A <ion-icon name=\"chevron-down-outline\"></ion-icon></button>\n          <div class=\"search-advanced\">\n            <input type=\"text\" id=\"desired-ingredients\" class=\"search__input\" placeholder=\"\u0416\u0435\u043B\u0430\u0435\u043C\u044B\u0435 \u0438\u043D\u0433\u0440\u0435\u0434\u0438\u0435\u043D\u0442\u044B\">\n            <input type=\"text\" id=\"unwanted-ingredients\" class=\"search__input\" placeholder=\"\u041D\u0435\u0436\u0435\u043B\u0430\u0435\u043C\u044B\u0435 \u0438\u043D\u0433\u0440\u0435\u0434\u0438\u0435\u043D\u0442\u044B\">\n          </div>\n        </section>    \n        <div class=\"cards flex\"> </div>\n        <ul class=\"pagination\"> </ul>";
-      Object(_createRecipesCards__WEBPACK_IMPORTED_MODULE_6__["default"])(recipes, startSlice, endSlice, link);
-      Object(_scroolToUp__WEBPACK_IMPORTED_MODULE_4__["default"])('.main-page');
-      Object(_toggleContent__WEBPACK_IMPORTED_MODULE_5__["default"])('.btn__advanced-search', '.search-advanced', '.btn__advanced-search ion-icon');
-    }
-
-    console.log('from:', recipes);
-  } catch (_unused) {
-    console.log('It is not that page');
-  }
-};
-
-/* harmony default export */ __webpack_exports__["default"] = (generateRecipes);
-
-/***/ }),
-
 /***/ "./src/assets/js/modules/pagination.js":
 /*!*********************************************!*\
   !*** ./src/assets/js/modules/pagination.js ***!
@@ -6296,7 +6350,7 @@ var generateRecipes = function generateRecipes(recipes, startSlice, endSlice, li
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _createRecipesCards__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./createRecipesCards */ "./src/assets/js/modules/createRecipesCards.js");
-/* harmony import */ var _generateRecipes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./generateRecipes */ "./src/assets/js/modules/generateRecipes.js");
+/* harmony import */ var _createMainPage__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./createMainPage */ "./src/assets/js/modules/createMainPage.js");
 
 
 
@@ -6404,7 +6458,131 @@ var scrollToUp = function scrollToUp(mainContainer) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-var search = function search() {};
+/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.string.trim.js */ "./node_modules/core-js/modules/es.string.trim.js");
+/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.regexp.exec.js */ "./node_modules/core-js/modules/es.regexp.exec.js");
+/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_es_string_split_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.string.split.js */ "./node_modules/core-js/modules/es.string.split.js");
+/* harmony import */ var core_js_modules_es_string_split_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_split_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var core_js_modules_es_string_match_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es.string.match.js */ "./node_modules/core-js/modules/es.string.match.js");
+/* harmony import */ var core_js_modules_es_string_match_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_match_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var core_js_modules_es_function_name_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/es.function.name.js */ "./node_modules/core-js/modules/es.function.name.js");
+/* harmony import */ var core_js_modules_es_function_name_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_function_name_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var core_js_modules_es_array_for_each_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/es.array.for-each.js */ "./node_modules/core-js/modules/es.array.for-each.js");
+/* harmony import */ var core_js_modules_es_array_for_each_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_for_each_js__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each.js */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _createRecipesCards__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./createRecipesCards */ "./src/assets/js/modules/createRecipesCards.js");
+/* harmony import */ var _pagination__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./pagination */ "./src/assets/js/modules/pagination.js");
+
+
+
+
+
+
+
+
+
+
+var search = function search(recipes, recipesOnPages, link) {
+  var name = document.querySelector('#name'),
+      desiredIngredients = document.querySelector('#desired-ingredients'),
+      btnSearch = document.querySelector('#search'),
+      paginationContainer = document.querySelector('.pagination');
+  var warningNote = document.createElement('p');
+  warningNote.classList.add('warning');
+  warningNote.textContent = 'К сожалению, по вашему запросу ничего не найдено.';
+
+  var searchRecipe = function searchRecipe() {
+    var valueName = name.value.trim().toLowerCase(),
+        sortRecipe = [],
+        valueDesiredIngredients;
+
+    if (desiredIngredients) {
+      valueDesiredIngredients = desiredIngredients.value.toLowerCase().split(',');
+    } // console.log(valueName);
+    // console.log(valueDesiredIngredients, valueDesiredIngredients.length);
+
+
+    if (valueName !== '' && valueDesiredIngredients[0] !== '') {
+      (function () {
+        var arrayToSort = [];
+        console.log('both');
+
+        for (var i = 0; i < recipes.length; i++) {
+          if (recipes[i].name.match(valueName)) {
+            arrayToSort.push(recipes[i]);
+            console.log('name, arrayToSort:', arrayToSort);
+          }
+        }
+
+        var _loop = function _loop(_i) {
+          var _loop2 = function _loop2(j) {
+            valueDesiredIngredients.forEach(function (ingredient) {
+              if (arrayToSort[_i].ingredients[j].name.match(ingredient)) {
+                sortRecipe.push(arrayToSort[_i]);
+                console.log('ingredient, arrayToSort:', sortRecipe);
+              }
+            });
+          };
+
+          for (var j = 0; j < arrayToSort[_i].ingredients.length; j++) {
+            _loop2(j);
+          }
+        };
+
+        for (var _i = 0; _i < arrayToSort.length; _i++) {
+          _loop(_i);
+        }
+      })();
+    } else if (valueName !== '' || valueDesiredIngredients[0] !== '') {
+      console.log('one');
+
+      var _loop3 = function _loop3(i) {
+        if (valueName !== '' && recipes[i].name.match(valueName)) {
+          sortRecipe.push(recipes[i]);
+          console.log('name:', sortRecipe);
+        }
+
+        if (valueDesiredIngredients[0] !== '') {
+          var _loop4 = function _loop4(j) {
+            valueDesiredIngredients.forEach(function (ingredient) {
+              if (recipes[i].ingredients[j].name.match(ingredient)) {
+                sortRecipe.push(recipes[i]);
+                console.log('ingredient:', sortRecipe);
+              }
+            });
+          };
+
+          for (var j = 0; j < recipes[i].ingredients.length; j++) {
+            _loop4(j);
+          }
+        }
+      };
+
+      for (var i = 0; i < recipes.length; i++) {
+        _loop3(i);
+      }
+    }
+
+    if (sortRecipe.length === 0) {
+      console.log('test2');
+      Object(_createRecipesCards__WEBPACK_IMPORTED_MODULE_7__["default"])(sortRecipe, 0, recipesOnPages, link);
+      paginationContainer.style.display = 'none';
+      paginationContainer.before(warningNote);
+    } else {
+      console.log(sortRecipe);
+      console.log('test1');
+      warningNote.remove();
+      paginationContainer.style.display = '';
+      var paginationItemsCount = Math.ceil(sortRecipe.length / recipesOnPages);
+      Object(_createRecipesCards__WEBPACK_IMPORTED_MODULE_7__["default"])(sortRecipe, 0, recipesOnPages, link);
+      Object(_pagination__WEBPACK_IMPORTED_MODULE_8__["default"])(sortRecipe, paginationItemsCount, recipesOnPages, link);
+    }
+  };
+
+  btnSearch.addEventListener('click', searchRecipe);
+};
 
 /* harmony default export */ __webpack_exports__["default"] = (search);
 
@@ -6423,7 +6601,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_es_array_for_each_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_for_each_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each.js */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
 /* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _generateRecipes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./generateRecipes */ "./src/assets/js/modules/generateRecipes.js");
+/* harmony import */ var _createMainPage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./createMainPage */ "./src/assets/js/modules/createMainPage.js");
 /* harmony import */ var _pagination__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./pagination */ "./src/assets/js/modules/pagination.js");
 /* harmony import */ var _createRecipesCards__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./createRecipesCards */ "./src/assets/js/modules/createRecipesCards.js");
 
@@ -6437,7 +6615,7 @@ var showCategory = function showCategory(recipes, recipesOnPages, link) {
       showFavorite = document.querySelector('#show-favorites');
   showFavorite.addEventListener('click', function () {
     var sortRecipes = [];
-    var container = document.querySelector('.recipe-page');
+    var container = document.querySelector('.recipe-page') || document.querySelector('.add-recipe');
 
     for (var i = 0; i < recipes.length; i++) {
       if (recipes[i].favorite === 'true') {
@@ -6446,13 +6624,13 @@ var showCategory = function showCategory(recipes, recipesOnPages, link) {
     }
 
     var paginationItemsCount = Math.ceil(sortRecipes.length / recipesOnPages);
-    Object(_generateRecipes__WEBPACK_IMPORTED_MODULE_2__["default"])(sortRecipes, 0, recipesOnPages, link, container);
+    Object(_createMainPage__WEBPACK_IMPORTED_MODULE_2__["default"])(sortRecipes, 0, recipesOnPages, link, container);
     Object(_pagination__WEBPACK_IMPORTED_MODULE_3__["default"])(sortRecipes, paginationItemsCount, recipesOnPages, link);
   });
   categories.forEach(function (category) {
     category.addEventListener('click', function (e) {
       var sortRecipes = [];
-      var container = document.querySelector('.recipe-page');
+      var container = document.querySelector('.recipe-page') || document.querySelector('.add-recipe');
       var valueCategory = e.target.textContent;
 
       for (var i = 0; i < recipes.length; i++) {
@@ -6464,7 +6642,7 @@ var showCategory = function showCategory(recipes, recipesOnPages, link) {
       }
 
       var paginationItemsCount = Math.ceil(sortRecipes.length / recipesOnPages);
-      Object(_generateRecipes__WEBPACK_IMPORTED_MODULE_2__["default"])(sortRecipes, 0, recipesOnPages, link, container);
+      Object(_createMainPage__WEBPACK_IMPORTED_MODULE_2__["default"])(sortRecipes, 0, recipesOnPages, link, container);
       Object(_pagination__WEBPACK_IMPORTED_MODULE_3__["default"])(sortRecipes, paginationItemsCount, recipesOnPages, link);
     });
   });
@@ -6483,8 +6661,24 @@ var showCategory = function showCategory(recipes, recipesOnPages, link) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _services_deleteData__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../services/deleteData */ "./src/assets/js/services/deleteData.js");
-/* harmony import */ var _createRecipePage__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./createRecipePage */ "./src/assets/js/modules/createRecipePage.js");
+/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.object.to-string.js */ "./node_modules/core-js/modules/es.object.to-string.js");
+/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_es_promise_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.promise.js */ "./node_modules/core-js/modules/es.promise.js");
+/* harmony import */ var core_js_modules_es_promise_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_promise_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var regenerator_runtime_runtime_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! regenerator-runtime/runtime.js */ "./node_modules/regenerator-runtime/runtime.js");
+/* harmony import */ var regenerator_runtime_runtime_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(regenerator_runtime_runtime_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _services_deleteData__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../services/deleteData */ "./src/assets/js/services/deleteData.js");
+/* harmony import */ var _services_getData__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../services/getData */ "./src/assets/js/services/getData.js");
+/* harmony import */ var _createRecipePage__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./createRecipePage */ "./src/assets/js/modules/createRecipePage.js");
+
+
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+
 
 
 
@@ -6506,11 +6700,39 @@ var showModal = function showModal(modalSelector, linkDb, idRecipe, linkToStorag
 
     if (idModal === 'modal-without-errors') {
       var link = modal.querySelector('#to-recipe');
-      link.addEventListener('click', function (e) {
-        e.preventDefault();
-        closeModal();
-        Object(_createRecipePage__WEBPACK_IMPORTED_MODULE_1__["default"])(linkDb, idRecipe, '.add-recipe');
-      });
+      var recipe = {};
+      link.addEventListener('click', /*#__PURE__*/function () {
+        var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(e) {
+          return regeneratorRuntime.wrap(function _callee$(_context) {
+            while (1) {
+              switch (_context.prev = _context.next) {
+                case 0:
+                  e.preventDefault();
+                  _context.next = 3;
+                  return Object(_services_getData__WEBPACK_IMPORTED_MODULE_4__["default"])(linkDb).then(function (recipes) {
+                    for (var i = 0; i < recipes.length; i++) {
+                      if (idRecipe === recipes[i].id) {
+                        recipe = recipes[i];
+                      }
+                    }
+                  });
+
+                case 3:
+                  closeModal();
+                  Object(_createRecipePage__WEBPACK_IMPORTED_MODULE_5__["default"])(linkDb, recipe, '.add-recipe');
+
+                case 5:
+                case "end":
+                  return _context.stop();
+              }
+            }
+          }, _callee);
+        }));
+
+        return function (_x) {
+          return _ref.apply(this, arguments);
+        };
+      }());
     } else if (idModal === 'error-modal') {
       var btnClose = modal.querySelector('button');
       btnClose.addEventListener('click', function () {
@@ -6525,7 +6747,7 @@ var showModal = function showModal(modalSelector, linkDb, idRecipe, linkToStorag
       });
 
       btnDelete.addEventListener('click', function () {
-        Object(_services_deleteData__WEBPACK_IMPORTED_MODULE_0__["default"])(linkDb, idRecipe, linkToStorage);
+        Object(_services_deleteData__WEBPACK_IMPORTED_MODULE_3__["default"])(linkDb, idRecipe, linkToStorage);
       });
     }
   }

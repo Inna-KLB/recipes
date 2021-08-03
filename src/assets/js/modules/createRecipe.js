@@ -19,7 +19,7 @@ const createRecipe = (link) => {
     // Создание id для названия папки для изображений
     let idImgFolder = new Date().getDate() + new Date().getTime() + Math.random();
    
-    scrollToUp('.add-recipe');
+    // scrollToUp('.add-recipe');
 
     const createRecipeBody = async() => {
       const ingredients = document.querySelectorAll('.recipe-ingredients__list-item'),

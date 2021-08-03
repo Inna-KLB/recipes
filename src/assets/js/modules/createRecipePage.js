@@ -121,7 +121,7 @@ const createRecipePage = (link, recipe, container) => {
   mainContainer.append(recipeInstruction);
   scrollToUp('.recipe-page');
   
-  window.location.hash = recipe.id;
+  window.location.hash = recipe.name;
 
   linksToStorage.push(recipe.mainPhoto);
   mainContainer.removeChild(statusMessage);

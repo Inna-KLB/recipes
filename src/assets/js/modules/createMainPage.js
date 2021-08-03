@@ -5,10 +5,11 @@ import createRecipePage from "./createRecipePage";
 import scrollToUp from "./scroolToUp";
 import toggleContent from "./toggleContent";
 import createRecipesCards from "./createRecipesCards";
+import search from "./search";
 
 
 
-const generateRecipes = (recipes, startSlice, endSlice, link, oldContainer) => {
+const createMainPage = (recipes, startSlice, endSlice, link, oldContainer) => {
   try {
     let mainContainer;
     if(oldContainer) {
@@ -27,13 +28,12 @@ const generateRecipes = (recipes, startSlice, endSlice, link, oldContainer) => {
       mainContainer.innerHTML = `
         <section class="search">
           <div class="search-standart">
-            <input type="text" class="search__input" placeholder="Название блюда">
-            <button class="btn btn_blue">Поиск</button>
+            <input type="text" id="name" class="search__input" placeholder="Название блюда">
+            <button id="search" class="btn btn_blue">Поиск</button>
           </div>
           <button class="btn btn__advanced-search">Расширенный поиск <ion-icon name="chevron-down-outline"></ion-icon></button>
           <div class="search-advanced">
             <input type="text" id="desired-ingredients" class="search__input" placeholder="Желаемые ингредиенты">
-            <input type="text" id="unwanted-ingredients" class="search__input" placeholder="Нежелаемые ингредиенты">
           </div>
         </section>    
         <div class="cards flex"> </div>
@@ -41,11 +41,11 @@ const generateRecipes = (recipes, startSlice, endSlice, link, oldContainer) => {
         createRecipesCards(recipes, startSlice, endSlice, link);
         scrollToUp('.main-page');
         toggleContent('.btn__advanced-search', '.search-advanced', '.btn__advanced-search ion-icon');  
+        search(recipes, endSlice, link);
     }    
-    console.log('from:', recipes);  
   }
   catch {
     console.log('It is not that page');
   }
 };
-export default generateRecipes;
+export default createMainPage;
