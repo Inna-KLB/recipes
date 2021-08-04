@@ -5964,7 +5964,7 @@ var createRecipe = function createRecipe(link) {
 
               case 8:
                 // Если изображение не было загружено, то вставляется изображение по умолчанию
-                mainImgUrl = '../img/main-photo.jpg';
+                mainImgUrl = '../dist/img/main-photo.jpg';
 
               case 9:
                 // Создание массива с категориями
