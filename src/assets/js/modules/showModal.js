@@ -1,6 +1,8 @@
 import deleteData from "../services/deleteData";
 import getData from "../services/getData";
 import createRecipePage from "./createRecipePage";
+import createMainPage from "./createMainPage";
+
 
 const showModal = (modalSelector, linkDb, idRecipe, linkToStorage) => {
   const substrate = document.querySelector('.modal-substrate'),
@@ -48,8 +50,16 @@ const showModal = (modalSelector, linkDb, idRecipe, linkToStorage) => {
         btnClose.addEventListener('click', () => { 
           closeModal();
         });
-        btnDelete.addEventListener('click', () => { 
-          deleteData(linkDb, idRecipe, linkToStorage);
+        btnDelete.addEventListener('click', async() => { 
+          await deleteData(linkDb, idRecipe, linkToStorage);
+          const container = document.querySelector('.recipe-page');
+          let recipesArray = [];
+          getData(linkDb)
+          .then(recipes => {
+            recipesArray = recipes;
+            closeModal();
+            createMainPage(recipesArray, 0, 12, linkDb, container);
+          });
         });
       }
     }

@@ -20,6 +20,7 @@ const createRecipe = (link) => {
     let idImgFolder = new Date().getDate() + new Date().getTime() + Math.random();
    
     // scrollToUp('.add-recipe');
+    checkInputs();
 
     const createRecipeBody = async() => {
       const ingredients = document.querySelectorAll('.recipe-ingredients__list-item'),
@@ -42,7 +43,9 @@ const createRecipe = (link) => {
         }
       } else {
         // Если изображение не было загружено, то вставляется изображение по умолчанию
-        mainImgUrl = '../dist/img/main-photo.jpg';
+        // mainImgUrl = '../dist/img/main-photo.jpg';
+        mainImgUrl = '../img/main-photo.jpg';
+
       }
 
       // Создание массива с категориями

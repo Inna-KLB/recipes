@@ -1,3 +1,5 @@
+import createMainPage from "../modules/createMainPage";
+
 const deleteData = async(link, idRecipe, linksToStorage) => {
   const linkDelete = link.replace('.json', `/${idRecipe}.json`);
   //  Удаление информации из базы данных
@@ -21,7 +23,5 @@ const deleteData = async(link, idRecipe, linksToStorage) => {
       })
     }
   });
-   window.location.pathname = '';
-   window.location.hash = '';
 };
 export default deleteData;

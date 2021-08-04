@@ -40,28 +40,16 @@ window.addEventListener('DOMContentLoaded', async() => {
     paginationItemsCount = Math.ceil(recipes.length / recipesOnPages);
     createMainPage(recipesArray, 0, recipesOnPages, linkDb);
   });
-  const logoLink = document.querySelector('.logo');
-  logoLink.addEventListener('click', () => { 
-    const container = document.querySelector('main');
-    console.log(container);
-    createMainPage(recipesArray, 0, recipesOnPages, linkDb, container);
-    pagination(recipesArray, paginationItemsCount, recipesOnPages, linkDb);
+
+  const linksToAddRecipe = document.querySelectorAll('.go-to-add-recipe');
+  linksToAddRecipe.forEach(linkToAddRecipe => {
+    linkToAddRecipe.addEventListener('click', () => { 
+      const container = document.querySelector('main');
+      createAddrecipePage(container, linkDb);
+    });
   });
 
-  const linkToAddRecipe = document.querySelector('#go-to-add-recipe');
-  linkToAddRecipe.addEventListener('click', () => { 
-    const container = document.querySelector('main');
-    createAddrecipePage(container, linkDb);
-  });
-
-  pagination(recipesArray, paginationItemsCount, recipesOnPages, linkDb);
-  // addStep('.recipe-ingredients__list', '#add-ingredient');
-  // addStep('.recipe-instruction__list', '#add-step');
-  // deleteStep('.recipe-ingredients__list', '.ingredient__delete');
-  // deleteStep('.recipe-instruction__list', '.instruction__delete');
   toggleContent('#show-navbar', '#header-navbar');
-  // createRecipe(linkDb);
-  checkInputs();
   showCategory(recipesArray, recipesOnPages, linkDb);
   search(recipesArray, recipesOnPages, linkDb);
 });

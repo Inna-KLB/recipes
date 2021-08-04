@@ -11,6 +11,7 @@ const createRecipePage = (link, recipe, container) => {
   const mainContainer = document.createElement('main');
   mainContainer.classList.add('recipe-page');
   header.after(mainContainer);
+  header.scrollTop = 0; 
 
   let statusMessage = document.createElement('div');
   statusMessage.classList.add('modal-substrate');
@@ -121,7 +122,7 @@ const createRecipePage = (link, recipe, container) => {
   mainContainer.append(recipeInstruction);
   scrollToUp('.recipe-page');
   
-  window.location.hash = recipe.name;
+  window.location.hash = `/${recipe.name}`;
 
   linksToStorage.push(recipe.mainPhoto);
   mainContainer.removeChild(statusMessage);

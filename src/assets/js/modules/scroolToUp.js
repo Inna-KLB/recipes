@@ -1,5 +1,5 @@
-const scrollToUp = (mainContainer) => {
-  const container = document.querySelector(mainContainer);
+const scrollToUp = () => {
+  const container = document.querySelector('main');
 
   const btnToUp = document.createElement('a');
   btnToUp.setAttribute('href', '#header');

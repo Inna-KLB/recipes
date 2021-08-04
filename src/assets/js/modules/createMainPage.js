@@ -1,16 +1,13 @@
-import getData from "../services/getData";
-import patchData from "../services/patchData";
-import addToFavorites from "./addToFavorites";
-import createRecipePage from "./createRecipePage";
 import scrollToUp from "./scroolToUp";
 import toggleContent from "./toggleContent";
 import createRecipesCards from "./createRecipesCards";
 import search from "./search";
-
+import pagination from "./pagination";
 
 
 const createMainPage = (recipes, startSlice, endSlice, link, oldContainer) => {
   try {
+    window.location.hash = '/главная_страница';
     let mainContainer;
     if(oldContainer) {
       oldContainer.remove();
@@ -22,6 +19,7 @@ const createMainPage = (recipes, startSlice, endSlice, link, oldContainer) => {
         mainContainer.classList.add('main-page');
         const header = document.querySelector('.header');
         header.after(mainContainer);
+        header.scrollTop = 0; 
       }
     }
     finally {
@@ -42,10 +40,12 @@ const createMainPage = (recipes, startSlice, endSlice, link, oldContainer) => {
         scrollToUp('.main-page');
         toggleContent('.btn__advanced-search', '.search-advanced', '.btn__advanced-search ion-icon');  
         search(recipes, endSlice, link);
+        let paginationItemsCount = Math.ceil(recipes.length / endSlice); 
+        pagination(recipes, paginationItemsCount, endSlice, link);
     }    
   }
-  catch {
-    console.log('It is not that page');
+  catch(error) {
+    console.log(error);
   }
 };
 export default createMainPage;

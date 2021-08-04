@@ -8,7 +8,7 @@ const checkInputs = () => {
     let checkNum,
         checkText,
         checkTextarea;
-  
+   
   
     // проверка инпутов на корректные и пустые значения
     checkboxes.forEach(checkbox => {

@@ -14,6 +14,7 @@ const createAddrecipePage = (oldContainer, link) => {
     mainContainer.classList.add('add-recipe');
     const header = document.querySelector('.header');
     header.after(mainContainer);
+    header.scrollTop = 0; 
     mainContainer.innerHTML = `
       <section class="recipe-info flex">
         <div class="recipe-info__header">
@@ -190,6 +191,8 @@ const createAddrecipePage = (oldContainer, link) => {
     addStep('.recipe-instruction__list', '#add-step');
     deleteStep('.recipe-ingredients__list', '.ingredient__delete');
     deleteStep('.recipe-instruction__list', '.instruction__delete');
+    window.location.hash = '/добавить_рецепт';
+
   } 
   catch (error) {
     console.log(error);

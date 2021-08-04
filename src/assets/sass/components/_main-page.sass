@@ -2,7 +2,7 @@
   color: $white
   .cards
     justify-content: flex-start
-    column-gap: 1%
+    column-gap: 1.3%
     .card
       position: relative
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.3)
@@ -19,15 +19,17 @@
         position: absolute
         top: 0
         left: 0
-        padding: 2% 3%
+        padding: 3%
+        padding-top: 5%
         display: flex
         flex-direction: column
-        justify-content: center
+        justify-content: space-between
         align-items: center
       &__header
         margin-bottom: 10%
         font-weight: 600
         font-size: 1.4rem
+        flex-basis: 20%
         ::first-letter
           text-transform: capitalize
       &__description
@@ -37,6 +39,7 @@
         ::first-letter
           text-transform: capitalize
   a.btn 
+    // flex-basis: 20%
     padding: 3% 4.5%
     font-size: 1rem
     &:hover
