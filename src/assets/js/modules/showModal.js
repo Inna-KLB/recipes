@@ -54,7 +54,7 @@ const showModal = (modalSelector, linkDb, idRecipe, linkToStorage) => {
           await deleteData(linkDb, idRecipe, linkToStorage);
           const container = document.querySelector('.recipe-page');
           let recipesArray = [];
-          getData(linkDb)
+          await getData(linkDb)
           .then(recipes => {
             recipesArray = recipes;
             closeModal();

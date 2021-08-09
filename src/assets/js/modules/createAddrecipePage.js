@@ -184,7 +184,7 @@ const createAddrecipePage = (oldContainer, link) => {
         <button class="btn btn_red" id="save-recipe"><ion-icon name="save-sharp"></ion-icon> Сохранить</button>
       </section>
     `;
-
+    
     scrollToUp('.add-recipe');
     createRecipe(link);
     addStep('.recipe-ingredients__list', '#add-ingredient');

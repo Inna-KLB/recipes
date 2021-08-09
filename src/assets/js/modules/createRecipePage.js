@@ -1,13 +1,14 @@
-import getData from "../services/getData";
 import scrollToUp from "./scroolToUp";
-import showCategory from "./showCategory";
 import showModal from "./showModal";
+import changeRecipe from "./changeRecipe";
+
 
 const createRecipePage = (link, recipe, container) => {
   const oldContainer = document.querySelector(container),
         header = document.querySelector('#header');
   oldContainer.remove();
 
+  console.log(link, recipe, container);
   const mainContainer = document.createElement('main');
   mainContainer.classList.add('recipe-page');
   header.after(mainContainer);
@@ -54,6 +55,9 @@ const createRecipePage = (link, recipe, container) => {
   let btnChange = document.createElement('button');
   btnChange.classList.add('btn', 'btn_brown');
   btnChange.innerHTML = `<ion-icon name="pencil-outline"></ion-icon> Редактировать рецепт`;
+  btnChange.addEventListener('click', () => {
+    changeRecipe(link, recipe.id);
+  });
   let btnDelete = document.createElement('button');
   btnDelete.classList.add('btn', 'btn_red');
   btnDelete.setAttribute('id', 'delete-recipe-page');

@@ -41,10 +41,6 @@ const checkInputs = () => {
     // console.log('checkText', checkText);
     // console.log('checkTextarea', checkTextarea);
 
-    // alert('num:', checkNum);
-    // alert('checkText:', checkText);
-    // alert('checkTextarea:', checkTextarea);
-
     return (checkNum === 'true' && checkText === 'true' && checkTextarea === 'true') ? 'true' : 'false';
   }
   catch {

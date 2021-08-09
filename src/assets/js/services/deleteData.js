@@ -1,5 +1,3 @@
-import createMainPage from "../modules/createMainPage";
-
 const deleteData = async(link, idRecipe, linksToStorage) => {
   const linkDelete = link.replace('.json', `/${idRecipe}.json`);
   //  Удаление информации из базы данных

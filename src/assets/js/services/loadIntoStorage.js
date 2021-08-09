@@ -30,6 +30,8 @@ const loadIntoStorage = async(imgSelector, id, i) => {
 
   // Удаление спинера после загрузки изображений
   document.body.removeChild(statusMessage);
+  document.body.classList.remove('active-modal');
+
   return srcImg;  
 };
 export default loadIntoStorage;
