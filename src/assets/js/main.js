@@ -51,5 +51,4 @@ window.addEventListener('DOMContentLoaded', async() => {
 
   toggleContent('#show-navbar', '#header-navbar');
   showCategory(recipesArray, recipesOnPages, linkDb);
-  search(recipesArray, recipesOnPages, linkDb);
 });
