@@ -7523,7 +7523,7 @@ var getData = /*#__PURE__*/function () {
             // Отображение спиннера во время загрузки данных
             statusMessage = document.createElement('div');
             statusMessage.classList.add('modal-substrate');
-            statusMessage.innerHTML = "<img src='dist/img/spinner.gif' width='40vw'>";
+            statusMessage.innerHTML = "<img src='img/spinner.gif' width='40vw'>";
             document.body.prepend(statusMessage);
             _context.next = 6;
             return fetch(link, {
