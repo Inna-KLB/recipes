@@ -14,7 +14,7 @@ const createMainImgLink = async(idFolder) => {
       mainImgUrl = mainPhotoLink.textContent;
     } else if(mainPhotoLink.textContent.match('Если нет подходящего фото')) {
       // Если изображение не было загружено при добавлении рецепта, то вставляется изображение по умолчанию
-      mainImgUrl = 'dist/img/main-photo.jpg';
+      mainImgUrl = 'img/main-photo.jpg';
     }
      
   } else if(mainImg.value !== '' && mainImg.files[0].type === 'image/png' || mainImg.files[0].type === 'image/jpeg') {
@@ -31,7 +31,7 @@ const createMainImgLink = async(idFolder) => {
           mainImgUrl = url;
       });   
        
-    } else if(mainPhotoLink.textContent.match('dist/img/main-photo.jpg')) {
+    } else if(mainPhotoLink.textContent.match('img/main-photo.jpg')) {
       //  Если до редактирования рецепта фото было не загружено, а вставлено заглушка, то просто загружаем фото в storage и получаем его url
       await loadIntoStorage(mainImg, idFolder)
         .then(url => {

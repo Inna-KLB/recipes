@@ -3,7 +3,7 @@ const getData = async (link) => {
   // Отображение спиннера во время загрузки данных
   let statusMessage = document.createElement('div');
   statusMessage.classList.add('modal-substrate');
-  statusMessage.innerHTML = `<img src='dist/img/spinner.gif' width='40vw'>`;
+  statusMessage.innerHTML = `<img src='img/spinner.gif' width='40vw'>`;
   document.body.prepend(statusMessage);
   
   await fetch(link, {

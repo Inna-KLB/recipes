@@ -6540,7 +6540,7 @@ var createMainImgLink = /*#__PURE__*/function () {
               mainImgUrl = mainPhotoLink.textContent;
             } else if (mainPhotoLink.textContent.match('Если нет подходящего фото')) {
               // Если изображение не было загружено при добавлении рецепта, то вставляется изображение по умолчанию
-              mainImgUrl = 'dist/img/main-photo.jpg';
+              mainImgUrl = 'img/main-photo.jpg';
             }
 
             _context.next = 23;
@@ -6576,7 +6576,7 @@ var createMainImgLink = /*#__PURE__*/function () {
             break;
 
           case 15:
-            if (!mainPhotoLink.textContent.match('dist/img/main-photo.jpg')) {
+            if (!mainPhotoLink.textContent.match('img/main-photo.jpg')) {
               _context.next = 20;
               break;
             }
