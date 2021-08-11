@@ -11,14 +11,7 @@ const deleteData = async(link, idRecipe, linksToStorage) => {
     } else {
       let link = linkToStorage.split('/')[7].split('?')[0];
       let storageRef = firebase.storage().ref(`/${link.split('%2F')[0]}/${link.split('%2F')[1]}`);
-      console.log(storageRef);  
-      storageRef.delete()
-      .then(() => {
-        console.log(`Изображение удалено`);   
-      })
-      .catch((error) => {
-        console.log(error);  
-      })
+      storageRef.delete();
     }
   });
 };

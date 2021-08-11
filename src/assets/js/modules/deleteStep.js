@@ -1,3 +1,4 @@
+// Удаление пункта из списка ингредиентов или инструкций рецепта
 const deleteStep = (listSelector, btnSelector) => {
   const list = document.querySelector(listSelector);
   

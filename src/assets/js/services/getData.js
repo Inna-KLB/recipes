@@ -20,7 +20,8 @@ const getData = async (link) => {
       }        
     })
     res = recipes;
-  })
+  });
+  // Удаление спиннера после загрузки
   document.body.removeChild(statusMessage);
   return res;
 };

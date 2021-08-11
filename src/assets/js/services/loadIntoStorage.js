@@ -12,14 +12,8 @@ const loadIntoStorage = async(imgSelector, id, i) => {
     
 
   // Загрузка изображения в storage
-  await storageRef.put(file)
-    .then(() => {
-      console.log('Succsecfully uploaded');      
-    })
-    .catch(error => {
-      console.log(error.message);    
-    });
-
+  await storageRef.put(file);
+   
   // Получение сслыки изображения из storage
   await storageRef.getDownloadURL()
     .then(url => {

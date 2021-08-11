@@ -1,13 +1,14 @@
 import createMainPage from "./createMainPage";
 import pagination from "./pagination";
-import createRecipesCards from "./createRecipesCards";
 
 
+// Функцию показа рецептов по категориям
 const showCategory = (recipes, recipesOnPages, link) => {
   const categories = document.querySelectorAll('.navbar-menu__item'),
         showFavoriteBtns = document.querySelectorAll('.show-favorites'),
         header = document.querySelector('.header');
-  
+
+  // Показ рецептов в "Избранное"
   showFavoriteBtns.forEach(showFavorite => {
     showFavorite.addEventListener('click', () => {
       let sortRecipes = [];
@@ -18,13 +19,13 @@ const showCategory = (recipes, recipesOnPages, link) => {
           sortRecipes.push(recipes[i]);     
         }
       }
-      // let paginationItemsCount = Math.ceil(sortRecipes.length / recipesOnPages);    
       createMainPage(sortRecipes, 0, recipesOnPages, link, container);    
+      let paginationItemsCount = Math.ceil(sortRecipes.length / recipesOnPages);    
+      pagination(sortRecipes, paginationItemsCount, recipesOnPages, link);
       window.location.hash = '/избранное';
-      // pagination(sortRecipes, paginationItemsCount, recipesOnPages, link);
     });
   });
-
+  // Показ рецептов по категориям
   categories.forEach(category => {
     category.addEventListener('click', (e) => {
       e.preventDefault();
@@ -45,11 +46,11 @@ const showCategory = (recipes, recipesOnPages, link) => {
           }
         }
       }
-      // let paginationItemsCount = Math.ceil(sortRecipes.length / recipesOnPages);   
       
       createMainPage(sortRecipes, 0, recipesOnPages, link, container);  
+      let paginationItemsCount = Math.ceil(sortRecipes.length / recipesOnPages);   
+      pagination(sortRecipes, paginationItemsCount, recipesOnPages, link);
       window.location.hash = `/${valueCategory}`;
-      // pagination(sortRecipes, paginationItemsCount, recipesOnPages, link);
     });
   });
 };

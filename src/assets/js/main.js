@@ -1,15 +1,6 @@
-import addStep from "./modules/addStep";
-import checkInputs from "./modules/checkInputs";
-import createRecipe from "./modules/createRecipe";
-import createRecipePage from "./modules/createRecipePage";
-import deleteStep from "./modules/deleteStep";
-import pagination from "./modules/pagination";
-// import scrollToUp from "./modules/scroolToUp";
-import search from "./modules/search";
 import createMainPage from "./modules/createMainPage";
 import showCategory from "./modules/showCategory";
 import toggleContent from "./modules/toggleContent";
-import showModal from "./modules/showModal";
 import getData from "./services/getData";
 import createAddrecipePage from "./modules/createAddrecipePage";
 

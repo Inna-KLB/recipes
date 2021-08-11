@@ -2,22 +2,16 @@ import scrollToUp from "./scroolToUp";
 import showModal from "./showModal";
 import changeRecipe from "./changeRecipe";
 
-
+// Создание страницы рецепта
 const createRecipePage = (link, recipe, container) => {
   const oldContainer = document.querySelector(container),
         header = document.querySelector('#header');
   oldContainer.remove();
 
-  console.log(link, recipe, container);
   const mainContainer = document.createElement('main');
   mainContainer.classList.add('recipe-page');
   header.after(mainContainer);
   header.scrollTop = 0; 
-
-  let statusMessage = document.createElement('div');
-  statusMessage.classList.add('modal-substrate');
-  statusMessage.innerHTML = `<img src='../img/spinner.gif' width='40vw'>`;
-  mainContainer.prepend(statusMessage);
 
   // Создание массива для хранения ссылок изображений
   let linksToStorage = [];
@@ -25,11 +19,13 @@ const createRecipePage = (link, recipe, container) => {
   // Создание секции главной информации рецепта
   let recipeInfo = document.createElement('section');
   recipeInfo.classList.add('recipe-info', 'flex');
-
+  
+  // Создание блока с изображением рецепта
   let recipeMainImg = document.createElement('div');
   recipeMainImg.classList.add('recipe-info__img');
   recipeMainImg.style.backgroundImage = `url(${recipe.mainPhoto})`;
 
+  // Создание блока информации рецепта
   let recipeInfoText = document.createElement('div');
   recipeInfoText.classList.add('recipe-info__text');
   recipeInfoText.innerHTML = `<h2>${recipe.name}</h2>`;
@@ -51,13 +47,14 @@ const createRecipePage = (link, recipe, container) => {
   }
   recipeInfoBox.prepend(category);
 
-
+  // Создание кнопки изменения рецепта
   let btnChange = document.createElement('button');
   btnChange.classList.add('btn', 'btn_brown');
   btnChange.innerHTML = `<ion-icon name="pencil-outline"></ion-icon> Редактировать рецепт`;
   btnChange.addEventListener('click', () => {
     changeRecipe(link, recipe.id);
   });
+  // Создание кнопки удаления рецепта
   let btnDelete = document.createElement('button');
   btnDelete.classList.add('btn', 'btn_red');
   btnDelete.setAttribute('id', 'delete-recipe-page');
@@ -124,11 +121,12 @@ const createRecipePage = (link, recipe, container) => {
     linksToStorage.push(recipe.instructions[i].imgStep);
   }
   mainContainer.append(recipeInstruction);
+
   scrollToUp('.recipe-page');
+  
+  linksToStorage.push(recipe.mainPhoto);
   
   window.location.hash = `/${recipe.name}`;
 
-  linksToStorage.push(recipe.mainPhoto);
-  mainContainer.removeChild(statusMessage);
 };
 export default createRecipePage;

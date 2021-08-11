@@ -1,15 +1,11 @@
 import createRecipePage from "./createRecipePage";
 import addToFavorites from "./addToFavorites";
 
-
+// Создание карточек с рецептами
 const createRecipesCards = (recipes, startSlice, endSlice, link) => {
   const cardsContainer = document.querySelector('.cards');
   cardsContainer.innerHTML = '';
   
-  // let statusMessage = document.createElement('div');
-  // statusMessage.classList.add('modal-substrate');
-  // statusMessage.innerHTML = `<img src='../img/spinner.gif' width='40vw'>`;
-  // cardsContainer.prepend(statusMessage);
   for(let i = startSlice; i < endSlice; i++){            
     if(recipes[i]) {
       let card = document.createElement('div');
@@ -55,10 +51,7 @@ const createRecipesCards = (recipes, startSlice, endSlice, link) => {
       card.append(cardSubstrate);
       cardsContainer.prepend(card);
     }
-  }
-
-  // cardsContainer.removeChild(statusMessage);
-  
+  } 
    
 };
 export default createRecipesCards;

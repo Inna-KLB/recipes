@@ -1,5 +1,5 @@
 import patchData from "../services/patchData";
-
+// Добавление/удаление рецепта в избранное
 const addToFavorites = async(target, link, isFavorite, idRecipe) => {
   let status;
   await patchData(link, idRecipe, {favorite: isFavorite})

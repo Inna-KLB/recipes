@@ -7,52 +7,38 @@ const createMainImgLink = async(idFolder) => {
   let mainImgUrl,
       idImgFolder;
      
-  
-  // Создание id для названия папки для изображений
-  // idImgFolder = new Date().getDate() + new Date().getTime() + Math.random();
   // Получение ссылки главного изображения
-
   if(mainImg.value === ''){
     if(mainPhotoLink.textContent.match('https://firebasestorage') || mainPhotoLink.textContent.match('../img/main-photo.jpg')) {
       // Если фото не заменяется при редактировании, то url остается прежним
       mainImgUrl = mainPhotoLink.textContent;
-      console.log('ссылка остается прежней', mainImgUrl);
     } else if(mainPhotoLink.textContent.match('Если нет подходящего фото')) {
-      // Если изображение не было загружено, то вставляется изображение по умолчанию
-      console.log('должна вставиться заглушка');
-      mainImgUrl = '../img/main-photo.jpg';
-      // mainImgUrl = '../dist/img/main-photo.jpg';
+      // Если изображение не было загружено при добавлении рецепта, то вставляется изображение по умолчанию
+      mainImgUrl = '../dist/img/main-photo.jpg';
     }
      
   } else if(mainImg.value !== '' && mainImg.files[0].type === 'image/png' || mainImg.files[0].type === 'image/jpeg') {
     if(mainPhotoLink.textContent.match('https://firebasestorage')) {
-      // Замена фото при редактировании
-       idImgFolder = mainPhotoLink.textContent.split('/')[7].split('%2F')[0];
-       console.log(idImgFolder);
-      // Замена картинки в storage
-       let link = mainPhotoLink.textContent.split('/')[7].split('?')[0];
-       let storageRef = firebase.storage().ref(`/${link.split('%2F')[0]}/${link.split('%2F')[1]}`);
-       await storageRef.delete()
-       .then(() => {
-         console.log(`Изображение удалено`);   
-       })
-       .catch((error) => {
-         console.log(error);  
-       })
-       await loadIntoStorage(mainImg, idImgFolder)
-         .then(url => {
-           mainImgUrl = url;
-        });   
+      // Если при редактировании рецепта загружается новое фото, то заменяем старое фото в storage на новое
+      // Получаем ссылку на storage исходя из id папки со старым фото
+      let link = mainPhotoLink.textContent.split('/')[7].split('?')[0];
+      let storageRef = firebase.storage().ref(`/${link.split('%2F')[0]}/${link.split('%2F')[1]}`);
+      // Удаляем старое фото
+      await storageRef.delete();
+      //  Загружаем новое фото и получаем url
+      await loadIntoStorage(mainImg, idImgFolder)
+        .then(url => {
+          mainImgUrl = url;
+      });   
        
     } else if(mainPhotoLink.textContent.match('../img/main-photo.jpg')) {
-    //  Если до этого фото не было загружено, но вставлено фото-заглушка
-      console.log('via');
+      //  Если до редактирования рецепта фото было не загружено, а вставлено заглушка, то просто загружаем фото в storage и получаем его url
       await loadIntoStorage(mainImg, idFolder)
         .then(url => {
           mainImgUrl = url;
       }); 
     } else if(mainPhotoLink.textContent.match('Если нет подходящего фото')) {
-    // Если загрузка фото просходит в первый раз
+    // Если загрузка фото просходит при добавлении нового рецепта, то просто загружаем фото в storage и получаем его url
     await loadIntoStorage(mainImg, idFolder)
     .then(url => {
       mainImgUrl = url;

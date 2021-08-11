@@ -1,3 +1,4 @@
+// Функция показа/скрытия меню для мобильной версии и расширенного поиска 
 const toggleContent = (trigger, content, icon) => {
   const btnToggleContent = document.querySelector(trigger),
         containerContent = document.querySelector(content),

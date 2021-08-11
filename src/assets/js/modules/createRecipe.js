@@ -1,13 +1,12 @@
-import loadIntoStorage from "../services/loadIntoStorage";
 import postData from "../services/postData";
 import checkInputs from "./checkInputs";
 import createCategoryArray from "./createRecipe/createCategoryArray";
 import createIngredientsArray from "./createRecipe/createIngredientsArray";
 import createInstructionsArray from "./createRecipe/createInstructionsArray";
 import createMainImgLink from "./createRecipe/createMainImgLink";
-import scrollToUp from "./scroolToUp";
 import showModal from "./showModal";
 
+// Создание объекта рецепта и его загрузка на сервер
 const createRecipe = (link) => {
 
   try {
@@ -17,13 +16,10 @@ const createRecipe = (link) => {
           portions = document.querySelector('#portions'),
           description = document.querySelector('#description'),
           btnSave = document.querySelector('#save-recipe');
-    
-    
-   
+
     checkInputs();
 
-    const createRecipeBody = async() => {
-           
+    const createRecipeBody = async() => {         
       let arrInstruction = [],
           mainImgUrl,
           idRecipe;
@@ -31,16 +27,15 @@ const createRecipe = (link) => {
     // Создание id для названия папки для изображений
      let idImgFolder = new Date().getDate() + new Date().getTime() + Math.random();
 
+    //  Получение ссылки главного изображения
      await createMainImgLink(idImgFolder)
       .then(url => {
         mainImgUrl = url;
-        console.log(mainImgUrl);
       });               
-
+      //  Получения массива инструкций
       await createInstructionsArray(idImgFolder)
       .then(res => {
         arrInstruction = res;
-        console.log(arrInstruction);
       });
 
       // Основной объект рецепта, который передается в базу данных
@@ -62,8 +57,6 @@ const createRecipe = (link) => {
        // Валидация массива с категориями
       let checkCategory = (recipeBody.category.length === 0) ? 'false' : 'true';
              
-      console.log(recipeBody);
-
       // Проверка заполненной формы, и показ модального окна в соответствии наличия или отсутствия ошибок     
       if(checkInputs() === 'false' || checkCategory === 'false') {
         showModal('#error-modal');
@@ -87,17 +80,3 @@ const createRecipe = (link) => {
   }
 };
 export default createRecipe;
-
-
-/* old rules storage
-
-rules_version = '2';
-service firebase.storage {
-  match /b/{bucket}/o {
-    match /{allPaths=**} {
-      allow read, write: if request.auth != null;
-    }
-  }
-}
-
-*/

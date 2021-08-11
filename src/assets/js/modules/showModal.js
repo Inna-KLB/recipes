@@ -3,7 +3,7 @@ import getData from "../services/getData";
 import createRecipePage from "./createRecipePage";
 import createMainPage from "./createMainPage";
 
-
+// Функция показа модальных окон
 const showModal = (modalSelector, linkDb, idRecipe, linkToStorage) => {
   const substrate = document.querySelector('.modal-substrate'),
         modal = document.querySelector(modalSelector);
@@ -21,12 +21,13 @@ const showModal = (modalSelector, linkDb, idRecipe, linkToStorage) => {
       substrate.classList.remove('hide');
       modal.classList.remove('hide');
       document.body.classList.add('active-modal');
-      
+      // Показ модального окна при правильно заполненной страницы рецепта
       if(idModal === 'modal-without-errors') {
         const link = modal.querySelector('#to-recipe');
         let recipe = {};
         link.addEventListener('click', async(e) => {
           e.preventDefault();
+          // получение объекта нужного рецепта и создание страницы на его основе
           await getData(linkDb)
           .then(recipes => {
             for (let i = 0; i < recipes.length; i++) {
@@ -38,27 +39,30 @@ const showModal = (modalSelector, linkDb, idRecipe, linkToStorage) => {
           closeModal();   
           createRecipePage(linkDb, recipe, '.add-recipe');
         });
-      } else if(idModal === 'error-modal'){
+      }
+      // Показ модального окна, если при добавлении/редактировании рецепта неправильного заполнены поля 
+      else if(idModal === 'error-modal'){
         const btnClose = modal.querySelector('button');
           btnClose.addEventListener('click', () => { 
             closeModal();
           });     
-      } else if (idModal === 'modal-delete-recipe') {
+      } 
+      // Показ модального окна при удалении рецепта
+      else if (idModal === 'modal-delete-recipe') {
         const btnDelete = document.querySelector('#delete-recipe'),
               btnClose = document.querySelector('#cancel');
-        
+        document.body.style.top = '0';
         btnClose.addEventListener('click', () => { 
           closeModal();
         });
         btnDelete.addEventListener('click', async() => { 
+          // удаление рецепта и переход на главную страницу с обновленным списком рецептов
           await deleteData(linkDb, idRecipe, linkToStorage);
           const container = document.querySelector('.recipe-page');
-          let recipesArray = [];
           await getData(linkDb)
           .then(recipes => {
-            recipesArray = recipes;
             closeModal();
-            createMainPage(recipesArray, 0, 12, linkDb, container);
+            createMainPage(recipes, 0, 12, linkDb, container);
           });
         });
       }

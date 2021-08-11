@@ -1,3 +1,4 @@
+// Создание стрелки наверх
 const scrollToUp = () => {
   const container = document.querySelector('main');
 

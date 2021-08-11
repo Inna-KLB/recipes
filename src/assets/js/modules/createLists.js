@@ -1,10 +1,14 @@
+// Функция создания строк с ингредиентом или инструкцией рецепта
+// При редактировании рецепта изначально отображалось всего по 3 строки с ингредиентами или инструкциями
+// Данная функция считает сколько строк необходимо создать исходя из содержания рецепта
 const createLists = (listSelector, numberItems) => {
   const listName = document.querySelector(listSelector);
-  let children = listName.children;
-  children.forEach(child => {
-    child.remove();
-  });
-  console.log(numberItems, listName);
+  // Удаление строк из списка
+  let listItems = listName.children;
+  for(let i = 1; i < listItems; i++) {
+    listItems[i].remove();
+  }
+  // Создание новых строк нужной численности и добавление их в список
   for(let i = 0; i < numberItems; i++) {
     let listItem = document.createElement('li');
     if(listSelector == '.recipe-ingredients__list') {

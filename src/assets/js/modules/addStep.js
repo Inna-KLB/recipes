@@ -1,5 +1,6 @@
 import checkInputs from "./checkInputs";
 
+// Добавление пункта ингредиентов или инструкций рецепта
 const addStep = (listSelector,  btnSelector) => {
   try {
     const list = document.querySelector(listSelector),

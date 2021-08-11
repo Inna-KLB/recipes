@@ -1,3 +1,4 @@
+// Создания массива с выбранным категориями
 const createCategoryArray = () => {
   const categories = document.querySelectorAll('.recipe-info__category input');
   let arrCategory = [];

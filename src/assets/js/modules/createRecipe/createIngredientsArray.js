@@ -1,3 +1,4 @@
+// Создание массива с ингредиентами
 const createIngredientsArray = () => {
   const ingredients = document.querySelectorAll('.recipe-ingredients__list-item');
   let arrIngredient = [];

@@ -4,7 +4,7 @@ import createRecipesCards from "./createRecipesCards";
 import search from "./search";
 import pagination from "./pagination";
 
-
+// Создание главной страницы
 const createMainPage = (recipes, startSlice, endSlice, link, oldContainer) => {
   try {
     window.location.hash = '/главная_страница';
@@ -31,7 +31,7 @@ const createMainPage = (recipes, startSlice, endSlice, link, oldContainer) => {
           </div>
           <button class="btn btn__advanced-search">Расширенный поиск <ion-icon name="chevron-down-outline"></ion-icon></button>
           <div class="search-advanced">
-            <input type="text" id="desired-ingredients" class="search__input" placeholder="Желаемые ингредиенты">
+            <input type="text" id="desired-ingredients" class="search__input" placeholder="Желаемые ингредиенты (указать через запятую)">
           </div>
         </section>    
         <div class="cards flex"> </div>

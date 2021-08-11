@@ -140,5 +140,6 @@ gulp.task('clean-folder', () => {
   .pipe(clean())
 });
 
-gulp.task('build', gulp.series('clean-folder', gulp.parallel('html', 'sass', 'build-js', 'img', 'fonts')));
+// gulp.task('build', gulp.series('clean-folder', gulp.parallel('html', 'sass', 'build-js', 'img', 'fonts')));
+gulp.task('build', gulp.series('clean-folder', gulp.parallel('html', 'sass', 'prod-build-js', 'img', 'fonts')));
 gulp.task('default', gulp.parallel('watch-files', 'build', 'browser-sync'));
