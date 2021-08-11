@@ -7427,7 +7427,7 @@ var deleteData = /*#__PURE__*/function () {
           case 3:
             //  Удаление изображений из storage
             linksToStorage.forEach(function (linkToStorage) {
-              if (linkToStorage.match('https://via.placeholder.com/') || linkToStorage.match('../img/main-photo.jpg')) {
+              if (linkToStorage.match('https://via.placeholder.com/') || linkToStorage.match('img/main-photo.jpg')) {
                 return;
               } else {
                 var _link = linkToStorage.split('/')[7].split('?')[0];
