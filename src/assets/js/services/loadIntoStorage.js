@@ -6,7 +6,7 @@ const loadIntoStorage = async(imgSelector, id, i) => {
   // Создание и отображение спинера при загрузке изображений
   let statusMessage = document.createElement('div');
   statusMessage.classList.add('modal-substrate');
-  statusMessage.innerHTML = `<img src='../img/spinner.gif' width='40vw'>`;
+  statusMessage.innerHTML = `<img src='img/spinner.gif' width='40vw'>`;
   document.body.classList.add('active-modal');
   document.body.append(statusMessage);
     

@@ -7598,7 +7598,7 @@ var loadIntoStorage = /*#__PURE__*/function () {
 
             statusMessage = document.createElement('div');
             statusMessage.classList.add('modal-substrate');
-            statusMessage.innerHTML = "<img src='../img/spinner.gif' width='40vw'>";
+            statusMessage.innerHTML = "<img src='img/spinner.gif' width='40vw'>";
             document.body.classList.add('active-modal');
             document.body.append(statusMessage); // Загрузка изображения в storage
 
