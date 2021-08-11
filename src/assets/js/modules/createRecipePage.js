@@ -3,7 +3,7 @@ import showModal from "./showModal";
 import changeRecipe from "./changeRecipe";
 
 // Создание страницы рецепта
-const createRecipePage = (link, recipe, container) => {
+const createRecipePage = (link, recipe, container, id) => {
   const oldContainer = document.querySelector(container),
         header = document.querySelector('#header');
   oldContainer.remove();
@@ -12,6 +12,8 @@ const createRecipePage = (link, recipe, container) => {
   mainContainer.classList.add('recipe-page');
   header.after(mainContainer);
   header.scrollTop = 0; 
+
+  console.log(recipe);
 
   // Создание массива для хранения ссылок изображений
   let linksToStorage = [];
@@ -52,7 +54,7 @@ const createRecipePage = (link, recipe, container) => {
   btnChange.classList.add('btn', 'btn_brown');
   btnChange.innerHTML = `<ion-icon name="pencil-outline"></ion-icon> Редактировать рецепт`;
   btnChange.addEventListener('click', () => {
-    changeRecipe(link, recipe.id);
+    changeRecipe(link, (recipe.id || id));
   });
   // Создание кнопки удаления рецепта
   let btnDelete = document.createElement('button');
@@ -60,7 +62,7 @@ const createRecipePage = (link, recipe, container) => {
   btnDelete.setAttribute('id', 'delete-recipe-page');
   btnDelete.innerHTML = `<ion-icon name="trash-outline"></ion-icon> Удалить рецепт`;
   btnDelete.addEventListener('click', () => {
-    showModal('#modal-delete-recipe',link, recipe.id, linksToStorage);
+    showModal('#modal-delete-recipe',link, (recipe.id || id), linksToStorage);
   });
 
   recipeInfoText.append(recipeInfoBox);

@@ -19,7 +19,7 @@ const createAddrecipePage = (oldContainer, link) => {
       <section class="recipe-info flex">
         <div class="recipe-info__header">
           <ion-icon name="pencil-outline"></ion-icon>
-          <input class="header__input" type="text" placeholder="Название блюда">  
+          <input class="header__input" type="text" maxlength="35" placeholder="Название блюда">  
         </div>
         <div class="recipe-info__category">
           <p class="input-group__header">Добавить категорию</p>
@@ -84,7 +84,7 @@ const createAddrecipePage = (oldContainer, link) => {
       <section class="recipe-description">
         <h3 class="recipe-description__header">Описание блюда</h3>
         <div class="recipe-description__text">
-          <input type="text" placeholder="1-2 небольших предложения" maxlength="150" id="description" value="">
+          <input type="text" placeholder="1-2 небольших предложения" maxlength="110" id="description" value="">
         </div>
       </section>
 

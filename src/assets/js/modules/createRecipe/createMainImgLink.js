@@ -9,7 +9,7 @@ const createMainImgLink = async(idFolder) => {
      
   // Получение ссылки главного изображения
   if(mainImg.value === ''){
-    if(mainPhotoLink.textContent.match('https://firebasestorage') || mainPhotoLink.textContent.match('../img/main-photo.jpg')) {
+    if(mainPhotoLink.textContent.match('https://firebasestorage') || mainPhotoLink.textContent.match('img/main-photo.jpg')) {
       // Если фото не заменяется при редактировании, то url остается прежним
       mainImgUrl = mainPhotoLink.textContent;
     } else if(mainPhotoLink.textContent.match('Если нет подходящего фото')) {

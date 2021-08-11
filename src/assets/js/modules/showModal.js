@@ -2,6 +2,8 @@ import deleteData from "../services/deleteData";
 import getData from "../services/getData";
 import createRecipePage from "./createRecipePage";
 import createMainPage from "./createMainPage";
+import showCategory from "./showCategory";
+
 
 // Функция показа модальных окон
 const showModal = (modalSelector, linkDb, idRecipe, linkToStorage) => {
@@ -59,10 +61,11 @@ const showModal = (modalSelector, linkDb, idRecipe, linkToStorage) => {
           // удаление рецепта и переход на главную страницу с обновленным списком рецептов
           await deleteData(linkDb, idRecipe, linkToStorage);
           const container = document.querySelector('.recipe-page');
-          await getData(linkDb)
+          getData(linkDb)
           .then(recipes => {
             closeModal();
             createMainPage(recipes, 0, 12, linkDb, container);
+            showCategory(recipes, 12, linkDb);
           });
         });
       }

@@ -63,8 +63,8 @@ const changeRecipe = async(link, idRecipe) => {
     }
   }
 
-  createLists('.recipe-ingredients__list', currentRecipe.ingredients.length - 3);
-  createLists('.recipe-instruction__list', currentRecipe.instructions.length - 3);
+  createLists('.recipe-ingredients__list', currentRecipe.ingredients.length - 1);
+  createLists('.recipe-instruction__list', currentRecipe.instructions.length - 1);
 
   for(let i = 0; i < currentRecipe.ingredients.length; i++) {
     const recipeIngredients = document.querySelectorAll('.recipe-ingredients__list-item'),
@@ -125,7 +125,8 @@ const changeRecipe = async(link, idRecipe) => {
     } else {
       patchData(link, idRecipe, recipe)
       .then(newRecipe => {
-        createRecipePage(link, newRecipe, '.add-recipe');
+        console.log(newRecipe);
+        createRecipePage(link, newRecipe, '.add-recipe', idRecipe);
       });
     }
   });

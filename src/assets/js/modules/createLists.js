@@ -5,9 +5,10 @@ const createLists = (listSelector, numberItems) => {
   const listName = document.querySelector(listSelector);
   // Удаление строк из списка
   let listItems = listName.children;
-  for(let i = 1; i < listItems; i++) {
-    listItems[i].remove();
-  }
+  listItems.forEach(item => {
+    item.remove();
+  });
+
   // Создание новых строк нужной численности и добавление их в список
   for(let i = 0; i < numberItems; i++) {
     let listItem = document.createElement('li');
